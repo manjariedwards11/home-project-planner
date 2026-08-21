@@ -5,139 +5,66 @@
   "phaseId": "pump-filter",
   "title": "Pump + Filter + Fountain",
   "status": "current",
-  "goal": "Choose and install a low-maintenance circulation and filtration setup with enough capacity for possible small fish later.",
-  "decisionStatus": "pending",
+  "goal": "Install the low-maintenance 300 GPH integrated circulation and filtration system for the permanent pond.",
+  "decisionStatus": "selected",
+  "selectedOption": "integrated-system",
+  "decisionSummary": "Option B selected: one integrated 300 GPH pump/filter system for lower maintenance and simpler plumbing.",
   "phaseEstimate": {
-    "min": 150,
-    "max": 250,
+    "min": 112,
+    "max": 127,
     "currency": "USD",
-    "note": "Current project allowance includes the $30 Smartpond already purchased. Final cost depends on which system option is selected."
+    "note": "Permanent-system estimate. Final actual will be updated from the Lowe's receipt; the original $30 Smartpond is being returned."
   },
-  "actualTotal": 30.0,
-  "ownedEquipment": {
-    "item": "Smartpond Filter Kit with Pump from Lowe's",
-    "actualCost": 30.0,
-    "status": "bought",
-    "note": "Already purchased. It can be used in Option A or kept as nursery/backup equipment if Option B is selected."
-  },
-  "systemOptions": [
+  "purchases": [
     {
-      "id": "keep-smartpond",
-      "label": "Option A — Keep the Smartpond",
-      "status": "considering",
-      "summary": "Use the Smartpond as the visible fountain and add a separate pump and permanent mechanical/biological filter.",
-      "systemEstimatedMin": 142.19,
-      "systemEstimatedMax": 152.19,
-      "remainingEstimatedMin": 112.19,
-      "remainingEstimatedMax": 122.19,
-      "pumpCount": 2,
-      "maintenance": "Higher than Option B because there are two pumps/fountain components to maintain.",
-      "recommendedShopping": [
-        {
-          "item": "TOTALPOND 330 GPH Pond Pump",
-          "retailer": "Home Depot",
-          "model": "52223",
-          "currentPrice": 57.98,
-          "priceChecked": "2026-08-21",
-          "status": "candidate-if-selected",
-          "role": "Main circulation",
-          "link": "https://www.homedepot.com/p/202017037"
-        },
-        {
-          "item": "TOTALPOND Universal Pump Filter Box",
-          "retailer": "Home Depot",
-          "model": "52231",
-          "currentPrice": 44.21,
-          "priceChecked": "2026-08-21",
-          "status": "candidate-if-selected",
-          "role": "Coarse + fine mechanical filtration and bio-balls",
-          "link": "https://www.homedepot.com/p/202278958"
-        },
-        {
-          "item": "Pond tubing / return fittings",
-          "estimatedMin": 10.0,
-          "estimatedMax": 20.0,
-          "status": "need-if-selected",
-          "role": "Quiet filtered-water return"
-        }
-      ],
-      "note": "Existing Smartpond remains the independent fountain. New purchases are about $112–122."
+      "item": "smartpond Filter Kit with 300 GPH Pump",
+      "retailer": "Lowe's",
+      "status": "bought",
+      "listedPrice": 112.0,
+      "actualCost": null,
+      "purchaseDate": "2026-08-21",
+      "role": "Integrated pump, mechanical filtration, biological filtration and fountain hardware",
+      "note": "Purchased. Final all-in actual cost is pending receipt confirmation."
     },
     {
-      "id": "integrated-system",
-      "label": "Option B — One Integrated System",
-      "status": "considering",
-      "summary": "Use one integrated pump/filter system in the permanent pond; keep the Smartpond as nursery or backup equipment.",
-      "systemEstimatedMin": 112.0,
-      "systemEstimatedMax": 127.0,
-      "additionalSpendFromTodayMin": 112.0,
-      "additionalSpendFromTodayMax": 127.0,
-      "pumpCount": 1,
-      "maintenance": "Lower-maintenance option with one pump, less plumbing and fewer failure points.",
-      "qualityNote": "Simpler architecture for consistent filtration; choose a kit with both mechanical filtration and biological media.",
-      "recommendedShopping": [
-        {
-          "item": "TOTALPOND Complete Filter Kit with 300-GPH Pump",
-          "retailer": "Home Depot",
-          "model": "52229",
-          "currentPrice": 112.0,
-          "priceChecked": "2026-08-21",
-          "status": "best-value-candidate",
-          "role": "Integrated 300 GPH pump, filter box, mechanical filters, bio-media and fountain hardware",
-          "link": "https://www.homedepot.com/p/202278961"
-        },
-        {
-          "item": "Extra tubing for quiet return",
-          "estimatedMin": 0.0,
-          "estimatedMax": 15.0,
-          "status": "optional",
-          "role": "Only needed if the final layout uses a separate quiet return"
-        }
-      ],
-      "alternateCandidate": {
-        "item": "POND BOSS Complete Filter Kit with Pump up to 500 gallons",
-        "retailer": "Home Depot",
-        "model": "52734",
-        "currentPrice": 124.97,
-        "priceChecked": "2026-08-21",
-        "status": "alternate",
-        "link": "https://www.homedepot.com/p/315376902"
-      },
-      "accountingNote": "The $30 already spent on the Smartpond remains part of project actual spend even if it is not used in the permanent pond."
+      "item": "Existing small Smartpond Filter Kit with Pump",
+      "retailer": "Lowe's",
+      "status": "return-pending",
+      "originalActualCost": 30.0,
+      "expectedRefund": 30.0,
+      "note": "Will be returned because the new 300 GPH integrated system replaces it in the permanent setup."
     }
   ],
-  "comparison": {
-    "optionA": {
-      "permanentPumps": 2,
-      "newSpend": "$112–122",
-      "maintenance": "Higher",
-      "plumbing": "More complex"
-    },
-    "optionB": {
-      "permanentPumps": 1,
-      "newSpend": "$112–127",
-      "maintenance": "Lower",
-      "plumbing": "Simpler"
-    },
-    "currentConclusion": "Costs are nearly the same. Option B is the lower-maintenance architecture, but no option is selected yet."
-  },
-  "decisionNote": "No option is selected yet. Option B is expected to require less maintenance; final selection will be made later.",
   "shoppingList": {
-    "status": "decision-pending",
-    "actualTotal": 30.0,
+    "status": "mostly-complete",
+    "actualTotal": null,
     "items": [
       {
-        "item": "Smartpond Filter Kit with Pump from Lowe's",
+        "item": "smartpond Filter Kit with 300 GPH Pump",
         "status": "bought",
-        "actualCost": 30.0,
-        "note": "Only committed Phase 3 purchase so far."
+        "estimatedCost": 112.0,
+        "actualCost": null,
+        "note": "Main permanent system; final receipt total pending."
+      },
+      {
+        "item": "Extra tubing / flow-control fittings",
+        "status": "optional-if-needed",
+        "estimatedMin": 0.0,
+        "estimatedMax": 15.0,
+        "actualCost": null,
+        "note": "Buy only if the final placement needs extra reach or a separate quiet return."
       }
     ]
   },
+  "futureMaintenance": [
+    "Clean mechanical filter pads as needed.",
+    "Check pump intake and water level during hot weather.",
+    "Add a UV clarifier later only if persistent green-water algae develops; UV does not solve string algae, wall algae or debris."
+  ],
   "completionMemory": {
     "title": "End of Phase 3",
-    "status": "awaiting-completion",
+    "status": "awaiting-installation",
     "image": null,
-    "caption": "Permanent circulation, filtration and fountain system installed and running."
+    "caption": "300 GPH integrated circulation, filtration and fountain system installed and running."
   }
 }
