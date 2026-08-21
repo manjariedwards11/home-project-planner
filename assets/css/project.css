@@ -112,13 +112,11 @@
 .phase-cost .qualifier{font-size:10px;color:var(--muted)}
 .phase-cost .muted{color:var(--line)}
 
-/* Completed phases: main content left, completion image + shopping list right.
-   The sidebar gets a generous fixed width so shopping rows stay on one line —
-   wrapped rows are what made this column tall enough to need scrolling. The
-   main column has plenty to spare, since its content is short. */
-.phase-layout{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:14px;align-items:start}
-.phase-main{min-width:0}
-.phase-side{min-width:0;display:flex;flex-direction:column;gap:10px}
+/* Every phase reads top to bottom in the same order: goal, then the phase
+   photo beside its shopping list, then the checklist, then detail. The photo
+   is a fixed column so the shopping table always gets the remaining width. */
+.phase-media{display:grid;grid-template-columns:340px minmax(0,1fr);gap:12px;align-items:start;margin-bottom:9px}
+.phase-media > *{min-width:0}
 
 .completion-card{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .memory-frame{position:relative}
@@ -186,7 +184,7 @@
 .phase-cost .actual-amount.is-final{color:var(--green)}
 
 /* Long lists scroll inside the card rather than lengthening the page. */
-.shop-scroll{max-height:230px;overflow-y:auto}
+.shop-scroll{max-height:none}
 .phase-shopping{font-size:11px}
 .phase-shopping th,.phase-shopping td{padding:3px 5px}
 .phase-shopping .col-check{width:16px;text-align:center;padding-left:0;padding-right:0}
@@ -331,8 +329,7 @@
 /* Narrower sidebar before stacking, so the main column keeps a readable
    measure on laptop widths. Must precede the 980px rule below. */
 @media(max-width:1200px){
-  .phase-layout{grid-template-columns:minmax(0,1fr) 330px}
-  /* Laptop viewports are short as well as narrow; the photo is the one
+    /* Laptop viewports are short as well as narrow; the photo is the one
      element that can give up height without losing information. */
   .completion-card img{max-height:180px}
   /* A fixed 430px sidebar cramps the rationale at this width; stack instead. */
@@ -358,17 +355,7 @@
   .box ul{columns:1}
   .roadmap-head{gap:10px}
   .cost-fig{flex:1 1 auto;min-width:96px}
-  /* Stack main content, image and shopping list vertically. */
-  .phase-layout{grid-template-columns:minmax(0,1fr)}
   .finalists,.fin-briefs{grid-template-columns:minmax(0,1fr)}
-  .phase-side{flex-direction:row;flex-wrap:wrap;align-items:flex-start}
-  .completion-card{flex:1 1 260px;max-width:340px}
-  .shopping-card{flex:1 1 300px}
-}
-
-@media(max-width:620px){
-  .phase-side{flex-direction:column}
-  .completion-card,.shopping-card{max-width:none;flex:1 1 auto}
 }
 
 @media(max-width:620px){
@@ -452,21 +439,9 @@
 .placement-shot .memory-tools button{font-size:9.5px;padding:1px 5px}
 .placement-shot .local-badge{font-size:8px}
 
-/* Sparse phases: the goal spans the width, then the memory and shopping cards
-   sit side by side beneath it rather than stacking in a narrow gutter with a
-   mostly empty column alongside. */
-.phase-layout.is-sparse{grid-template-columns:minmax(0,1fr)}
-.phase-layout.is-sparse .phase-side{
-  flex-direction:row;align-items:flex-start;gap:12px;
-}
-.phase-layout.is-sparse .completion-card{flex:0 0 360px;max-width:360px}
-.phase-layout.is-sparse .shopping-card{flex:1 1 auto;min-width:0}
 /* With the extra width the list no longer needs its own scrollbar. */
-.phase-layout.is-sparse .shop-scroll{max-height:none}
 @media(max-width:900px){
-  .phase-layout.is-sparse .phase-side{flex-direction:column}
-  .phase-layout.is-sparse .completion-card{flex:1 1 auto;max-width:none}
-}
+    }
 
 /* Phase checklist — compact, and quiet once a task is done. */
 .todo-box-wrap h3{font-size:12.5px;margin:0 0 5px;display:flex;align-items:center;gap:6px}
@@ -479,3 +454,8 @@
 .todo.is-future{opacity:.6}
 .todo.is-future .todo-task{font-style:italic}
 @media(max-width:900px){ .todo-list{columns:1} }
+
+/* Photo and list stack once the row can no longer hold both comfortably. */
+@media(max-width:900px){
+  .phase-media{grid-template-columns:minmax(0,1fr)}
+}

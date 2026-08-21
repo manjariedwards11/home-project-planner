@@ -723,7 +723,7 @@
     });
   }
 
-  function renderPhaseSidebar(phase, project, opts) {
+  function renderPhaseMedia(phase, project, opts) {
     // A detail file may carry its list as shoppingList (planned, in progress or
     // purchased) or, before a purchase, as pendingShoppingList. Route either
     // through the same renderer rather than tying the shape to the file kind.
@@ -748,10 +748,10 @@
       card = renderPlainShoppingCard(phase, project, opts.costRow);
     }
     return `
-      <aside class="phase-side">
+      <div class="phase-media">
         ${renderMemoryCard(phase, project, opts.memory)}
         ${card}
-      </aside>`;
+      </div>`;
   }
 
   function currencyOf(project) {
@@ -987,13 +987,14 @@
     const comp = completion || {};
     const primary = [];
     const extra = [];
+    const parts = { cost: '', goal: '', todos: '', content: '', details: '' };
 
     const costRow = costRowFor(costPlan, phase);
-    primary.push(renderPhaseCostLine(costRow, currency));
+    parts.cost = renderPhaseCostLine(costRow, currency);
 
     const goal = comp.goal || phase.goal || phase.summary;
     if (goal) {
-      primary.push(`<div class="box goal-box"><p><strong>Goal:</strong> ${esc(goal)}</p></div>`);
+      parts.goal = `<div class="box goal-box"><p><strong>Goal:</strong> ${esc(goal)}</p></div>`;
     }
 
     // Summaries that merely restate the goal are dropped rather than collapsed:
@@ -1035,7 +1036,7 @@
     (phase.items || []).forEach((i) => { if (!actions.includes(i)) actions.push(i); });
 
     if (todos.length) {
-      primary.push(renderTodos(todos));
+      parts.todos = renderTodos(todos);
       if (actions.length) {
         extra.push(`<h4>Phase requirements</h4><ul>${actions.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>`);
       }
@@ -1085,14 +1086,14 @@
       </table>`);
     }
 
-    const details = extra.length
+    parts.content = primary.join('');
+    parts.details = extra.length
       ? `<details class="accordion">
            <summary>Details &amp; history</summary>
            <div class="accordion-body">${extra.join('')}</div>
          </details>`
       : '';
-
-    return primary.join('') + details;
+    return parts;
   }
 
   // ---- Decision panels (a phase's narrowed finalist comparison) -------------
@@ -1239,6 +1240,10 @@
       ${decision.completionRule ? `<div class="notice ${settled ? 'success' : ''}">${esc(decision.completionRule)}</div>` : ''}`;
   }
 
+  // One shape for every phase, in a fixed reading order:
+  //   title + cost -> Goal -> photo & shopping -> To-do -> phase detail.
+  // No per-phase layout branching, so no phase can drift into looking like a
+  // different product as its content grows.
   function renderPhasePanels(project, costPlan, phaseDetails) {
     return project.phases.map((phase) => {
       const detail = phaseDetails.get(phase.number) || {};
@@ -1251,44 +1256,36 @@
         || (completion && completion.completionMemory)
         || null;
 
-      // Every phase uses the same two-column pattern: main content left,
-      // memory card + that phase's shopping list right.
-      const hasSidebar = true;
-
-      let main;
+      let parts;
       if (decision) {
-        main = `
-          ${renderPhaseCostLine(costRow, currencyOf(project))}
-          ${renderDecisionPanel(decision, phase, project)}
-          ${renderTodos(todosFor(phase, decision, projectTodos))}
-          ${renderDecisionHistory(phase, decision)}
-          ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
-          ${phase.decisionGate ? `<div class="notice">${esc(phase.decisionGate)}</div>` : ''}`;
+        parts = {
+          cost: renderPhaseCostLine(costRow, currencyOf(project)),
+          goal: decision.goal
+            ? `<div class="box goal-box"><p><strong>Goal:</strong> ${esc(decision.goal)}</p></div>`
+            : '',
+          todos: renderTodos(todosFor(phase, decision, projectTodos)),
+          content: `
+            ${renderDecisionPanel(decision, phase, project)}
+            ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
+            ${phase.decisionGate ? `<div class="notice">${esc(phase.decisionGate)}</div>` : ''}`,
+          details: renderDecisionHistory(phase, decision),
+        };
       } else {
-        main = renderPhaseBody(phase, project.currency, costPlan, hasSidebar, completion);
+        parts = renderPhaseBody(phase, project.currency, costPlan, true, completion);
       }
 
       const title = (decision && decision.title) || (completion && completion.title) || phase.name;
-      // A phase whose main column is short (a goal and little else) would
-      // otherwise leave most of the page empty beside a tall, internally
-      // scrolling sidebar. Those lay the memory and shopping cards out across
-      // the full width instead.
-      // Wide content always takes the full-width form; everything else is
-      // decided by measuring the rendered columns in balancePhaseLayout, since
-      // counting markup blocks broke as soon as a phase gained a to-do list.
-      const hasGallery = main.includes('placement-grid');
-
-      const inner = hasSidebar
-        ? `<div class="phase-layout${hasGallery ? ' is-sparse' : ''}">
-             <div class="phase-main">${main}</div>
-             ${renderPhaseSidebar(phase, project, { completion, decision, costRow, memory })}
-           </div>`
-        : main;
+      const media = renderPhaseMedia(phase, project, { completion, decision, costRow, memory });
 
       return `
         <section id="p${phase.number}" class="panel">
           <h2>Phase ${phase.number} — ${esc(title)}</h2>
-          ${inner}
+          ${parts.cost}
+          ${parts.goal}
+          ${media}
+          ${parts.todos}
+          ${parts.content}
+          ${parts.details}
         </section>`;
     }).join('');
   }
@@ -1412,33 +1409,12 @@
       <button class="tab" data-tab="decisions"><span class="dot"></span>Decisions</button>`;
   }
 
-  // Choose the layout by what actually rendered: if the main column ends up far
-  // shorter than the sidebar, the two-column form leaves a tall empty gap, so
-  // the memory and shopping cards spread across the full width instead.
-  // Hidden panels measure as zero, so this runs when a panel is first shown.
-  function balancePhaseLayout(panel) {
-    if (!panel || panel.dataset.balanced === '1') return;
-    const layout = panel.querySelector('.phase-layout');
-    if (!layout) return;
-    const main = layout.querySelector('.phase-main');
-    const side = layout.querySelector('.phase-side');
-    if (!main || !side) return;
-    if (!main.getBoundingClientRect().height) return;   // still hidden
-    if (!layout.classList.contains('is-sparse')) {
-      const mainH = main.getBoundingClientRect().height;
-      const sideH = side.getBoundingClientRect().height;
-      if (sideH > 0 && mainH < sideH * 0.72) layout.classList.add('is-sparse');
-    }
-    panel.dataset.balanced = '1';
-  }
-
   function initTabs() {
     const tabs = [...document.querySelectorAll('.tab')];
     const panels = [...document.querySelectorAll('.panel')];
     function show(id) {
       tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === id));
       panels.forEach((p) => p.classList.toggle('active', p.id === id));
-      balancePhaseLayout(document.getElementById(id));
       history.replaceState(null, '', '#' + id);
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
@@ -1573,7 +1549,6 @@
     }
 
     initTabs();
-    document.querySelectorAll('.panel.active').forEach(balancePhaseLayout);
     attachMemoryImages();
     initLightbox();
   }
