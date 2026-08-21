@@ -1111,6 +1111,35 @@
       </div>`;
   }
 
+  // A leaning, not a decision. Any phase carrying a `recommendation` object
+  // renders this; the colour follows the data's own status, so it only reads
+  // as settled if the JSON says it is.
+  function renderRecommendation(rec) {
+    if (!rec || (!rec.topChoice && !rec.runnerUp && !rec.summary)) return '';
+    const settled = isSettledStatus(rec.status);
+    const pick = (label, value, top) => value
+      ? `<div class="reco-pick${top ? ' is-top' : ''}">
+           <span class="spec-label">${esc(label)}</span>
+           <span class="reco-name">${esc(value)}</span>
+         </div>`
+      : '';
+    const why = (rec.why || rec.rationale || []);
+    return `
+      <section class="reco">
+        <div class="reco-head">
+          <h3>Recommendation</h3>
+          ${rec.status ? `<span class="pill ${settled ? 'green' : 'amber'}">${esc(humanizeSlug(rec.status))}</span>` : ''}
+        </div>
+        <div class="reco-picks">
+          ${pick('Top choice', rec.topChoice, true)}
+          ${pick('Runner-up', rec.runnerUp, false)}
+        </div>
+        ${rec.summary ? `<p class="reco-summary">${esc(rec.summary)}</p>` : ''}
+        ${why.length ? `<ul class="reco-why">${why.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>` : ''}
+        ${rec.decisionGate ? `<div class="notice"><strong>Before locking this in:</strong> ${esc(rec.decisionGate)}</div>` : ''}
+      </section>`;
+  }
+
   // A phase page is a concise operational view: goal, the few things to do,
   // and the money. Anything discursive — restated summaries, design rationale,
   // extra notes — goes into a collapsed Details block so it is preserved
@@ -1201,6 +1230,7 @@
     if (phase.id === 'pond-placement' || /placement/.test(String(phase.id))) {
       primary.push(renderPlacementGallery(phase, { projectId: currentProjectId }, comp));
     }
+    primary.push(renderRecommendation(comp.recommendation));
 
     // At most one note stays on the page; the rest are preserved in Details.
     const notes = (phase.notes || []).slice();

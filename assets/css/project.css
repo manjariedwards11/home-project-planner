@@ -511,3 +511,22 @@
   .todo-check{width:16px;height:16px;margin-top:0}
   .todo{margin-bottom:1px}
 }
+
+/* A recommendation is a leaning, not a decision: the top choice is emphasised
+   but nothing is styled as locked unless the data says it is. */
+.reco{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin-bottom:9px}
+.reco-head{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+.reco-head h3{font-size:12.5px;margin:0;font-weight:800}
+.reco-picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:7px}
+.reco-pick{background:var(--soft);border-radius:5px;padding:5px 9px;min-width:0}
+.reco-pick.is-top{background:var(--accent-soft)}
+.reco-pick .reco-name{display:block;font-size:12.5px;font-weight:800;line-height:1.25}
+.reco-pick.is-top .reco-name{color:var(--accent)}
+.reco-summary{margin:0 0 6px;font-size:11.5px;line-height:1.4;color:var(--muted)}
+.reco-why{margin:0 0 7px;padding-left:16px;columns:2;column-gap:20px}
+.reco-why li{margin:0 0 3px;font-size:11.5px;line-height:1.32;break-inside:avoid}
+.reco .notice{margin-bottom:0}
+@media(max-width:820px){
+  .reco-picks{grid-template-columns:minmax(0,1fr)}
+  .reco-why{columns:1}
+}
