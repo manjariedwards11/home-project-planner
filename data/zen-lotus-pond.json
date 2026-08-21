@@ -6,11 +6,11 @@
   "displayTitle": "ZEN LOTUS POND — BACKYARD PLAN",
   "lede": "Filtered, jasmine-flanked lotus water garden with Buddha and simple moving water.",
   "status": "underway",
-  "currentPhase": 2,
-  "spentToDate": 137.13,
+  "currentPhase": 3,
+  "spentToDate": 283.32,
   "currency": "USD",
   "lastContentUpdate": "2026-08-21",
-  "nextAction": "Purchase the preferred brown Algreen Manhattan 40-inch Balcony Planter & Pond from Wayfair, then finalize the fish-ready Phase 3 pump and filtration system around its actual setup.",
+  "nextAction": "Finalize the fish-ready Phase 3 main pump, mechanical/biological filtration and quiet return for the purchased Brownstone Algreen Manhattan while keeping the existing Smartpond kit as the visible gentle fountain.",
   "goals": [
     "Low-maintenance serene lotus water feature",
     "Clean moving water with minimal visible algae and larvae",
@@ -26,7 +26,7 @@
   },
   "budget": {
     "planned": null,
-    "spentToDate": 137.13,
+    "spentToDate": 283.32,
     "remaining": null,
     "status": "not-set",
     "note": "A total project budget has not been locked yet. Actual spend is tracked as purchases are confirmed."
@@ -113,25 +113,31 @@
     },
     {
       "phase": 2,
-      "item": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brown",
-      "status": "preferred-pending-purchase",
+      "item": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
+      "status": "bought",
       "price": 134.99,
       "store": "Wayfair",
       "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036",
-      "actualCost": null,
+      "actualCost": 146.19,
+      "itemSubtotal": 134.99,
+      "tax": 11.20,
+      "shipping": 0.0,
+      "purchaseDate": "2026-08-21",
+      "estimatedDeliveryStart": "2026-08-26",
+      "estimatedDeliveryEnd": "2026-08-29",
       "budget": null,
-      "note": "Preferred permanent pond vessel. Brown color selected; purchase is still pending."
+      "note": "Purchased in Brownstone. Actual Phase 2 spend is $146.19 all-in, including $11.20 tax and $0 shipping."
     },
     {
       "phase": 2,
       "item": "Pennington 50-gallon Aquagarden",
-      "status": "final-alternate",
+      "status": "not-selected-final-alternate",
       "price": null,
       "store": "Walmart",
       "link": "https://www.walmart.com/ip/Pennington-50-gal-Aquagarden-Resin-Pond-Kit-Multi-Color/13240014659",
       "actualCost": null,
       "budget": null,
-      "note": "Final alternate; less preferred aesthetically than the Algreen Manhattan and not part of the pending shopping list."
+      "note": "Final alternate retained as decision history; less preferred aesthetically than the Algreen Manhattan."
     },
     {
       "phase": 2,
@@ -166,7 +172,7 @@
       "estimatedMin": 35.0,
       "estimatedMax": 60.0,
       "budget": null,
-      "note": "Target roughly 200–300 GPH actual flow through filtration after normal plumbing/head losses. Final model selection waits until the Manhattan setup is confirmed."
+      "note": "Target roughly 200–300 GPH actual flow through filtration after normal plumbing/head losses. Final model selection can now be made around the purchased Manhattan vessel."
     },
     {
       "phase": 3,
@@ -272,8 +278,20 @@
       "number": 2,
       "id": "pond-decision",
       "name": "Pond Decision",
-      "status": "current",
-      "summary": "Choose and purchase the permanent pond vessel. The brown Algreen Manhattan 40-inch Balcony Planter & Pond from Wayfair is the preferred choice; purchase is pending.",
+      "status": "complete",
+      "spent": 146.19,
+      "summary": "Permanent pond decision complete. The Algreen Manhattan 40-inch Balcony Planter & Pond in Brownstone was purchased from Wayfair on August 21, 2026 for $146.19 all-in.",
+      "purchase": {
+        "item": "Algreen Manhattan 40-inch Balcony Planter & Pond",
+        "color": "Brownstone",
+        "retailer": "Wayfair",
+        "purchaseDate": "2026-08-21",
+        "subtotal": 134.99,
+        "shipping": 0.0,
+        "tax": 11.20,
+        "totalPaid": 146.19,
+        "estimatedDelivery": "August 26–29, 2026"
+      },
       "decisionCriteria": [
         "Purpose-built or structurally verified for continuous water load",
         "Rectangular architectural appearance",
@@ -292,11 +310,11 @@
           "notes": "Earlier option retained for decision history. It would have required verification of framing, cross-bracing, bottom support, liner type/condition, seams, penetrations and patio/slab support before conversion."
         },
         {
-          "name": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brown",
-          "status": "preferred-pending-purchase",
-          "priority": "preferred-purpose-built-candidate",
+          "name": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
+          "status": "selected-purchased",
+          "priority": "selected-purpose-built-vessel",
           "dimensions": "40 in W × 20 in D × 18 in H",
-          "notes": "Preferred because the rectangular form fits the architectural design, the brown color has been selected, and the vessel allows Phase 3 filtration to be chosen separately. Not recorded as purchased yet.",
+          "notes": "Selected and purchased because the rectangular form fits the architectural design, Brownstone was the chosen color, and the vessel lets Phase 3 filtration be chosen separately.",
           "links": [
             {
               "label": "Wayfair Manhattan 40 Balcony Planter Pond",
@@ -306,7 +324,7 @@
         },
         {
           "name": "Pennington 50-gallon Aquagarden",
-          "status": "final-alternate",
+          "status": "not-selected-final-alternate",
           "notes": "All-in-one option considered, but less preferred aesthetically than the Algreen Manhattan."
         },
         {
@@ -320,10 +338,10 @@
       "number": 3,
       "id": "pump-filter",
       "name": "Pump + Filter + Fountain",
-      "status": "planned",
+      "status": "current",
       "spent": 30.0,
       "summary": "Build the permanent circulation and filtration system so the pond runs fishless now but has enough mechanical and biological capacity for a possible small fish population later without rebuilding the system.",
-      "decisionGate": "Finalize the main pump/filter after the Phase 2 Manhattan vessel is purchased and the actual plumbing/head layout is known.",
+      "decisionGate": "The Manhattan vessel is now purchased. Finalize the main pump/filter around the approximately 40 × 20 × 18-inch vessel and the actual filter/return placement.",
       "requirements": [
         "Keep the existing Smartpond kit as the gentle visible fountain and surface-movement feature",
         "Adjustable main pond pump in roughly the 300–500 GPH rated range",
@@ -426,13 +444,13 @@
     },
     {
       "item": "Permanent pond vessel",
-      "status": "preferred-pending-purchase",
-      "decision": "Brown Algreen Manhattan 40-inch Balcony Planter & Pond from Wayfair is the preferred selection. Pennington remains the final alternate; earlier planter/custom-build options are retained as decision history."
+      "status": "locked-purchased",
+      "decision": "Brownstone Algreen Manhattan 40-inch Balcony Planter & Pond purchased from Wayfair on August 21, 2026 for $146.19 all-in. Pennington remains as decision history only."
     },
     {
       "item": "Pond color",
       "status": "locked",
-      "decision": "Brown selected for the Algreen Manhattan."
+      "decision": "Brownstone selected for the Algreen Manhattan."
     },
     {
       "item": "Jasmine layout",
