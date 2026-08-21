@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "projectId": "zen-lotus-pond",
+  "phase": 5,
+  "phaseId": "jasmine",
+  "title": "Jasmine Frame",
+  "status": "planned",
+  "goal": "Frame the pond with jasmine while keeping the composition light and uncluttered.",
+  "shoppingList": {
+    "status": "planning",
+    "estimatedTotalMin": 100,
+    "estimatedTotalMax": 200,
+    "actualTotal": null,
+    "items": [
+      {
+        "item": "Two white jasmine planters",
+        "status": "need-to-buy",
+        "estimatedCost": null,
+        "actualCost": null
+      },
+      {
+        "item": "Two black jasmine trellises",
+        "status": "need-to-buy",
+        "estimatedCost": null,
+        "actualCost": null
+      },
+      {
+        "item": "Jasmine plants — reuse existing if suitable, otherwise buy two",
+        "status": "considering",
+        "estimatedCost": null,
+        "actualCost": null
+      }
+    ]
+  },
+  "completionMemory": {
+    "title": "End of Phase 5",
+    "status": "awaiting-completion",
+    "image": null,
+    "caption": "Pond framed by jasmine in white planters with black trellises."
+  }
+}
