@@ -7,18 +7,36 @@
   "status": "future-idea",
   "timeHorizon": "Revisit in about one year.",
   "goal": "Decide whether a small fish population is appropriate after the pond has proven stable through Arizona seasons.",
+  "reviewCriteria": [
+    "Review summer water temperature and oxygen/aeration needs.",
+    "Confirm the mechanical and biological filtration is mature and adequate.",
+    "Review algae performance; add a UV clarifier only if persistent green-water algae becomes a problem.",
+    "Choose only a conservative number of small fish if conditions support them."
+  ],
+  "maintenanceNotes": [
+    "UV is optional future equipment for free-floating green-water algae only; it does not solve string algae, wall algae or debris.",
+    "Continue routine debris removal, filter cleaning and water-level checks before adding more equipment."
+  ],
   "shoppingList": {
     "status": "not-active",
     "estimatedTotalMin": null,
     "estimatedTotalMax": null,
     "actualTotal": null,
-    "items": [],
-    "note": "No fish purchases or budget are committed now."
+    "items": [
+      {
+        "item": "UV clarifier",
+        "status": "future-optional",
+        "estimatedCost": null,
+        "actualCost": null,
+        "note": "Only consider if persistent green-water algae develops after the pond has been running with normal filtration and maintenance."
+      }
+    ],
+    "note": "No fish or UV purchases are committed now."
   },
   "completionMemory": {
     "title": "End of Phase 8",
     "status": "not-active",
     "image": null,
-    "caption": "Reserved for the future fish decision if this idea is activated."
+    "caption": "Reserved for the future fish and long-term pond-health decision if this phase is activated."
   }
 }
