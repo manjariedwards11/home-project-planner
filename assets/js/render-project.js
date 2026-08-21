@@ -37,8 +37,18 @@
     return symbol + Number(amount).toFixed(2);
   }
 
+  function wholeMoney(amount, currency) {
+    const symbol = { USD: '$' }[currency] || (currency ? currency + ' ' : '$');
+    return symbol + Number(amount).toFixed(0);
+  }
+
   function optionalMoney(amount, currency) {
     return amount == null ? '—' : money(amount, currency);
+  }
+
+  function moneyRange(min, max, currency) {
+    if (min == null || max == null) return '—';
+    return `${wholeMoney(min, currency)}–${wholeMoney(max, currency)}`;
   }
 
   // Badges are computed, not stored: "done"/"now" reflect JSON status, and
@@ -51,7 +61,44 @@
     return { cls: '', badge: '' };
   }
 
-  function renderRoadmap(project) {
+  function renderCostPlan(costPlan, currency) {
+    if (!costPlan || !costPlan.phases || !costPlan.phases.length) return '';
+
+    const phaseRows = costPlan.phases.map((p) => {
+      let actual = '—';
+      if (p.actual != null) {
+        actual = money(p.actual, currency);
+        if (p.actualStatus === 'complete') actual += ' ✓';
+        if (p.actualStatus === 'so-far') actual += ' so far';
+      }
+      return `
+        <tr>
+          <td>${esc(p.phase)} ${esc(p.label)}</td>
+          <td>${esc(moneyRange(p.estimatedMin, p.estimatedMax, currency))}</td>
+          <td>${esc(actual)}</td>
+        </tr>`;
+    }).join('');
+
+    return `
+      <div class="cost-plan" data-cost-plan>
+        <div class="box">
+          <h3>${esc(costPlan.title || 'Cost by Phase')}</h3>
+          ${costPlan.subtitle ? `<p>${esc(costPlan.subtitle)}</p>` : ''}
+          <p><strong>Target:</strong> ${esc(moneyRange(costPlan.targetBudget?.min, costPlan.targetBudget?.max, currency))} · <strong>Estimated range:</strong> ${esc(moneyRange(costPlan.estimatedTotal?.min, costPlan.estimatedTotal?.max, currency))} · <strong>Actual spent:</strong> ${esc(money(costPlan.actualSpentToDate, currency))}</p>
+        </div>
+        <table>
+          <tr><th>Phase</th><th>Estimated</th><th>Actual</th></tr>
+          ${phaseRows}
+          <tr>
+            <td><strong>Total</strong></td>
+            <td><strong>${esc(moneyRange(costPlan.estimatedTotal?.min, costPlan.estimatedTotal?.max, currency))}</strong></td>
+            <td><strong>${esc(money(costPlan.actualSpentToDate, currency))} so far</strong></td>
+          </tr>
+        </table>
+      </div>`;
+  }
+
+  function renderRoadmap(project, costPlan) {
     const phases = project.phases;
     const nextPlannedNumber = Math.min(
       ...phases.filter((p) => p.status === 'planned').map((p) => p.number)
@@ -81,7 +128,8 @@
     return `
       <h2>Roadmap</h2>
       ${nextActionNotice}
-      <div class="road">${cards}</div>`;
+      <div class="road">${cards}</div>
+      ${renderCostPlan(costPlan, project.currency)}`;
   }
 
   // One field type -> one rendering treatment, applied uniformly across every
@@ -242,6 +290,16 @@
     const res = await fetch(dataFile);
     const project = await res.json();
 
+    let costPlan = null;
+    if (project.projectId) {
+      try {
+        const costRes = await fetch(`data/${project.projectId}-cost-plan.json`);
+        if (costRes.ok) costPlan = await costRes.json();
+      } catch (err) {
+        console.warn('[render-project] optional cost plan not loaded', err);
+      }
+    }
+
     const statusMount = document.querySelector('[data-project-status]');
     if (statusMount) statusMount.innerHTML = renderStatusPill(project);
 
@@ -251,7 +309,7 @@
     const panelsMount = document.querySelector('[data-panels]');
     if (panelsMount) {
       panelsMount.innerHTML = `
-        <section id="roadmap" class="panel active">${renderRoadmap(project)}</section>
+        <section id="roadmap" class="panel active">${renderRoadmap(project, costPlan)}</section>
         ${renderPhasePanels(project)}
         ${renderDecisions(project)}`;
     }
