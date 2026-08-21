@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "projectId": "zen-lotus-pond",
+  "name": "Zen Lotus Pond",
+  "subtitle": "Backyard lotus water garden",
+  "status": "underway",
+  "currentPhase": 2,
+  "spentToDate": 137.13,
+  "currency": "USD",
+  "nextAction": "Choose and verify the permanent pond solution before sizing the permanent pump and filter.",
+  "goals": [
+    "Low-maintenance serene lotus water feature",
+    "Clean moving water with minimal visible algae and larvae",
+    "No fish required",
+    "Professional compact design framed by jasmine and Buddha",
+    "Keep routine maintenance small and predictable"
+  ],
+  "siteConstraints": {
+    "climate": "Very hot summer climate; temperatures can reach about 110°F",
+    "preferredWaterMovement": "Gentle bubbler or low fountain to limit evaporation",
+    "maintenanceTarget": "A few minutes weekly in hot weather plus roughly 10–15 minutes monthly for filter cleaning as needed"
+  },
+  "phases": [
+    {
+      "number": 1,
+      "id": "nursery",
+      "name": "Lotus Nursery",
+      "status": "complete",
+      "spent": 107.13,
+      "summary": "Establish three seed-grown lotus seedlings in the temporary nursery.",
+      "items": [
+        "Temporary nursery container",
+        "Solid lotus planting pot",
+        "Aquatic planting media",
+        "White pea gravel cap",
+        "Conditioned water",
+        "Small circulation/fountain"
+      ]
+    },
+    {
+      "number": 2,
+      "id": "pond-decision",
+      "name": "Pond Decision",
+      "status": "current",
+      "summary": "Select the permanent pond solution and verify that it is suitable for long-term water use.",
+      "candidates": [
+        {
+          "name": "Existing raised planter conversion",
+          "status": "under-evaluation",
+          "dimensions": "Approximately 11 ft × 3 ft × 22 in",
+          "notes": "Already lined, but framing, bracing, liner type, bottom support and continuous hydrostatic load must be verified before conversion."
+        },
+        {
+          "name": "Algreen Manhattan rectangular planter pond",
+          "status": "candidate",
+          "notes": "Preferred over the Pennington 50-gallon option for appearance and depth; not yet recorded as purchased."
+        },
+        {
+          "name": "Pennington 50-gallon Aquagarden",
+          "status": "alternate",
+          "notes": "All-in-one option considered, but less preferred aesthetically than the Algreen Manhattan."
+        },
+        {
+          "name": "Separate 4 ft × 2 ft × 2 ft raised pond",
+          "status": "paused",
+          "notes": "Do not purchase/build until the other permanent pond options are resolved."
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "pump-filter",
+      "name": "Pump + Filter + Fountain",
+      "status": "planned",
+      "summary": "Size the circulation and filtration system after final pond volume is known.",
+      "requirements": [
+        "Adjustable pond pump",
+        "Mechanical filtration",
+        "Biological filtration",
+        "Tubing and flow control",
+        "Simple low fountain or bubbler return"
+      ],
+      "notes": [
+        "UV clarifier is optional and should be added only if persistent green-water algae becomes a problem.",
+        "The existing low-cost smartpond kit is for the small nursery, not the permanent pond."
+      ]
+    },
+    {
+      "number": 4,
+      "id": "structure-liner",
+      "name": "Structure / Liner",
+      "status": "conditional",
+      "summary": "Reinforce the pond shell or replace/add pond-grade liner only if the selected permanent pond solution requires it."
+    },
+    {
+      "number": 5,
+      "id": "jasmine",
+      "name": "Jasmine",
+      "status": "planned",
+      "summary": "Frame the pond with two jasmine planters and black trellises using intentionally light foliage density."
+    },
+    {
+      "number": 6,
+      "id": "lotus-buddha",
+      "name": "Lotus + Buddha",
+      "status": "planned",
+      "summary": "Place lotus on one side, Buddha beside the lotus, fountain toward the opposite side, and preserve open reflective water."
+    },
+    {
+      "number": 7,
+      "id": "pothos",
+      "name": "Pothos",
+      "status": "planned",
+      "summary": "Use trailing pothos only in locations protected from intense direct summer sun."
+    },
+    {
+      "number": 8,
+      "id": "lighting",
+      "name": "Lighting",
+      "status": "planned",
+      "summary": "Add restrained warm accent lighting after the pond system is stable."
+    }
+  ],
+  "decisions": [
+    {
+      "item": "Fish",
+      "status": "locked",
+      "decision": "Start fishless; fish are not required."
+    },
+    {
+      "item": "Bamboo fountain",
+      "status": "locked",
+      "decision": "Removed; use a simple fountain or bubbler return."
+    },
+    {
+      "item": "UV clarifier",
+      "status": "open",
+      "decision": "Optional later if persistent green-water algae warrants it."
+    },
+    {
+      "item": "Jasmine layout",
+      "status": "locked",
+      "decision": "Jasmine — Pond — Jasmine in one row, with lighter foliage density."
+    },
+    {
+      "item": "Pothos",
+      "status": "conditional",
+      "decision": "Use only where protected from severe direct summer sun."
+    }
+  ],
+  "maintenance": [
+    {
+      "frequency": "Weekly in hot weather",
+      "task": "Remove visible debris/string algae and check water level",
+      "time": "2–5 minutes"
+    },
+    {
+      "frequency": "Monthly/as needed",
+      "task": "Clean mechanical filter",
+      "time": "10–15 minutes"
+    },
+    {
+      "frequency": "1–2 times yearly",
+      "task": "Deeper cleanup and lotus maintenance",
+      "time": "As needed"
+    }
+  ]
+}
