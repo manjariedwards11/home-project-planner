@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "projects": [
+    {
+      "id": "zen-lotus-pond",
+      "name": "Zen Lotus Pond",
+      "subtitle": "Backyard lotus water garden",
+      "status": "underway",
+      "currentPhase": 2,
+      "totalPhases": 8,
+      "spentToDate": 137.13,
+      "currency": "USD",
+      "currentLabel": "Pond Decision",
+      "dataFile": "data/zen-lotus-pond.json"
+    }
+  ]
+}
