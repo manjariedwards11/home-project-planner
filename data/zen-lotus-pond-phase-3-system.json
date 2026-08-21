@@ -7,8 +7,54 @@
   "status": "current",
   "goal": "Install the low-maintenance 300 GPH integrated circulation and filtration system for the permanent pond.",
   "decisionStatus": "selected",
+  "decisionState": "selected-purchased",
   "selectedOption": "integrated-system",
+  "preferredChoice": "Option B — One Integrated 300 GPH System",
   "decisionSummary": "Option B selected: one integrated 300 GPH pump/filter system for lower maintenance and simpler plumbing.",
+  "whyPreferred": [
+    "One pump means fewer components to clean and maintain.",
+    "Integrated mechanical and biological filtration keeps the plumbing simpler.",
+    "The 300 GPH system provides ample circulation for the Manhattan pond without excessive splash or flow."
+  ],
+  "comparison": [
+    {
+      "name": "Option A — Keep Existing Smartpond + Separate Filtration",
+      "retailer": "Lowe's",
+      "status": "not-selected",
+      "priceSnapshot": 143.0,
+      "priceSnapshotDate": "2026-08-21",
+      "includedEquipment": "Existing small Smartpond fountain plus separate adjustable main pump, mechanical/biological filter and tubing.",
+      "strengths": [
+        "Independent fountain and filtration circuits",
+        "Reuses the original Smartpond kit"
+      ],
+      "tradeoffs": [
+        "Two pumps to maintain",
+        "More plumbing and fittings",
+        "More failure and cleaning points",
+        "Estimated system cost about $143–153 including the existing $30 kit"
+      ]
+    },
+    {
+      "name": "Option B — One Integrated 300 GPH System",
+      "retailer": "Lowe's",
+      "status": "preferred",
+      "priceSnapshot": 112.0,
+      "priceSnapshotDate": "2026-08-21",
+      "includedEquipment": "smartpond 300 GPH pump, mechanical filtration, biological filtration and fountain hardware in one system.",
+      "strengths": [
+        "One pump",
+        "Lower maintenance",
+        "Simpler plumbing",
+        "Mechanical + biological filtration in one system",
+        "Gentle fountain hardware included"
+      ],
+      "tradeoffs": [
+        "Original $30 Smartpond kit will be returned",
+        "Extra tubing may still be needed depending on final placement"
+      ]
+    }
+  ],
   "phaseEstimate": {
     "min": 112,
     "max": 127,
