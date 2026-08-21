@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "projectId": "zen-lotus-pond",
+  "phase": 8,
+  "phaseId": "future-fish-ready",
+  "title": "Future Fish Decision",
+  "status": "future-idea",
+  "timeHorizon": "Revisit in about one year.",
+  "goal": "Decide whether a small fish population is appropriate after the pond has proven stable through Arizona seasons.",
+  "shoppingList": {
+    "status": "not-active",
+    "estimatedTotalMin": null,
+    "estimatedTotalMax": null,
+    "actualTotal": null,
+    "items": [],
+    "note": "No fish purchases or budget are committed now."
+  },
+  "completionMemory": {
+    "title": "End of Phase 8",
+    "status": "not-active",
+    "image": null,
+    "caption": "Reserved for the future fish decision if this idea is activated."
+  }
+}
