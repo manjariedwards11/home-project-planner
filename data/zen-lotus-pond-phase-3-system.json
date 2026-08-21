@@ -4,7 +4,7 @@
   "phase": 3,
   "phaseId": "pump-filter",
   "title": "Pump + Filter + Fountain",
-  "status": "planned",
+  "status": "current",
   "goal": "Build the permanent circulation and filtration system so the pond runs fishless now but has enough mechanical and biological capacity for a small, appropriate fish population later without rebuilding the system.",
   "phaseEstimate": {
     "min": 150,
@@ -15,13 +15,14 @@
   "designIntent": {
     "currentState": "Fishless lotus pond",
     "futureState": "Fish-ready infrastructure for a possible small fish population after the pond has been stable for about a year",
+    "selectedVessel": "Algreen Manhattan 40-inch Balcony Planter & Pond in Brownstone, purchased from Wayfair",
     "mainPumpTarget": "Adjustable pump in roughly the 300–500 GPH rated range, sized to deliver approximately 200–300 GPH through filtration after normal flow losses",
     "fountainRole": "Keep the existing Smartpond kit as the gentle visible fountain/surface-movement feature rather than relying on it as the main filtration system",
     "filterRole": "Use separate mechanical and biological filtration with enough bio-media capacity to avoid rebuilding the system if small fish are added later",
     "uv": "Optional later only if persistent free-floating green water becomes a problem"
   },
   "shoppingList": {
-    "status": "in-planning",
+    "status": "active",
     "estimatedTotalMin": 150,
     "estimatedTotalMax": 250,
     "actualTotal": 30.0,
@@ -42,7 +43,7 @@
         "estimatedMin": 35.0,
         "estimatedMax": 60.0,
         "actualCost": null,
-        "note": "Final selection should be confirmed after the Manhattan pond is purchased and the actual plumbing/head layout is known."
+        "note": "The Manhattan vessel is now purchased, so final pump selection can be made around its approximately 40 x 20 x 18-inch footprint and the actual plumbing/head layout."
       },
       {
         "item": "Mechanical + biological filter with generous bio-media capacity",
