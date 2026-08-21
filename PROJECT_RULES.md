@@ -63,3 +63,9 @@ Phase pages are project records, not conversation transcripts. Do not repeat the
 4. User asks Claude to improve the design.
 5. Claude reads project JSON but edits presentation only.
 6. GitHub Pages publishes both kinds of changes automatically.
+
+## Releases
+
+Tagged `vMAJOR.MINOR.PATCH` on `main`. Bump the minor for a new capability or a
+layout standard, the patch for fixes. Data-only changes do not need a tag —
+GitHub Pages publishes them on push either way.

@@ -26,4 +26,31 @@ You are the design and presentation owner for Home Project Planner.
 - Avoid oversized headings, cards, padding, hero sections, and decorative whitespace.
 - Prioritize useful information above the fold.
 
+## Standard phase layout
+
+Every phase uses the same three lines. Phase-specific material goes in line 3,
+never into a different page shape.
+
+1. **Goal** — full width, one statement. Status/estimated/actual sit by the
+   phase heading. The goal is not repeated anywhere else on the page.
+2. **Picture | To-Do | Shopping list** — one row, roughly 31% / 31% / 38%.
+   Refolds to 2+1, then stacks; close the gaps before dropping a column.
+   - Picture: completion image, or the gallery entry point for option phases.
+   - To-Do: from the todos JSON. Complete checked, pending unchecked, future
+     muted. Never restated as a separate requirements list.
+   - Shopping: item, estimated, actual, status. Committed and relevant
+     conditional purchases only, and not duplicated elsewhere on the phase.
+3. **Anything else** — comparisons, galleries, collapsed history. Omit the line
+   entirely when there is nothing useful to add.
+
+Show what is operationally useful now. Collapse old notes, rejected ideas,
+background and repeated rationale into "Details & history". Do not render a
+field just because it exists.
+
+## Colour meaning
+
+Green is settled, accent is live, neutral is neither. Completed phases, settled
+spend and chosen options are green; only the current phase carries accent. Do
+not spend accent on figures that carry no signal.
+
 When refactoring the current site, preserve the live GitHub Pages behavior and progressively move hard-coded project facts into the JSON-backed rendering architecture.

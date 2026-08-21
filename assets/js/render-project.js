@@ -1021,7 +1021,12 @@
     if (comp.decisionStatus === 'pending' || comp.decisionStatus === 'decision-pending') {
       primary.push(`<div class="notice"><strong>Decision pending.</strong>${comp.decisionNote ? ' ' + esc(comp.decisionNote) : ''}</div>`);
     }
-    primary.push(renderOwnedEquipment(comp, currency));
+    // Owned equipment is already a row in the phase's shopping list, so only
+    // its note (which the list does not carry) moves into Details.
+    const owned = comp.ownedEquipment;
+    (Array.isArray(owned) ? owned : owned ? [owned] : []).forEach((o) => {
+      if (o.note) extra.push(`<h4>${esc(o.item)}</h4><p>${esc(o.note)}</p>`);
+    });
     primary.push(renderSystemOptions(comp, currency));
 
     if (comp.currentState) {
@@ -1451,26 +1456,15 @@
   // the data supplies one, else this map, else fall back to the slug implied by
   // status. Adding "detailFile" to a phase in the project JSON removes the need
   // to touch this map at all.
-  // Keyed by phase id, not phase number: phases get renumbered (7 and 8 were
-  // swapped once already) while the file keeps its original name, and a
-  // number-keyed lookup would then load one phase's file into another.
-  // The value is the filename fragment exactly as it exists in data/.
-  const PHASE_DETAIL_FILES = {
-    'nursery': 'phase-1-completion',
-    'pond-decision': 'phase-2-decision',
-    'pump-filter': 'phase-3-system',
-    'future-fish-ready': 'phase-8-future-fish',
-  };
-
   // Candidates in priority order. The explicit pointer wins, but a phase that
   // has been renumbered can carry a pointer whose filename was never renamed,
   // so the id-keyed fallback keeps the phase rendering instead of going blank.
+  // A phase points at its own detail file. Older projects that predate that
+  // field fall back to the conventional name implied by their status.
   function detailUrlsFor(project, phase) {
     const id = project.projectId;
     const urls = [];
     if (phase.detailFile) urls.push(phase.detailFile);
-    const fragment = PHASE_DETAIL_FILES[phase.id];
-    if (fragment) urls.push(`data/${id}-${fragment}.json`);
     if (phase.status === 'current') urls.push(`data/${id}-phase-${phase.number}-decision.json`);
     if (phase.status === 'complete') urls.push(`data/${id}-phase-${phase.number}-completion.json`);
     return urls.filter((u, i) => urls.indexOf(u) === i);

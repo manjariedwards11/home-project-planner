@@ -118,7 +118,7 @@
    changing order. */
 .phase-row{
   display:grid;gap:12px;align-items:start;margin-bottom:9px;
-  grid-template-columns:300px minmax(0,1fr) minmax(0,1.15fr);
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.2fr);
   grid-template-areas:"pic todo shop";
 }
 .row-pic{grid-area:pic;min-width:0}
@@ -468,9 +468,12 @@
 
 /* The shopping table needs the most room, so it drops to its own full-width
    line first, then everything stacks. */
-@media(max-width:1200px){
+/* Close the gaps before sacrificing a column. */
+@media(max-width:1320px){ .phase-row{gap:9px} }
+@media(max-width:1150px){
   .phase-row{
-    grid-template-columns:280px minmax(0,1fr);
+    gap:10px;
+    grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);
     grid-template-areas:"pic todo" "shop shop";
   }
 }
