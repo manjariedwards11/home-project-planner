@@ -133,13 +133,13 @@
       ? `<p><strong>Goals</strong></p><ul>${project.goals.map((g) => `<li>${esc(g)}</li>`).join('')}</ul>`
       : '';
     const sc = project.siteConstraints;
-    const constraints = sc
-      ? `<p><strong>Site constraints</strong></p><ul>
-          ${sc.climate ? `<li>${esc(sc.climate)}</li>` : ''}
-          ${sc.preferredWaterMovement ? `<li>${esc(sc.preferredWaterMovement)}</li>` : ''}
-          ${sc.maintenanceTarget ? `<li>${esc(sc.maintenanceTarget)}</li>` : ''}
-          ${sc.designIntent ? `<li>${esc(sc.designIntent)}</li>` : ''}
-        </ul>`
+    // Rendered generically so a newly added constraint (location, and whatever
+    // comes next) appears without a code change.
+    const constraintItems = sc
+      ? Object.values(sc).filter((v) => typeof v === 'string' && v.trim())
+      : [];
+    const constraints = constraintItems.length
+      ? `<p><strong>Site constraints</strong></p><ul>${constraintItems.map((v) => `<li>${esc(v)}</li>`).join('')}</ul>`
       : '';
     const cp = costPlan || {};
     const accounting = (cp.accountingNote || cp.title || cp.subtitle)
@@ -246,6 +246,7 @@
       </div>
       <div class="progress-strip">${strip}</div>
       ${nextActionNotice}
+      ${project.lastContentUpdate ? `<p class="caption-note">Project data last updated ${esc(project.lastContentUpdate)}</p>` : ''}
       ${renderProjectBudget(project)}
       ${renderOverviewAccordion(project, costPlan)}
       <table class="road-table">
@@ -1174,7 +1175,7 @@
     'nursery': 'phase-1-completion',
     'pond-decision': 'phase-2-decision',
     'pump-filter': 'phase-3-system',
-    'future-fish-ready': 'phase-7-future-fish',
+    'future-fish-ready': 'phase-8-future-fish',
   };
 
   // Candidates in priority order. The explicit pointer wins, but a phase that
