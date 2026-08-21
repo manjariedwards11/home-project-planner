@@ -26,102 +26,111 @@
       "label": "Option A — Keep the Smartpond",
       "status": "considering",
       "summary": "Use the Smartpond as the visible fountain and add a separate pump and permanent mechanical/biological filter.",
-      "systemEstimatedMin": 150.0,
-      "systemEstimatedMax": 235.0,
-      "remainingEstimatedMin": 120.0,
-      "remainingEstimatedMax": 205.0,
+      "systemEstimatedMin": 142.19,
+      "systemEstimatedMax": 152.19,
+      "remainingEstimatedMin": 112.19,
+      "remainingEstimatedMax": 122.19,
       "pumpCount": 2,
       "maintenance": "Higher than Option B because there are two pumps/fountain components to maintain.",
-      "items": [
+      "recommendedShopping": [
         {
-          "item": "Smartpond Filter Kit with Pump",
-          "status": "bought",
-          "estimatedMin": 30.0,
-          "estimatedMax": 30.0,
-          "actualCost": 30.0,
-          "role": "Visible gentle fountain / surface movement"
+          "item": "TOTALPOND 330 GPH Pond Pump",
+          "retailer": "Home Depot",
+          "model": "52223",
+          "currentPrice": 57.98,
+          "priceChecked": "2026-08-21",
+          "status": "candidate-if-selected",
+          "role": "Main circulation",
+          "link": "https://www.homedepot.com/p/202017037"
         },
         {
-          "item": "Adjustable main pond pump, approximately 300–500 GPH",
-          "status": "need-to-buy-if-selected",
-          "estimatedMin": 35.0,
-          "estimatedMax": 60.0,
-          "actualCost": null,
-          "role": "Main circulation through filtration"
+          "item": "TOTALPOND Universal Pump Filter Box",
+          "retailer": "Home Depot",
+          "model": "52231",
+          "currentPrice": 44.21,
+          "priceChecked": "2026-08-21",
+          "status": "candidate-if-selected",
+          "role": "Coarse + fine mechanical filtration and bio-balls",
+          "link": "https://www.homedepot.com/p/202278958"
         },
         {
-          "item": "Mechanical + biological filter with bio-media",
-          "status": "need-to-buy-if-selected",
-          "estimatedMin": 65.0,
-          "estimatedMax": 110.0,
-          "actualCost": null,
-          "role": "Permanent water filtration"
-        },
-        {
-          "item": "Tubing, flow control and quiet return fittings",
-          "status": "need-to-buy-if-selected",
-          "estimatedMin": 20.0,
-          "estimatedMax": 35.0,
-          "actualCost": null,
-          "role": "Connect filtration and return water"
+          "item": "Pond tubing / return fittings",
+          "estimatedMin": 10.0,
+          "estimatedMax": 20.0,
+          "status": "need-if-selected",
+          "role": "Quiet filtered-water return"
         }
-      ]
+      ],
+      "note": "Existing Smartpond remains the independent fountain. New purchases are about $112–122."
     },
     {
       "id": "integrated-system",
       "label": "Option B — One Integrated System",
       "status": "considering",
-      "summary": "Do not use the Smartpond in the permanent pond. Use one proper pump/filter system with a gentle fountain or return attachment.",
-      "systemEstimatedMin": 125.0,
-      "systemEstimatedMax": 215.0,
-      "additionalSpendFromTodayMin": 125.0,
-      "additionalSpendFromTodayMax": 215.0,
+      "summary": "Use one integrated pump/filter system in the permanent pond; keep the Smartpond as nursery or backup equipment.",
+      "systemEstimatedMin": 112.0,
+      "systemEstimatedMax": 127.0,
+      "additionalSpendFromTodayMin": 112.0,
+      "additionalSpendFromTodayMax": 127.0,
       "pumpCount": 1,
-      "maintenance": "Lower-maintenance option with fewer pumps, fittings and failure points.",
-      "qualityNote": "Best fit for the goal of simpler maintenance and consistent filtration, provided the integrated system has proper mechanical and biological filtration.",
-      "accountingNote": "The $30 already spent on the Smartpond remains part of project actual spend even if it is not used in the permanent pond.",
-      "items": [
+      "maintenance": "Lower-maintenance option with one pump, less plumbing and fewer failure points.",
+      "qualityNote": "Simpler architecture for consistent filtration; choose a kit with both mechanical filtration and biological media.",
+      "recommendedShopping": [
         {
-          "item": "Integrated pump + mechanical/biological filter system",
-          "status": "need-to-buy-if-selected",
-          "estimatedMin": 90.0,
-          "estimatedMax": 150.0,
-          "actualCost": null,
-          "role": "Single main circulation and filtration system"
+          "item": "TOTALPOND Complete Filter Kit with 300-GPH Pump",
+          "retailer": "Home Depot",
+          "model": "52229",
+          "currentPrice": 112.0,
+          "priceChecked": "2026-08-21",
+          "status": "best-value-candidate",
+          "role": "Integrated 300 GPH pump, filter box, mechanical filters, bio-media and fountain hardware",
+          "link": "https://www.homedepot.com/p/202278961"
         },
         {
-          "item": "Gentle fountain head / return attachment",
-          "status": "need-to-buy-if-selected",
-          "estimatedMin": 15.0,
-          "estimatedMax": 30.0,
-          "actualCost": null,
-          "role": "Surface movement / visual fountain"
-        },
-        {
-          "item": "Tubing, flow control and fittings",
-          "status": "need-to-buy-if-selected",
-          "estimatedMin": 20.0,
-          "estimatedMax": 35.0,
-          "actualCost": null,
-          "role": "Connect and control the system"
+          "item": "Extra tubing for quiet return",
+          "estimatedMin": 0.0,
+          "estimatedMax": 15.0,
+          "status": "optional",
+          "role": "Only needed if the final layout uses a separate quiet return"
         }
-      ]
+      ],
+      "alternateCandidate": {
+        "item": "POND BOSS Complete Filter Kit with Pump up to 500 gallons",
+        "retailer": "Home Depot",
+        "model": "52734",
+        "currentPrice": 124.97,
+        "priceChecked": "2026-08-21",
+        "status": "alternate",
+        "link": "https://www.homedepot.com/p/315376902"
+      },
+      "accountingNote": "The $30 already spent on the Smartpond remains part of project actual spend even if it is not used in the permanent pond."
     }
   ],
+  "comparison": {
+    "optionA": {
+      "permanentPumps": 2,
+      "newSpend": "$112–122",
+      "maintenance": "Higher",
+      "plumbing": "More complex"
+    },
+    "optionB": {
+      "permanentPumps": 1,
+      "newSpend": "$112–127",
+      "maintenance": "Lower",
+      "plumbing": "Simpler"
+    },
+    "currentConclusion": "Costs are nearly the same. Option B is the lower-maintenance architecture, but no option is selected yet."
+  },
   "decisionNote": "No option is selected yet. Option B is expected to require less maintenance; final selection will be made later.",
   "shoppingList": {
     "status": "decision-pending",
-    "estimatedTotalMin": 150,
-    "estimatedTotalMax": 250,
     "actualTotal": 30.0,
     "items": [
       {
         "item": "Smartpond Filter Kit with Pump from Lowe's",
         "status": "bought",
-        "estimatedMin": 30.0,
-        "estimatedMax": 30.0,
         "actualCost": 30.0,
-        "note": "Only committed Phase 3 purchase so far. Remaining purchases depend on Option A vs Option B."
+        "note": "Only committed Phase 3 purchase so far."
       }
     ]
   },
