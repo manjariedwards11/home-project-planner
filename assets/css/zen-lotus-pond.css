@@ -18,6 +18,22 @@
 
 .workspace{display:flex;gap:18px;align-items:flex-start}
 
+/* Desktop: the page itself never scrolls. Header, metrics and phase nav stay
+   put, and only the active panel scrolls. Mobile keeps normal page scrolling,
+   which is what touch expects. */
+@media(min-width:981px){
+  html,body{height:100%;overflow:hidden}
+  body{display:flex;flex-direction:column}
+  .project-shell{flex:1;min-height:0;display:flex;flex-direction:column}
+  .workspace{flex:1;min-height:0}
+  .side-nav{position:static;max-height:100%;overflow-y:auto}
+  .panels{max-height:100%;overflow-y:auto;padding-right:6px}
+  /* Keep the scrollbar off the content itself. */
+  .panels::-webkit-scrollbar{width:8px}
+  .panels::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+  .panels::-webkit-scrollbar-track{background:transparent}
+}
+
 .side-nav{
   flex:0 0 176px;width:176px;
   display:flex;flex-direction:column;gap:2px;
@@ -91,15 +107,39 @@
 .phase-side{min-width:0;display:flex;flex-direction:column;gap:10px}
 
 .completion-card{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.memory-frame{position:relative}
 /* 3:2 matches the source photo (no crop) and is shorter than 4:3 at this
    width; the max-height caps it on short viewports. */
 .completion-card img{display:block;width:100%;aspect-ratio:3/2;max-height:270px;object-fit:cover}
+/* Shown when no photo is configured yet, so the slot reads as reserved
+   rather than broken. */
+.memory-placeholder{
+  aspect-ratio:3/2;max-height:270px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  background:repeating-linear-gradient(45deg,var(--soft) 0 8px,var(--card) 8px 16px);
+  color:var(--muted);
+}
+.memory-placeholder[hidden]{display:none}
+.memory-placeholder .ph-mark{font-size:26px;line-height:1;opacity:.5}
+.memory-placeholder .ph-text{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
 .completion-card figcaption{padding:7px 10px;font-size:11.5px;line-height:1.3;border-top:1px solid var(--line)}
 .completion-card figcaption strong{display:block;font-size:12px}
 .caption-note{display:block;color:var(--muted);font-size:10.5px;line-height:1.3;margin-top:2px}
 
 .shopping-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
-.shopping-card h3{font-size:12px;margin:0 0 5px;font-weight:800}
+.shopping-card h3{font-size:12px;margin:0 0 6px;font-weight:800;display:flex;align-items:center;gap:6px}
+
+/* Headline figures as cards so estimate and actual read at a glance instead
+   of being buried in the table's last row. */
+.money-cards{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:7px}
+.money-card{background:var(--soft);border-radius:5px;padding:5px 8px}
+.money-card .cost-label{display:block;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.money-card .money-value{display:block;font-size:14px;font-weight:800;line-height:1.2;white-space:nowrap}
+.money-card.is-actual{background:var(--accent-soft)}
+.money-card.is-actual .money-value{color:var(--accent)}
+
+/* Long lists scroll inside the card rather than lengthening the page. */
+.shop-scroll{max-height:230px;overflow-y:auto}
 .phase-shopping{font-size:11px}
 .phase-shopping th,.phase-shopping td{padding:3px 5px}
 .phase-shopping .col-check{width:16px;text-align:center;padding-left:0;padding-right:0}

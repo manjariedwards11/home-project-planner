@@ -255,85 +255,196 @@
     return costPlan[`phase${phase.number}Completion`] || null;
   }
 
-  // A completed phase gets a sidebar: completion image on top, itemized
-  // shopping list below. The shopping list carries every amount the phase's
-  // spendBreakdown used to show, so replacing that table loses no figures.
-  function renderCompletionSidebar(completion, phase, project, costRow) {
-    if (!completion) return '';
-    const currency = project.currency;
-    const projectId = project.projectId || '';
+  // ---- Reusable phase sidebar: memory card on top, shopping list below -----
 
-    // Prefer a phase-specific photo, fall back to the project photo, then
-    // hide the figure entirely rather than leaving a broken image.
-    const phaseImg = `assets/img/${projectId}-phase${phase.number}.png`;
-    const projectImg = `assets/img/${projectId}.png`;
-    const figure = `
+  // Completed phases show their photo once one exists; every other phase shows
+  // a placeholder so the slot is present from the start. A configured image
+  // wins; otherwise we try the conventional per-phase path and fall back to the
+  // placeholder if that file is not there yet.
+  function renderMemoryCard(phase, project, memory) {
+    const mem = memory || {};
+    const title = mem.title || `End of Phase ${phase.number}`;
+    const caption = mem.caption || '';
+    const projectId = project.projectId || '';
+    const src = mem.image || `assets/img/${projectId}-phase${phase.number}.png`;
+    const awaiting = phase.status === 'complete' ? 'Awaiting photo' : 'Awaiting completion';
+
+    return `
       <figure class="completion-card">
-        <img src="${esc(phaseImg)}" alt="End of Phase ${phase.number} — ${esc(completion.label || phase.name)}"
-             loading="lazy"
-             data-fallback="${esc(projectImg)}"
-             onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.removeAttribute('data-fallback')}else{this.closest('figure').style.display='none'}">
+        <!-- The placeholder is the default. attachMemoryImages() probes the
+             candidate path with fetch and swaps the photo in only if it is
+             actually there — a plain <img> would log a 404 on every load. -->
+        <div class="memory-frame" data-memory-src="${esc(src)}" data-memory-alt="${esc(title)}">
+          <div class="memory-placeholder">
+            <span class="ph-mark" aria-hidden="true">&#9707;</span>
+            <span class="ph-text">${esc(awaiting)}</span>
+          </div>
+        </div>
         <figcaption>
-          <strong>End of Phase ${phase.number}</strong>
-          ${completion.goal ? `<span class="caption-note">${esc(completion.goal)}</span>` : ''}
+          <strong>${esc(title)}</strong>
+          ${caption ? `<span class="caption-note">${esc(caption)}</span>` : ''}
         </figcaption>
       </figure>`;
+  }
 
-    // Per-item estimates are not present in the data, so the estimate column
-    // shows a dash per row; the phase-level estimate carries the total.
-    const itemRows = (completion.items || []).map((i) => `
-      <tr>
-        <td class="col-check">${i.status === 'complete' ? '<span class="check" title="Complete">✓</span>' : ''}</td>
-        <td>${esc(i.item)}</td>
-        <td class="col-est">—</td>
-        <td class="col-actual"><span class="actual-amount">${esc(money(i.actual, currency))}</span></td>
-      </tr>`).join('');
+  // Headline figures as info cards, so the phase estimate and actual read at a
+  // glance instead of being buried in a table's last row.
+  function renderMoneyCards(estLabel, estValue, actualValue, currency) {
+    return `
+      <div class="money-cards">
+        <div class="money-card">
+          <span class="cost-label">${esc(estLabel)}</span>
+          <span class="money-value">${esc(estValue)}</span>
+        </div>
+        <div class="money-card is-actual">
+          <span class="cost-label">Actual</span>
+          <span class="money-value">${actualValue == null ? '&mdash;' : esc(money(actualValue, currency))}</span>
+        </div>
+      </div>`;
+  }
 
-    const estTotal = costRow
-      ? moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency)
-      : '—';
+  function shoppingTable(rows) {
+    return `
+      <table class="phase-shopping">
+        <tr><th class="col-check"></th><th>Item</th><th class="col-est">Estimated</th><th class="col-actual">Actual</th></tr>
+        ${rows}
+      </table>`;
+  }
 
-    // The spendBreakdown entry matching this phase's total is now itemized
-    // above, so its original label rides along on the total row instead of
-    // disappearing with the old Spend table.
+  // Completed phase: itemized actuals. Per-item estimates were never recorded,
+  // so those cells stay blank rather than being reconstructed after the fact.
+  function renderCompletionShopping(phase, project, completion, costRow) {
+    const currency = project.currency;
+    const list = completion.shoppingList || {};
+    const items = list.items || completion.items || [];
+
+    const rows = items.map((i) => {
+      const actual = i.actualCost != null ? i.actualCost : i.actual;
+      const done = (i.status === 'complete' || i.status === 'bought');
+      return `
+        <tr>
+          <td class="col-check">${done ? '<span class="check" title="Complete">&#10003;</span>' : ''}</td>
+          <td>${esc(i.item)}</td>
+          <td class="col-est">${i.estimatedCost == null ? '&mdash;' : esc(money(i.estimatedCost, currency))}</td>
+          <td class="col-actual"><span class="actual-amount">${esc(money(actual, currency))}</span></td>
+        </tr>`;
+    }).join('');
+
+    const actualTotal = list.actualTotal != null ? list.actualTotal : completion.actualTotal;
+
+    // The spendBreakdown row equal to this phase's total is itemized above, so
+    // its original label rides on the total row rather than disappearing.
     const totalLabels = (phase.spendBreakdown || [])
-      .filter((s) => Number(s.amount) === Number(completion.actualTotal))
+      .filter((s) => Number(s.amount) === Number(actualTotal))
       .map((s) => s.label);
 
-    // Amounts recorded against this phase but accounted for elsewhere are kept
-    // visible and labelled, rather than dropped from the page.
-    const elsewhere = (phase.spendBreakdown || []).filter((s) => {
-      const amt = Number(s.amount);
-      return amt !== Number(completion.actualTotal);
-    });
-    const elsewhereRows = elsewhere.map((s) => `
-      <tr class="offphase-row">
+    // Amounts recorded here but booked to another phase stay visible and
+    // labelled, and are excluded from the total.
+    const elsewhereRows = (phase.spendBreakdown || [])
+      .filter((s) => Number(s.amount) !== Number(actualTotal))
+      .map((s) => `
+        <tr class="offphase-row">
+          <td class="col-check"></td>
+          <td>${esc(s.label)}<span class="caption-note">Counted under Phase 3, not in the Phase ${phase.number} total</span></td>
+          <td class="col-est">&mdash;</td>
+          <td class="col-actual">${esc(money(s.amount, currency))}</td>
+        </tr>`).join('');
+
+    const estMin = list.estimatedTotalMin != null ? list.estimatedTotalMin : (costRow && costRow.estimatedMin);
+    const estMax = list.estimatedTotalMax != null ? list.estimatedTotalMax : (costRow && costRow.estimatedMax);
+
+    return `
+      <div class="shopping-card">
+        <h3>Shopping list</h3>
+        ${renderMoneyCards('Phase estimate', moneyRange(estMin, estMax, currency), actualTotal, currency)}
+        <div class="shop-scroll">
+          ${shoppingTable(`
+            ${rows}
+            <tr class="total-row">
+              <td class="col-check"></td>
+              <td>Phase ${phase.number} total
+                ${totalLabels.map((l) => `<span class="caption-note">${esc(l)}</span>`).join('')}
+              </td>
+              <td class="col-est">${esc(moneyRange(estMin, estMax, currency))}</td>
+              <td class="col-actual"><span class="actual-amount">${esc(money(actualTotal, currency))}</span></td>
+            </tr>
+            ${elsewhereRows}`)}
+        </div>
+        ${list.estimateNote ? `<p class="caption-note">${esc(list.estimateNote)}</p>` : ''}
+        ${completion.crossPhaseAccountingNote ? `<p class="caption-note">${esc(completion.crossPhaseAccountingNote)}</p>` : ''}
+      </div>`;
+  }
+
+  // Active phase: only the planned purchase, never the comparison alternates.
+  function renderPendingShoppingCard(phase, project, decision) {
+    const currency = project.currency;
+    const ps = decision.pendingShoppingList;
+    if (!ps || !ps.items || !ps.items.length) return '';
+
+    const rows = ps.items.map((i) => `
+      <tr>
         <td class="col-check"></td>
-        <td>${esc(s.label)}<span class="caption-note">Counted under Phase 3, not in the Phase ${phase.number} total</span></td>
-        <td class="col-est">—</td>
-        <td class="col-actual">${esc(money(s.amount, currency))}</td>
+        <td>${esc(i.item)}
+          <span class="caption-note">${esc(i.retailer || '')}${i.link ? ` &middot; <a href="${esc(i.link)}" target="_blank" rel="noopener">link</a>` : ''}</span>
+          ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
+        </td>
+        <td class="col-est">${esc(optionalMoney(i.estimatedCost, currency))}</td>
+        <td class="col-actual">${esc(optionalMoney(i.actualCost, currency))}</td>
       </tr>`).join('');
 
     return `
-      <aside class="phase-side">
-        ${figure}
-        <div class="shopping-card">
-          <h3>Shopping list</h3>
-          <table class="phase-shopping">
-            <tr><th class="col-check"></th><th>Item</th><th class="col-est">Est.</th><th class="col-actual">Actual</th></tr>
-            ${itemRows}
+      <div class="shopping-card">
+        <h3>Pending shopping list <span class="pill amber">${esc(humanizeSlug(ps.status || 'pending'))}</span></h3>
+        ${renderMoneyCards('Phase estimate', moneyRange(ps.phaseEstimateMin, ps.phaseEstimateMax, currency), ps.actualTotal, currency)}
+        <div class="shop-scroll">
+          ${shoppingTable(`
+            ${rows}
             <tr class="total-row">
               <td class="col-check"></td>
-              <td>
-                Phase ${phase.number} total
-                ${totalLabels.map((l) => `<span class="caption-note">${esc(l)}</span>`).join('')}
-              </td>
-              <td class="col-est">${esc(estTotal)}</td>
-              <td class="col-actual"><span class="actual-amount">${esc(money(completion.actualTotal, currency))}</span></td>
-            </tr>
-            ${elsewhereRows}
-          </table>
+              <td>Phase ${phase.number} total</td>
+              <td class="col-est">${esc(moneyRange(ps.phaseEstimateMin, ps.phaseEstimateMax, currency))}</td>
+              <td class="col-actual">${esc(optionalMoney(ps.actualTotal, currency))}</td>
+            </tr>`)}
         </div>
+        ${ps.note ? `<p class="caption-note">${esc(ps.note)}</p>` : ''}
+      </div>`;
+  }
+
+  // Swap a memory photo in wherever one actually exists. Drop a file at the
+  // conventional path (or set completionMemory.image) and it appears on the
+  // next load; until then the placeholder stands.
+  function attachMemoryImages() {
+    document.querySelectorAll('.memory-frame[data-memory-src]').forEach(async (frame) => {
+      const src = frame.getAttribute('data-memory-src');
+      if (!src) return;
+      try {
+        const res = await fetch(src, { method: 'HEAD' });
+        if (!res.ok) return;
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = frame.getAttribute('data-memory-alt') || '';
+        img.loading = 'lazy';
+        img.addEventListener('load', () => {
+          const ph = frame.querySelector('.memory-placeholder');
+          if (ph) ph.hidden = true;
+        });
+        frame.prepend(img);
+      } catch (err) {
+        /* no photo yet — placeholder stays */
+      }
+    });
+  }
+
+  function renderPhaseSidebar(phase, project, opts) {
+    const card = opts.completion
+      ? renderCompletionShopping(phase, project, opts.completion, opts.costRow)
+      : opts.decision
+        ? renderPendingShoppingCard(phase, project, opts.decision)
+        : '';
+    return `
+      <aside class="phase-side">
+        ${renderMemoryCard(phase, project, opts.memory)}
+        ${card}
       </aside>`;
   }
 
@@ -352,22 +463,38 @@
 
   // One field type -> one rendering treatment, applied uniformly across every
   // phase regardless of phase number.
-  function renderPhaseBody(phase, currency, costPlan, hasSidebar) {
+  function renderPhaseBody(phase, currency, costPlan, hasSidebar, completion) {
     let html = '';
+    const comp = completion || {};
 
     const costRow = costRowFor(costPlan, phase);
     html += renderPhaseCostLine(costRow, currency);
 
-    if (phase.summary) {
-      html += `<div class="box"><p>${esc(phase.summary)}</p></div>`;
+    if (comp.goal) {
+      html += `<div class="box goal-box"><p><strong>Goal:</strong> ${esc(comp.goal)}</p></div>`;
     }
+
+    // The detail file may restate the summary; render it only if it differs,
+    // so identical text is not shown twice.
+    const summaries = [phase.summary, comp.summary]
+      .filter(Boolean)
+      .filter((s, i, a) => a.indexOf(s) === i);
+    summaries.forEach((s) => {
+      html += `<div class="box"><p>${esc(s)}</p></div>`;
+    });
 
     if (phase.layout) {
       html += `<div class="box"><p><strong>Layout:</strong> ${esc(phase.layout)}</p></div>`;
     }
 
-    if (phase.items && phase.items.length) {
-      html += `<div class="box"><ul>${phase.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>`;
+    // Union of the phase item list and any completed-work entries the detail
+    // file adds, so neither source loses an entry.
+    const items = (phase.items || []).slice();
+    (comp.completedWork || []).forEach((w) => {
+      if (!items.includes(w)) items.push(w);
+    });
+    if (items.length) {
+      html += `<div class="box"><ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>`;
     }
 
     if (phase.decisionCriteria && phase.decisionCriteria.length) {
@@ -395,8 +522,13 @@
       </table></div>`;
     }
 
-    if (phase.notes && phase.notes.length) {
-      html += phase.notes.map((n) => `<div class="notice">${esc(n)}</div>`).join('');
+    // Union again: every note from either source appears exactly once.
+    const notes = (phase.notes || []).slice();
+    (comp.notes || []).forEach((n) => {
+      if (!notes.includes(n)) notes.push(n);
+    });
+    if (notes.length) {
+      html += notes.map((n) => `<div class="notice">${esc(n)}</div>`).join('');
     }
 
     return html;
@@ -532,35 +664,41 @@
     return project.phases.map((phase) => {
       const detail = phaseDetails.get(phase.number) || {};
       const decision = detail.decision;
-      const completion = completionFor(costPlan, phase);
+      // A dedicated completion file wins over the block embedded in the cost
+      // plan, since it carries richer data (goal, shopping list, memory).
+      const completion = detail.completion || completionFor(costPlan, phase);
       const costRow = costRowFor(costPlan, phase);
+      const memory = (decision && decision.completionMemory)
+        || (completion && completion.completionMemory)
+        || null;
 
-      // A phase with a decision file leads with the finalist comparison; its
-      // older evaluation content moves into the history accordion below.
+      // Every phase with detail data uses the same two-column pattern:
+      // main content left, memory card + shopping list right.
+      const hasSidebar = !!(decision || completion);
+
+      let main;
       if (decision) {
-        return `
-          <section id="p${phase.number}" class="panel">
-            <h2>Phase ${phase.number} — ${esc(decision.title || phase.name)}</h2>
-            ${renderPhaseCostLine(costRow, currencyOf(project))}
-            ${renderDecisionPanel(decision, phase, project)}
-            ${renderDecisionHistory(phase, decision)}
-            ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
-            ${phase.decisionGate ? `<div class="notice">${esc(phase.decisionGate)}</div>` : ''}
-          </section>`;
+        main = `
+          ${renderPhaseCostLine(costRow, currencyOf(project))}
+          ${renderDecisionPanel(decision, phase, project)}
+          ${renderDecisionHistory(phase, decision)}
+          ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
+          ${phase.decisionGate ? `<div class="notice">${esc(phase.decisionGate)}</div>` : ''}`;
+      } else {
+        main = renderPhaseBody(phase, project.currency, costPlan, hasSidebar, completion);
       }
 
-      const body = renderPhaseBody(phase, project.currency, costPlan, !!completion);
-      // Phases with a completion record get a two-column layout; the rest keep
-      // the single-column form.
-      const inner = completion
+      const title = (decision && decision.title) || (completion && completion.title) || phase.name;
+      const inner = hasSidebar
         ? `<div class="phase-layout">
-             <div class="phase-main">${body}</div>
-             ${renderCompletionSidebar(completion, phase, project, costRow)}
+             <div class="phase-main">${main}</div>
+             ${renderPhaseSidebar(phase, project, { completion, decision, costRow, memory })}
            </div>`
-        : body;
+        : main;
+
       return `
         <section id="p${phase.number}" class="panel">
-          <h2>Phase ${phase.number} — ${esc(phase.name)}</h2>
+          <h2>Phase ${phase.number} — ${esc(title)}</h2>
           ${inner}
         </section>`;
     }).join('');
@@ -768,6 +906,7 @@
     }
 
     initTabs();
+    attachMemoryImages();
   }
 
   render().catch((err) => {
