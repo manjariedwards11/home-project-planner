@@ -692,15 +692,41 @@
       </div>`;
   }
 
+  // Placement shots are meant to be compared, so a click opens the full image.
+  // Works for a committed file and for a device-local preview alike.
+  function initLightbox() {
+    let overlay = document.querySelector('.lightbox');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'lightbox';
+      overlay.hidden = true;
+      overlay.innerHTML = '<img alt=""><button type="button" class="lightbox-close" aria-label="Close">&times;</button>';
+      document.body.appendChild(overlay);
+      const close = () => { overlay.hidden = true; };
+      overlay.addEventListener('click', close);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    }
+    document.addEventListener('click', (e) => {
+      const img = e.target.closest('.placement-shot img');
+      if (!img) return;
+      overlay.querySelector('img').src = img.src;
+      overlay.querySelector('img').alt = img.alt || '';
+      overlay.hidden = false;
+    });
+  }
+
   function renderPhaseSidebar(phase, project, opts) {
     // A detail file may carry its list as shoppingList (planned, in progress or
     // purchased) or, before a purchase, as pendingShoppingList. Route either
     // through the same renderer rather than tying the shape to the file kind.
     const detail = opts.completion || opts.decision;
+    // When a phase presents its purchases inside per-option cards, the generic
+    // records list would repeat them and make one option look committed.
+    const optionsOwnTheItems = !!(detail && detail.systemOptions && detail.systemOptions.length);
     let card;
     if (detail && detail.shoppingList) {
       card = renderCompletionShopping(phase, project, detail, opts.costRow)
-        + renderPhaseShoppingRecords(phase, project, true);
+        + (optionsOwnTheItems ? '' : renderPhaseShoppingRecords(phase, project, true));
     } else if (opts.decision && opts.decision.pendingShoppingList) {
       card = renderPendingShoppingCard(phase, project, opts.decision)
         + renderPhaseShoppingRecords(phase, project, true);
@@ -760,13 +786,23 @@
       const src = o.image || `${base}${o.file || 'option-' + (i + 1)}.jpg`;
       return `
         <figure class="placement">
-          <a class="placement-shot" href="${esc(src)}" target="_blank" rel="noopener"
-             data-memory-src="${esc(src)}" data-memory-alt="${esc(o.label)}">
+          <div class="memory-frame placement-shot"
+               data-memory-src="${esc(src)}" data-memory-alt="${esc(o.label)}"
+               data-memory-key="${esc(project.projectId)}:phase${phase.number}-${esc(o.file || 'option-' + (i + 1))}">
             <div class="memory-placeholder">
               <span class="ph-mark" aria-hidden="true">&#9707;</span>
               <span class="ph-text">Image pending</span>
+              <label class="ph-pick">
+                <input type="file" accept="image/*" hidden>
+                <span>Choose photo&hellip;</span>
+              </label>
             </div>
-          </a>
+            <div class="memory-tools" hidden>
+              <span class="local-badge">This device only</span>
+              <button type="button" data-mem-save>Save copy</button>
+              <button type="button" data-mem-clear>Remove</button>
+            </div>
+          </div>
           <figcaption>${esc(o.label)}</figcaption>
         </figure>`;
     }).join('');
@@ -778,6 +814,107 @@
         </div>
         <div class="placement-grid">${cards}</div>
       </section>`;
+  }
+
+  // Two alternative system designs shown side by side while the choice is open.
+  // Nothing here marks a winner: the only comparative claim is "lower
+  // maintenance", and that is derived from the options' own pump counts.
+  function renderSystemOptions(detail, currency) {
+    const options = detail.systemOptions || [];
+    if (options.length < 2) return '';
+
+    const pumpCounts = options.map((o) => o.pumpCount).filter((n) => n != null);
+    const fewestPumps = pumpCounts.length ? Math.min(...pumpCounts) : null;
+    const mostPumps = pumpCounts.length ? Math.max(...pumpCounts) : null;
+
+    const fromToday = (o) => {
+      const min = o.remainingEstimatedMin != null ? o.remainingEstimatedMin : o.additionalSpendFromTodayMin;
+      const max = o.remainingEstimatedMax != null ? o.remainingEstimatedMax : o.additionalSpendFromTodayMax;
+      return moneyRange(min, max, currency);
+    };
+    const fromTodayLabel = (o) => (o.remainingEstimatedMin != null ? 'Remaining spend' : 'Additional spend');
+    const maintenanceWord = (o) => {
+      if (fewestPumps === mostPumps || o.pumpCount == null) return '—';
+      return o.pumpCount === fewestPumps ? 'Lower' : 'Higher';
+    };
+
+    const cards = options.map((o) => {
+      const rows = (o.items || []).map((i) => {
+        const bought = i.status === 'bought';
+        return `
+          <tr>
+            <td class="col-check">${bought ? '<span class="check">&#10003;</span>' : ''}</td>
+            <td>${esc(i.item)}
+              <span class="caption-note"><span class="pill ${bought ? 'green' : 'amber'}">${bought ? 'Bought' : 'Need if selected'}</span>${i.role ? ' ' + esc(i.role) : ''}</span>
+            </td>
+            <td class="col-est">${esc(moneyRange(i.estimatedMin, i.estimatedMax, currency))}</td>
+            <td class="col-actual">${i.actualCost == null ? '&mdash;' : `<span class="actual-amount is-final">${esc(money(i.actualCost, currency))}</span>`}</td>
+          </tr>`;
+      }).join('');
+
+      return `
+        <article class="sysopt">
+          <header class="sysopt-head">
+            <h3>${esc(o.label)}</h3>
+            ${o.pumpCount != null && o.pumpCount === fewestPumps && fewestPumps !== mostPumps
+              ? '<span class="pill green">Lower maintenance</span>' : ''}
+          </header>
+          ${o.summary ? `<p class="sysopt-summary">${esc(o.summary)}</p>` : ''}
+          <div class="sysopt-figs">
+            <div class="money-card">
+              <span class="cost-label">System cost</span>
+              <span class="money-value">${esc(moneyRange(o.systemEstimatedMin, o.systemEstimatedMax, currency))}</span>
+            </div>
+            <div class="money-card">
+              <span class="cost-label">${esc(fromTodayLabel(o))}</span>
+              <span class="money-value">${esc(fromToday(o))}</span>
+            </div>
+            <div class="money-card">
+              <span class="cost-label">Pumps</span>
+              <span class="money-value">${o.pumpCount != null ? o.pumpCount : '&mdash;'}</span>
+            </div>
+          </div>
+          ${rows ? `<table class="phase-shopping">
+            <tr><th class="col-check"></th><th>Item</th><th class="col-est">Estimated</th><th class="col-actual">Actual</th></tr>
+            ${rows}
+          </table>` : ''}
+          ${o.maintenance ? `<p class="caption-note"><strong>Maintenance:</strong> ${esc(o.maintenance)}</p>` : ''}
+          ${o.qualityNote ? `<p class="caption-note">${esc(o.qualityNote)}</p>` : ''}
+          ${o.accountingNote ? `<p class="caption-note">${esc(o.accountingNote)}</p>` : ''}
+        </article>`;
+    }).join('');
+
+    // Only rows that can be sourced from the options themselves.
+    const row = (label, cell) => `<tr><td class="cmp-label">${esc(label)}</td>${options.map((o) => `<td>${cell(o)}</td>`).join('')}</tr>`;
+    const compare = `
+      <table class="compare-table">
+        <tr><th></th>${options.map((o) => `<th>${esc(o.label)}</th>`).join('')}</tr>
+        ${row('Concept', (o) => esc(o.summary || '—'))}
+        ${row('Pumps', (o) => (o.pumpCount != null ? o.pumpCount : '—'))}
+        ${row('System cost', (o) => esc(moneyRange(o.systemEstimatedMin, o.systemEstimatedMax, currency)))}
+        ${row('From today', (o) => esc(fromToday(o)))}
+        ${row('Maintenance', (o) => esc(maintenanceWord(o)))}
+      </table>`;
+
+    return `
+      <div class="sysopt-grid">${cards}</div>
+      ${compare}`;
+  }
+
+  function renderOwnedEquipment(detail, currency) {
+    const owned = detail.ownedEquipment;
+    if (!owned) return '';
+    const list = Array.isArray(owned) ? owned : [owned];
+    return `
+      <div class="box owned-box">
+        <h3>Already owned</h3>
+        ${list.map((o) => `
+          <p><strong>${esc(o.item)}</strong>
+            ${o.actualCost != null ? ` — <span class="actual-amount is-final">${esc(money(o.actualCost, currency))}</span>` : ''}
+            <span class="pill green">${esc(humanizeSlug(o.status || 'bought'))}</span>
+          </p>
+          ${o.note ? `<p class="caption-note">${esc(o.note)}</p>` : ''}`).join('')}
+      </div>`;
   }
 
   // A phase page is a concise operational view: goal, the few things to do,
@@ -815,6 +952,13 @@
     if (phase.layout) {
       primary.push(`<div class="box"><p><strong>Layout:</strong> ${esc(phase.layout)}</p></div>`);
     }
+
+    // An open choice is announced before the options themselves.
+    if (comp.decisionStatus === 'pending' || comp.decisionStatus === 'decision-pending') {
+      primary.push(`<div class="notice"><strong>Decision pending.</strong>${comp.decisionNote ? ' ' + esc(comp.decisionNote) : ''}</div>`);
+    }
+    primary.push(renderOwnedEquipment(comp, currency));
+    primary.push(renderSystemOptions(comp, currency));
 
     // The essential actions for this phase — the heart of the page.
     const actions = (phase.requirements || []).slice();
@@ -1316,6 +1460,7 @@
 
     initTabs();
     attachMemoryImages();
+    initLightbox();
   }
 
   render().catch((err) => {
