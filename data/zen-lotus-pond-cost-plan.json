@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "projectId": "zen-lotus-pond",
+  "title": "What each phase is likely to cost",
+  "subtitle": "Estimated going in, actual once it's bought.",
+  "targetBudget": {
+    "min": 800,
+    "max": 900,
+    "label": "Target to actually work toward"
+  },
+  "estimatedTotal": {
+    "min": 660,
+    "max": 1275
+  },
+  "actualSpentToDate": 137.13,
+  "currency": "USD",
+  "phases": [
+    {
+      "phase": 1,
+      "phaseId": "nursery",
+      "label": "Nursery",
+      "estimatedMin": 60,
+      "estimatedMax": 100,
+      "actual": 107.13,
+      "actualStatus": "complete"
+    },
+    {
+      "phase": 2,
+      "phaseId": "pond-decision",
+      "label": "Pond",
+      "estimatedMin": 125,
+      "estimatedMax": 200,
+      "actual": null
+    },
+    {
+      "phase": 3,
+      "phaseId": "pump-filter",
+      "label": "Pump/filter/UV",
+      "estimatedMin": 150,
+      "estimatedMax": 250,
+      "actual": 30,
+      "actualStatus": "so-far"
+    },
+    {
+      "phase": 4,
+      "phaseId": "structure-liner",
+      "label": "Pond exterior",
+      "estimatedMin": 100,
+      "estimatedMax": 200,
+      "actual": null
+    },
+    {
+      "phase": 5,
+      "phaseId": "jasmine",
+      "label": "Jasmine + pots/trellis",
+      "estimatedMin": 100,
+      "estimatedMax": 200,
+      "actual": null
+    },
+    {
+      "phase": 6,
+      "phaseId": "lotus-buddha",
+      "label": "Lotus/Buddha",
+      "estimatedMin": 50,
+      "estimatedMax": 125,
+      "actual": null
+    },
+    {
+      "phase": 7,
+      "phaseId": "pothos",
+      "label": "Pothos",
+      "estimatedMin": 25,
+      "estimatedMax": 75,
+      "actual": null
+    },
+    {
+      "phase": 8,
+      "phaseId": "lighting",
+      "label": "Lighting/finishing",
+      "estimatedMin": 50,
+      "estimatedMax": 125,
+      "actual": null
+    }
+  ],
+  "accountingNote": "For the revised phase-cost view, the $30 Smartpond Filter Kit with Pump is counted under Phase 3 pump/filter equipment. Phase 1 actual remains $107.13; total project spend remains $137.13."
+}
