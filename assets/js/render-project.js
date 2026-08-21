@@ -1115,7 +1115,7 @@
   // and the money. Anything discursive — restated summaries, design rationale,
   // extra notes — goes into a collapsed Details block so it is preserved
   // without dominating the page.
-  function renderPhaseBody(phase, currency, costPlan, hasSidebar, completion) {
+  function renderPhaseBody(phase, currency, costPlan, project, completion) {
     const comp = completion || {};
     const primary = [];
     const extra = [];
@@ -1166,6 +1166,14 @@
       if (o.note) extra.push(`<h4>${esc(o.item)}</h4><p>${esc(o.note)}</p>`);
     });
     primary.push(renderSystemOptions(comp, currency));
+    // A phase can carry both a settled purchase and the options it chose
+    // between; these used to live on separate branches, which meant whichever
+    // shape the data took, the other half of the page disappeared.
+    if (Array.isArray(comp.comparison) && comp.comparison.length) {
+      primary.push(renderDecisionPanel(comp, phase, project));
+      const hist = renderDecisionHistory(phase, comp);
+      if (hist) extra.push(hist);
+    }
 
     if (comp.currentState) {
       primary.push(`<div class="box"><p>${esc(comp.currentState)}</p></div>`);
@@ -1407,23 +1415,10 @@
         || (completion && completion.completionMemory)
         || null;
 
-      let parts;
-      if (decision) {
-        parts = {
-          cost: renderPhaseCostLine(costRow, currencyOf(project)),
-          goal: decision.goal
-            ? `<div class="box goal-box"><p><strong>Goal:</strong> ${esc(decision.goal)}</p></div>`
-            : '',
-          todos: renderTodos(todosFor(phase, decision, projectTodos), phase),
-          content: `
-            ${renderDecisionPanel(decision, phase, project)}
-            ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
-            ${phase.decisionGate ? `<div class="notice">${esc(phase.decisionGate)}</div>` : ''}`,
-          details: renderDecisionHistory(phase, decision),
-        };
-      } else {
-        parts = renderPhaseBody(phase, project.currency, costPlan, true, completion);
-      }
+      // One path for every phase: the detail file may be a decision, a
+      // completion record, or both at once.
+      const detailData = completion || decision;
+      const parts = renderPhaseBody(phase, project.currency, costPlan, project, detailData);
 
       const title = (decision && decision.title) || (completion && completion.title) || phase.name;
       const row = renderPhaseRow(phase, project, {
