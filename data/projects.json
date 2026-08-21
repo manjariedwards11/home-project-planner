@@ -13,6 +13,18 @@
       "currentLabel": "Pump + Filter + Fountain",
       "dataFile": "data/zen-lotus-pond.json",
       "costPlanFile": "data/zen-lotus-pond-cost-plan.json"
+    },
+    {
+      "id": "living-room-glass-door-treatments",
+      "name": "Living Room Glass Door Treatments",
+      "subtitle": "Farmhouse window treatment redesign",
+      "status": "underway",
+      "currentPhase": 2,
+      "totalPhases": 4,
+      "spentToDate": 0,
+      "currency": "USD",
+      "currentLabel": "Choose Window Treatment",
+      "dataFile": "data/living-room-glass-door-treatments.json"
     }
   ]
 }
