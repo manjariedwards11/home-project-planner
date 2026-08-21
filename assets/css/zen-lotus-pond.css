@@ -1,4 +1,4 @@
-.project-shell{width:min(1440px,100%);margin:auto;padding:16px 28px 32px}
+.project-shell{width:min(1440px,100%);margin:auto;padding:14px 28px 16px}
 
 .project-header{border-bottom:1.5px solid var(--line);padding-bottom:12px;margin-bottom:12px}
 .project-header h1{font-size:19px;line-height:1.2;font-weight:850;letter-spacing:.015em;margin:0 0 4px}
@@ -82,25 +82,30 @@
 .phase-cost .qualifier{font-size:10px;color:var(--muted)}
 .phase-cost .muted{color:var(--line)}
 
-/* Completed phases: main content left, completion image + shopping list right */
-.phase-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:14px;align-items:start}
+/* Completed phases: main content left, completion image + shopping list right.
+   The sidebar gets a generous fixed width so shopping rows stay on one line —
+   wrapped rows are what made this column tall enough to need scrolling. The
+   main column has plenty to spare, since its content is short. */
+.phase-layout{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:14px;align-items:start}
 .phase-main{min-width:0}
 .phase-side{min-width:0;display:flex;flex-direction:column;gap:10px}
 
 .completion-card{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
-.completion-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
-.completion-card figcaption{padding:8px 10px;font-size:11.5px;line-height:1.35;border-top:1px solid var(--line)}
+/* 3:2 matches the source photo (no crop) and is shorter than 4:3 at this
+   width; the max-height caps it on short viewports. */
+.completion-card img{display:block;width:100%;aspect-ratio:3/2;max-height:270px;object-fit:cover}
+.completion-card figcaption{padding:7px 10px;font-size:11.5px;line-height:1.3;border-top:1px solid var(--line)}
 .completion-card figcaption strong{display:block;font-size:12px}
 .caption-note{display:block;color:var(--muted);font-size:10.5px;line-height:1.3;margin-top:2px}
 
-.shopping-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:9px 10px}
-.shopping-card h3{font-size:12px;margin:0 0 6px;font-weight:800}
+.shopping-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+.shopping-card h3{font-size:12px;margin:0 0 5px;font-weight:800}
 .phase-shopping{font-size:11px}
-.phase-shopping th,.phase-shopping td{padding:4px 5px}
+.phase-shopping th,.phase-shopping td{padding:3px 5px}
 .phase-shopping .col-check{width:16px;text-align:center;padding-left:0;padding-right:0}
 .phase-shopping .check{color:var(--green);font-weight:800}
-.phase-shopping .col-est{width:52px;text-align:right;color:var(--muted)}
-.phase-shopping .col-actual{width:60px;text-align:right;white-space:nowrap}
+.phase-shopping .col-est{width:50px;text-align:right;color:var(--muted)}
+.phase-shopping .col-actual{width:58px;text-align:right;white-space:nowrap}
 /* Spend recorded here but booked to another phase — visible, clearly not counted. */
 .phase-shopping tr.offphase-row td{border-top:1px solid var(--line);color:var(--muted);font-style:italic}
 .phase-shopping tr.offphase-row .caption-note{font-style:normal}
@@ -119,8 +124,40 @@
 
 #shopping .box{margin-bottom:10px}
 #shopping table td:first-child{white-space:nowrap}
+/* Kept single-column on purpose: splitting these into two columns narrows the
+   five-column tables enough that rows wrap, making the panel taller overall. */
+
+/* Phase 2's candidate notes are long; tighten the table so the panel fits. */
+.candidate-table td{padding:4px 7px}
+.candidate-table td.cand-notes{line-height:1.28}
+#p2 .box{margin-bottom:7px}
+#p2 .box ul li{margin:0 0 1px}
+
+/* Trim the shopping panel's chrome so the open group clears the fold. */
+#shopping details.accordion{margin-bottom:7px}
+#shopping details.accordion summary{padding:6px 10px}
+#shopping details.accordion .accordion-body{padding:7px 10px 9px}
+#shopping table th,#shopping table td{padding:4px 7px}
+#shopping .cand-priority{margin-top:1px;line-height:1.25}
 
 .decision-item{color:var(--accent);font-weight:700}
+
+/* Narrower sidebar before stacking, so the main column keeps a readable
+   measure on laptop widths. Must precede the 980px rule below. */
+@media(max-width:1200px){
+  .phase-layout{grid-template-columns:minmax(0,1fr) 330px}
+  /* Laptop viewports are short as well as narrow; the photo is the one
+     element that can give up height without losing information. */
+  .completion-card img{max-height:180px}
+  .shopping-card{padding:7px 9px}
+  .phase-shopping th,.phase-shopping td{padding:2px 4px}
+  /* Reclaim page chrome so the panel itself gets the vertical room. */
+  .project-shell{padding:12px 24px 16px}
+  .back{margin-bottom:6px}
+  .project-header{padding-bottom:9px;margin-bottom:9px}
+  .project-header .lede{margin-bottom:9px}
+  .panel h2{margin-bottom:7px}
+}
 
 @media(max-width:980px){
   .project-shell{padding:13px 18px 24px}

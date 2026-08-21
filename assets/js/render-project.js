@@ -477,7 +477,7 @@
       const rows = items.filter((i) => i.status === status);
       if (!rows.length) return '';
       return `
-        <details class="accordion" ${status === 'bought' || status === 'need-to-buy' ? 'open' : ''}>
+        <details class="accordion" ${status === 'need-to-buy' ? 'open' : ''}>
           <summary>${esc(shoppingStatusLabel(status))} <span class="pill ${statusPillClass(status)}">${rows.length}</span></summary>
           <div class="accordion-body">
             <table>
@@ -499,7 +499,7 @@
       <section id="shopping" class="panel">
         <h2>Shopping + budget</h2>
         ${budgetSummary}
-        ${groups}
+        <div class="shopping-groups">${groups}</div>
       </section>`;
   }
 
