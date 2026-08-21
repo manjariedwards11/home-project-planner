@@ -819,45 +819,64 @@
   // Two alternative system designs shown side by side while the choice is open.
   // Nothing here marks a winner: the only comparative claim is "lower
   // maintenance", and that is derived from the options' own pump counts.
+  // A product line inside an option: whatever of item/retailer/model/price/
+  // role/link the data happens to carry. Prices render from currentPrice when
+  // a specific product is named, or from an estimate range when it is not.
+  function optionProductRow(i, currency, extraClass) {
+    const price = i.currentPrice != null
+      ? money(i.currentPrice, currency)
+      : moneyRange(i.estimatedMin, i.estimatedMax, currency);
+    const meta = [
+      i.retailer ? esc(i.retailer) : '',
+      i.model ? 'model ' + esc(i.model) : '',
+      i.priceChecked ? 'checked ' + esc(i.priceChecked) : '',
+    ].filter(Boolean).join(' &middot; ');
+    return `
+      <tr class="${extraClass || ''}">
+        <td>
+          ${i.link ? `<a href="${esc(i.link)}" target="_blank" rel="noopener">${esc(i.item)}</a>` : esc(i.item)}
+          ${i.status ? `<span class="caption-note"><span class="pill ${statusPillClass(i.status)}">${esc(humanizeSlug(i.status))}</span></span>` : ''}
+          ${i.role ? `<span class="caption-note">${esc(i.role)}</span>` : ''}
+          ${meta ? `<span class="caption-note">${meta}</span>` : ''}
+        </td>
+        <td class="col-actual">${esc(price)}</td>
+      </tr>`;
+  }
+
+  // Two alternative system designs shown side by side while the choice is open.
+  // Every figure, product and label comes from the JSON; nothing about which
+  // option wins is decided here. A "lower maintenance" tag only appears if the
+  // data's own comparison says so.
   function renderSystemOptions(detail, currency) {
     const options = detail.systemOptions || [];
-    if (options.length < 2) return '';
+    if (!options.length) return '';
+    const cmp = detail.comparison || {};
 
-    const pumpCounts = options.map((o) => o.pumpCount).filter((n) => n != null);
-    const fewestPumps = pumpCounts.length ? Math.min(...pumpCounts) : null;
-    const mostPumps = pumpCounts.length ? Math.max(...pumpCounts) : null;
+    // comparison is keyed optionA/optionB; pair each up with its option by order.
+    const cmpKeys = Object.keys(cmp).filter((k) => cmp[k] && typeof cmp[k] === 'object');
+    const cmpFor = (idx) => (cmpKeys[idx] ? cmp[cmpKeys[idx]] : null);
 
-    const fromToday = (o) => {
+    const spendOf = (o) => {
       const min = o.remainingEstimatedMin != null ? o.remainingEstimatedMin : o.additionalSpendFromTodayMin;
       const max = o.remainingEstimatedMax != null ? o.remainingEstimatedMax : o.additionalSpendFromTodayMax;
       return moneyRange(min, max, currency);
     };
-    const fromTodayLabel = (o) => (o.remainingEstimatedMin != null ? 'Remaining spend' : 'Additional spend');
-    const maintenanceWord = (o) => {
-      if (fewestPumps === mostPumps || o.pumpCount == null) return '—';
-      return o.pumpCount === fewestPumps ? 'Lower' : 'Higher';
-    };
+    const spendLabel = (o) => (o.remainingEstimatedMin != null ? 'Remaining spend' : 'New spend');
 
-    const cards = options.map((o) => {
-      const rows = (o.items || []).map((i) => {
-        const bought = i.status === 'bought';
-        return `
-          <tr>
-            <td class="col-check">${bought ? '<span class="check">&#10003;</span>' : ''}</td>
-            <td>${esc(i.item)}
-              <span class="caption-note"><span class="pill ${bought ? 'green' : 'amber'}">${bought ? 'Bought' : 'Need if selected'}</span>${i.role ? ' ' + esc(i.role) : ''}</span>
-            </td>
-            <td class="col-est">${esc(moneyRange(i.estimatedMin, i.estimatedMax, currency))}</td>
-            <td class="col-actual">${i.actualCost == null ? '&mdash;' : `<span class="actual-amount is-final">${esc(money(i.actualCost, currency))}</span>`}</td>
-          </tr>`;
-      }).join('');
+    const cards = options.map((o, idx) => {
+      const c = cmpFor(idx) || {};
+      const rec = (o.recommendedShopping || o.items || []).map((i) => optionProductRow(i, currency)).join('');
+      const alt = o.alternateCandidate
+        ? optionProductRow(Object.assign({}, o.alternateCandidate, { role: o.alternateCandidate.role || 'Alternate' }), currency, 'alt-row')
+        : '';
+      // Only a maintenance rating the data itself states.
+      const lowMaint = String(c.maintenance || '').toLowerCase() === 'lower';
 
       return `
         <article class="sysopt">
           <header class="sysopt-head">
             <h3>${esc(o.label)}</h3>
-            ${o.pumpCount != null && o.pumpCount === fewestPumps && fewestPumps !== mostPumps
-              ? '<span class="pill green">Lower maintenance</span>' : ''}
+            ${lowMaint ? '<span class="pill green">Lower maintenance</span>' : ''}
           </header>
           ${o.summary ? `<p class="sysopt-summary">${esc(o.summary)}</p>` : ''}
           <div class="sysopt-figs">
@@ -866,35 +885,40 @@
               <span class="money-value">${esc(moneyRange(o.systemEstimatedMin, o.systemEstimatedMax, currency))}</span>
             </div>
             <div class="money-card">
-              <span class="cost-label">${esc(fromTodayLabel(o))}</span>
-              <span class="money-value">${esc(fromToday(o))}</span>
+              <span class="cost-label">${esc(spendLabel(o))}</span>
+              <span class="money-value">${esc(spendOf(o))}</span>
             </div>
             <div class="money-card">
               <span class="cost-label">Pumps</span>
-              <span class="money-value">${o.pumpCount != null ? o.pumpCount : '&mdash;'}</span>
+              <span class="money-value">${o.pumpCount != null ? o.pumpCount : (c.permanentPumps != null ? c.permanentPumps : '&mdash;')}</span>
             </div>
           </div>
-          ${rows ? `<table class="phase-shopping">
-            <tr><th class="col-check"></th><th>Item</th><th class="col-est">Estimated</th><th class="col-actual">Actual</th></tr>
-            ${rows}
-          </table>` : ''}
+          ${rec || alt ? `<table class="phase-shopping">${rec}${alt}</table>` : ''}
           ${o.maintenance ? `<p class="caption-note"><strong>Maintenance:</strong> ${esc(o.maintenance)}</p>` : ''}
           ${o.qualityNote ? `<p class="caption-note">${esc(o.qualityNote)}</p>` : ''}
+          ${o.note ? `<p class="caption-note">${esc(o.note)}</p>` : ''}
           ${o.accountingNote ? `<p class="caption-note">${esc(o.accountingNote)}</p>` : ''}
         </article>`;
     }).join('');
 
-    // Only rows that can be sourced from the options themselves.
-    const row = (label, cell) => `<tr><td class="cmp-label">${esc(label)}</td>${options.map((o) => `<td>${cell(o)}</td>`).join('')}</tr>`;
-    const compare = `
-      <table class="compare-table">
-        <tr><th></th>${options.map((o) => `<th>${esc(o.label)}</th>`).join('')}</tr>
-        ${row('Concept', (o) => esc(o.summary || '—'))}
-        ${row('Pumps', (o) => (o.pumpCount != null ? o.pumpCount : '—'))}
-        ${row('System cost', (o) => esc(moneyRange(o.systemEstimatedMin, o.systemEstimatedMax, currency)))}
-        ${row('From today', (o) => esc(fromToday(o)))}
-        ${row('Maintenance', (o) => esc(maintenanceWord(o)))}
-      </table>`;
+    // The comparison table is built from whatever attributes the data provides,
+    // so new attributes appear without a code change.
+    let compare = '';
+    if (cmpKeys.length) {
+      const attrs = [];
+      cmpKeys.forEach((k) => Object.keys(cmp[k]).forEach((a) => { if (!attrs.includes(a)) attrs.push(a); }));
+      const rows = attrs.map((a) => `
+        <tr>
+          <td class="cmp-label">${esc(humanizeSlug(a.replace(/([A-Z])/g, '-$1').toLowerCase()))}</td>
+          ${cmpKeys.map((k) => `<td>${cmp[k][a] != null ? esc(cmp[k][a]) : '&mdash;'}</td>`).join('')}
+        </tr>`).join('');
+      compare = `
+        <table class="compare-table">
+          <tr><th></th>${cmpKeys.map((k, i) => `<th>${esc((options[i] && options[i].label) || humanizeSlug(k))}</th>`).join('')}</tr>
+          ${rows}
+        </table>
+        ${cmp.currentConclusion ? `<p class="caption-note">${esc(cmp.currentConclusion)}</p>` : ''}`;
+    }
 
     return `
       <div class="sysopt-grid">${cards}</div>
@@ -1118,7 +1142,7 @@
     // keeps the accent colour.
     const settled = isSettledStatus(decision.decisionState) || isSettledStatus(decision.status) || phase.status === 'complete';
     // A compact strip here; the full spec cards live in the Decisions log.
-    const finalists = (decision.comparison || []).map((c) => `
+    const finalists = (Array.isArray(decision.comparison) ? decision.comparison : []).map((c) => `
       <div class="fin-brief ${isChosen(c.status) ? 'is-chosen' : ''} ${(settled || isSettledStatus(c.status)) ? 'is-settled' : ''}">
         <div class="fin-brief-top">
           <span class="fin-brief-name">${esc(c.name)}</span>
@@ -1130,7 +1154,7 @@
         </div>
       </div>`).join('');
     const why = (decision.whyPreferred || []).map((w) => `<li>${esc(w)}</li>`).join('');
-    const preferredName = (decision.comparison || []).find((c) => c.status === 'preferred');
+    const preferredName = (Array.isArray(decision.comparison) ? decision.comparison : []).find((c) => c.status === 'preferred');
     const whyTitle = preferredName
       ? `Why ${esc(preferredName.name.split(' ').slice(0, 2).join(' '))} is the preferred choice`
       : 'Why this is the preferred choice';
@@ -1193,8 +1217,15 @@
       }
 
       const title = (decision && decision.title) || (completion && completion.title) || phase.name;
+      // A phase whose main column is short (a goal and little else) would
+      // otherwise leave most of the page empty beside a tall, internally
+      // scrolling sidebar. Those lay the memory and shopping cards out across
+      // the full width instead.
+      const mainWeight = (main.match(/<(?:div class="box|table|article|section|figure)/g) || []).length;
+      const sparse = mainWeight <= 1;
+
       const inner = hasSidebar
-        ? `<div class="phase-layout">
+        ? `<div class="phase-layout${sparse ? ' is-sparse' : ''}">
              <div class="phase-main">${main}</div>
              ${renderPhaseSidebar(phase, project, { completion, decision, costRow, memory })}
            </div>`
@@ -1219,7 +1250,7 @@
 
       // The full spec cards live here in the log, not in the phase panel.
       const settled = isSettledStatus(decision.decisionState) || isSettledStatus(decision.status) || phase.status === 'complete';
-      const fullCards = (decision.comparison || []).map((c) => finalistCard(c, currency, settled)).join('');
+      const fullCards = (Array.isArray(decision.comparison) ? decision.comparison : []).map((c) => finalistCard(c, currency, settled)).join('');
       const why = (decision.whyPreferred || []).map((w) => `<li>${esc(w)}</li>`).join('');
 
       blocks.push(`
@@ -1399,8 +1430,10 @@
           const res = await fetch(url);
           if (!res.ok) continue;
           const json = await res.json();
-          // A file listing options is a decision; anything else is phase detail.
-          const kind = json.comparison ? 'decision' : 'completion';
+          // A decision file lists its options as an array. Phase detail files
+          // may also carry a "comparison", but as an attribute map, so test the
+          // shape rather than the key's presence.
+          const kind = Array.isArray(json.comparison) ? 'decision' : 'completion';
           details.set(phase.number, { [kind]: json });
           return;
         } catch (err) {

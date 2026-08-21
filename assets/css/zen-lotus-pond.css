@@ -450,3 +450,19 @@
 .placement-shot .memory-tools{padding:4px 6px}
 .placement-shot .memory-tools button{font-size:9.5px;padding:1px 5px}
 .placement-shot .local-badge{font-size:8px}
+
+/* Sparse phases: the goal spans the width, then the memory and shopping cards
+   sit side by side beneath it rather than stacking in a narrow gutter with a
+   mostly empty column alongside. */
+.phase-layout.is-sparse{grid-template-columns:minmax(0,1fr)}
+.phase-layout.is-sparse .phase-side{
+  flex-direction:row;align-items:flex-start;gap:12px;
+}
+.phase-layout.is-sparse .completion-card{flex:0 0 360px;max-width:360px}
+.phase-layout.is-sparse .shopping-card{flex:1 1 auto;min-width:0}
+/* With the extra width the list no longer needs its own scrollbar. */
+.phase-layout.is-sparse .shop-scroll{max-height:none}
+@media(max-width:900px){
+  .phase-layout.is-sparse .phase-side{flex-direction:column}
+  .phase-layout.is-sparse .completion-card{flex:1 1 auto;max-width:none}
+}
