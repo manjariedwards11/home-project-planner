@@ -483,3 +483,6 @@
     grid-template-areas:"pic" "todo" "shop";
   }
 }
+
+/* A pending refund reads as money coming back, not money spent. */
+.refund{font-weight:800;color:var(--green)}

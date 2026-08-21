@@ -980,6 +980,44 @@
       </div>`;
   }
 
+  // Purchases recorded against a phase, including anything going back. A
+  // return is shown with its expected refund rather than silently removed, so
+  // the record stays legible while the refund is outstanding.
+  function renderPurchases(list, currency) {
+    if (!list || !list.length) return '';
+    const rows = list.map((i) => {
+      const returning = /return/.test(String(i.status || ''));
+      const listed = i.listedPrice != null ? i.listedPrice
+        : i.originalActualCost != null ? i.originalActualCost : null;
+      const right = returning && i.expectedRefund != null
+        ? `<span class="refund">&minus;${esc(money(i.expectedRefund, currency))}</span>`
+        : i.actualCost != null ? `<span class="actual-amount is-final">${esc(money(i.actualCost, currency))}</span>`
+        : '<span class="muted">&mdash;</span>';
+      return `
+        <tr class="${returning ? 'offphase-row' : ''}">
+          <td class="col-check">${!returning && i.status === 'bought' ? '<span class="check">&#10003;</span>' : ''}</td>
+          <td>${esc(i.item)}
+            <span class="caption-note">
+              <span class="pill ${statusPillClass(i.status)}">${esc(humanizeSlug(i.status))}</span>
+              ${i.retailer ? ' ' + esc(i.retailer) : ''}${i.purchaseDate ? ' &middot; ' + esc(i.purchaseDate) : ''}
+            </span>
+            ${i.role ? `<span class="caption-note">${esc(i.role)}</span>` : ''}
+            ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
+          </td>
+          <td class="col-est">${listed == null ? '&mdash;' : esc(money(listed, currency))}</td>
+          <td class="col-actual">${right}</td>
+        </tr>`;
+    }).join('');
+    return `
+      <div class="box">
+        <h3>Purchases</h3>
+        <table class="phase-shopping">
+          <tr><th class="col-check"></th><th>Item</th><th class="col-est">Listed</th><th class="col-actual">Actual</th></tr>
+          ${rows}
+        </table>
+      </div>`;
+  }
+
   // A phase page is a concise operational view: goal, the few things to do,
   // and the money. Anything discursive — restated summaries, design rationale,
   // extra notes — goes into a collapsed Details block so it is preserved
@@ -1018,8 +1056,15 @@
     }
 
     // An open choice is announced before the options themselves.
-    if (comp.decisionStatus === 'pending' || comp.decisionStatus === 'decision-pending') {
+    const ds = comp.decisionStatus;
+    if (ds === 'pending' || ds === 'decision-pending') {
       primary.push(`<div class="notice"><strong>Decision pending.</strong>${comp.decisionNote ? ' ' + esc(comp.decisionNote) : ''}</div>`);
+    } else if (isSettledStatus(ds) && comp.decisionSummary) {
+      primary.push(`<div class="notice success"><strong>Decided:</strong> ${esc(comp.decisionSummary)}</div>`);
+    }
+    primary.push(renderPurchases(comp.purchases, currency));
+    if (comp.phaseEstimate && comp.phaseEstimate.note) {
+      primary.push(`<p class="caption-note">${esc(comp.phaseEstimate.note)}</p>`);
     }
     // Owned equipment is already a row in the phase's shopping list, so only
     // its note (which the list does not carry) moves into Details.
@@ -1073,6 +1118,9 @@
     if (phase.decisionGate) extra.push(`<h4>Decision gate</h4><p>${esc(phase.decisionGate)}</p>`);
     if (comp.notBuyingNow && comp.notBuyingNow.length) {
       extra.push(`<h4>Deliberately not buying now</h4><ul>${comp.notBuyingNow.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`);
+    }
+    if (comp.futureMaintenance && comp.futureMaintenance.length) {
+      extra.push(`<h4>Future maintenance</h4><ul>${comp.futureMaintenance.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`);
     }
     if (comp.brainstormingTopics && comp.brainstormingTopics.length) {
       extra.push(`<h4>To review before deciding</h4><ul>${comp.brainstormingTopics.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`);
