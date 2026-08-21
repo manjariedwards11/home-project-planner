@@ -337,18 +337,26 @@
       </aside>`;
   }
 
+  function currencyOf(project) {
+    return project.currency;
+  }
+
+  // The estimate/actual line shown at the top of a phase panel.
+  function renderPhaseCostLine(costRow, currency) {
+    if (!costRow) return '';
+    return `<div class="phase-cost">
+      <span><span class="cost-label">Estimated</span> ${esc(moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency))}</span>
+      <span><span class="cost-label">Actual</span> ${actualCell(costRow, currency)}</span>
+    </div>`;
+  }
+
   // One field type -> one rendering treatment, applied uniformly across every
   // phase regardless of phase number.
   function renderPhaseBody(phase, currency, costPlan, hasSidebar) {
     let html = '';
 
     const costRow = costRowFor(costPlan, phase);
-    if (costRow) {
-      html += `<div class="phase-cost">
-        <span><span class="cost-label">Estimated</span> ${esc(moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency))}</span>
-        <span><span class="cost-label">Actual</span> ${actualCell(costRow, currency)}</span>
-      </div>`;
-    }
+    html += renderPhaseCostLine(costRow, currency);
 
     if (phase.summary) {
       html += `<div class="box"><p>${esc(phase.summary)}</p></div>`;
@@ -394,10 +402,153 @@
     return html;
   }
 
-  function renderPhasePanels(project, costPlan) {
+  // ---- Decision panels (a phase's narrowed finalist comparison) -------------
+
+  function finalistCard(c, currency) {
+    const spec = (label, value) => value
+      ? `<div class="spec"><span class="spec-label">${esc(label)}</span><span>${esc(value)}</span></div>`
+      : '';
+    const list = (label, arr, cls) => (arr && arr.length)
+      ? `<div class="fin-list ${cls}"><span class="spec-label">${esc(label)}</span><ul>${arr.map((s) => `<li>${esc(s)}</li>`).join('')}</ul></div>`
+      : '';
+    const price = c.priceSnapshot != null
+      ? `<div class="fin-price">${esc(money(c.priceSnapshot, currency))}${c.priceSnapshotDate ? `<span class="caption-note">Price snapshot ${esc(c.priceSnapshotDate)}</span>` : ''}</div>`
+      : '';
+    return `
+      <article class="finalist ${c.status === 'preferred' ? 'is-preferred' : ''}">
+        <header class="fin-head">
+          <div>
+            <h3>${esc(c.name)}</h3>
+            <span class="caption-note">${esc(c.retailer || '')}</span>
+          </div>
+          <span class="pill ${c.status === 'preferred' ? 'accent' : ''}">${esc(humanizeSlug(c.status))}</span>
+        </header>
+        ${price}
+        <div class="fin-specs">
+          ${spec('Dimensions', c.dimensions)}
+          ${spec('Capacity', c.capacity)}
+          ${spec('Shape', c.shape)}
+          ${spec('Pond use', c.pondUse)}
+          ${spec('Construction', c.construction)}
+          ${spec('Included', c.includedEquipment)}
+        </div>
+        ${list('Strengths', c.strengths, 'strengths')}
+        ${list('Tradeoffs', c.tradeoffs, 'tradeoffs')}
+        ${c.link ? `<a class="fin-link" href="${esc(c.link)}" target="_blank" rel="noopener">View at ${esc(c.retailer || 'retailer')} →</a>` : ''}
+      </article>`;
+  }
+
+  // Older evaluation content is relocated here, never dropped: the original
+  // decision criteria, every earlier candidate, and any explicitly excluded
+  // reference (shown with its reason so it cannot read as a live option).
+  function renderDecisionHistory(phase, decision) {
+    let inner = '';
+
+    if (phase.decisionCriteria && phase.decisionCriteria.length) {
+      inner += `<h4>Decision criteria</h4><ul>${phase.decisionCriteria.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>`;
+    }
+
+    if (phase.candidates && phase.candidates.length) {
+      inner += `<h4>Earlier candidates</h4>${renderCandidates(phase.candidates)}`;
+    }
+
+    const ex = decision && decision.excludedReference;
+    if (ex) {
+      inner += `<h4>Not a valid purchase option</h4>
+        <div class="notice"><strong>${esc(ex.item)}</strong>${ex.reason ? `<br>${esc(ex.reason)}` : ''}</div>`;
+    }
+
+    if (!inner) return '';
+    return `
+      <details class="accordion">
+        <summary>Earlier options &amp; decision history</summary>
+        <div class="accordion-body">${inner}</div>
+      </details>`;
+  }
+
+  function renderPendingShopping(decision, currency) {
+    const ps = decision.pendingShoppingList;
+    if (!ps || !ps.items || !ps.items.length) return '';
+    return `
+      <div class="shopping-card">
+        <h3>Pending purchase</h3>
+        <table class="phase-shopping">
+          <tr><th>Item</th><th class="col-est">Est.</th><th class="col-actual">Actual</th></tr>
+          ${ps.items.map((i) => `
+            <tr>
+              <td>${esc(i.item)}
+                <span class="caption-note">${esc(i.retailer || '')}${i.link ? ` · <a href="${esc(i.link)}" target="_blank" rel="noopener">link</a>` : ''}${i.note ? ' · ' + esc(i.note) : ''}</span>
+              </td>
+              <td class="col-est">${esc(optionalMoney(i.estimatedCost, currency))}</td>
+              <td class="col-actual">${esc(optionalMoney(i.actualCost, currency))}</td>
+            </tr>`).join('')}
+          <tr class="total-row">
+            <td>Phase allowance</td>
+            <td class="col-est">${esc(moneyRange(ps.phaseEstimateMin, ps.phaseEstimateMax, currency))}</td>
+            <td class="col-actual">${esc(optionalMoney(ps.actualTotal, currency))}</td>
+          </tr>
+        </table>
+        ${ps.note ? `<p class="caption-note">${esc(ps.note)}</p>` : ''}
+      </div>`;
+  }
+
+  function renderDecisionPanel(decision, phase, project) {
+    const currency = project.currency;
+    const finalists = (decision.comparison || []).map((c) => finalistCard(c, currency)).join('');
+    const why = (decision.whyPreferred || []).map((w) => `<li>${esc(w)}</li>`).join('');
+    const preferredName = (decision.comparison || []).find((c) => c.status === 'preferred');
+    const whyTitle = preferredName
+      ? `Why ${esc(preferredName.name.split(' ').slice(0, 2).join(' '))} is the preferred choice`
+      : 'Why this is the preferred choice';
+
+    // The phase summary, goal and decision summary share one box rather than
+    // stacking three near-identical cards; all three texts are kept verbatim.
+    const intro = [
+      phase.summary ? `<p>${esc(phase.summary)}</p>` : '',
+      decision.goal ? `<p><strong>Goal:</strong> ${esc(decision.goal)}</p>` : '',
+      decision.decisionSummary ? `<p>${esc(decision.decisionSummary)}</p>` : '',
+    ].filter(Boolean).join('');
+
+    return `
+      ${decision.preferredChoice ? `
+        <div class="notice accent">
+          <strong>Preferred choice:</strong> ${esc(decision.preferredChoice)}
+          — <em>${esc(humanizeSlug(decision.decisionState || ''))}</em>
+        </div>` : ''}
+      ${intro ? `<div class="box intro-box">${intro}</div>` : ''}
+      <div class="finalists">${finalists}</div>
+      <div class="decision-cols">
+        ${why ? `
+          <div class="box why-preferred">
+            <h3>${whyTitle}</h3>
+            <ul>${why}</ul>
+          </div>` : ''}
+        ${renderPendingShopping(decision, currency)}
+      </div>
+      ${decision.completionRule ? `<div class="notice">${esc(decision.completionRule)}</div>` : ''}`;
+  }
+
+  function renderPhasePanels(project, costPlan, phaseDetails) {
     return project.phases.map((phase) => {
+      const detail = phaseDetails.get(phase.number) || {};
+      const decision = detail.decision;
       const completion = completionFor(costPlan, phase);
       const costRow = costRowFor(costPlan, phase);
+
+      // A phase with a decision file leads with the finalist comparison; its
+      // older evaluation content moves into the history accordion below.
+      if (decision) {
+        return `
+          <section id="p${phase.number}" class="panel">
+            <h2>Phase ${phase.number} — ${esc(decision.title || phase.name)}</h2>
+            ${renderPhaseCostLine(costRow, currencyOf(project))}
+            ${renderDecisionPanel(decision, phase, project)}
+            ${renderDecisionHistory(phase, decision)}
+            ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
+            ${phase.decisionGate ? `<div class="notice">${esc(phase.decisionGate)}</div>` : ''}
+          </section>`;
+      }
+
       const body = renderPhaseBody(phase, project.currency, costPlan, !!completion);
       // Phases with a completion record get a two-column layout; the rest keep
       // the single-column form.
@@ -539,6 +690,36 @@
     if (start && document.getElementById(start)) show(start);
   }
 
+  // Optional per-phase detail files, e.g.
+  //   data/<projectId>-phase-2-decision.json
+  //   data/<projectId>-phase-1-completion.json
+  // A missing file is normal, not an error.
+  async function loadPhaseDetails(project) {
+    const details = new Map();
+    const id = project.projectId;
+    if (!id) return details;
+
+    const wanted = [];
+    project.phases.forEach((p) => {
+      if (p.status === 'current') wanted.push([p.number, 'decision']);
+      if (p.status === 'complete') wanted.push([p.number, 'completion']);
+    });
+
+    await Promise.all(wanted.map(async ([num, kind]) => {
+      try {
+        const res = await fetch(`data/${id}-phase-${num}-${kind}.json`);
+        if (!res.ok) return;
+        const json = await res.json();
+        const entry = details.get(num) || {};
+        entry[kind] = json;
+        details.set(num, entry);
+      } catch (err) {
+        /* optional file — absence is expected */
+      }
+    }));
+    return details;
+  }
+
   async function render() {
     const root = document.querySelector('[data-project]');
     if (!root) return;
@@ -558,6 +739,11 @@
       }
     }
 
+    // Per-phase detail files are optional and fetched only where the phase
+    // status implies one, so this stays at a couple of requests rather than
+    // probing every phase: current -> decision, complete -> completion.
+    const phaseDetails = await loadPhaseDetails(project);
+
     const titleMount = document.querySelector('[data-project-title]');
     if (titleMount) titleMount.textContent = project.displayTitle || project.name;
 
@@ -576,7 +762,7 @@
     if (panelsMount) {
       panelsMount.innerHTML = `
         <section id="roadmap" class="panel active">${renderRoadmap(project, costPlan)}</section>
-        ${renderPhasePanels(project, costPlan)}
+        ${renderPhasePanels(project, costPlan, phaseDetails)}
         ${renderDecisions(project)}
         ${renderShopping(project)}`;
     }

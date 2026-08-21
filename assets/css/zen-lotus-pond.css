@@ -127,6 +127,59 @@
 /* Kept single-column on purpose: splitting these into two columns narrows the
    five-column tables enough that rows wrap, making the panel taller overall. */
 
+/* Finalist comparison — the primary content of a decision phase. */
+.finalists{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:9px}
+.finalist{
+  background:var(--card);border:1px solid var(--line);border-radius:6px;
+  padding:9px 11px;min-width:0;font-size:12px;line-height:1.3;
+}
+.finalist.is-preferred{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.fin-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px}
+.fin-head h3{font-size:12.5px;margin:0;line-height:1.2;font-weight:800}
+.fin-price{font-size:15px;font-weight:800;color:var(--accent);margin-bottom:5px;line-height:1.1}
+.fin-price .caption-note{font-weight:500;color:var(--muted);margin-top:0}
+
+.fin-specs{display:grid;gap:1px;margin-bottom:5px}
+.spec{display:grid;grid-template-columns:70px minmax(0,1fr);gap:6px;font-size:11px;line-height:1.28}
+.spec-label{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);line-height:1.4}
+
+.fin-list{margin-bottom:4px}
+.fin-list ul{margin:1px 0 0;padding-left:14px}
+.fin-list li{margin:0 0 1px;font-size:11px;line-height:1.28}
+/* Wide cards fit these short lines in two columns. */
+@media(min-width:1100px){
+  .fin-list ul{columns:2;column-gap:16px}
+  .fin-list li{break-inside:avoid}
+}
+.fin-list.strengths li::marker{color:var(--green)}
+.fin-list.tradeoffs li{color:var(--muted)}
+.fin-list.tradeoffs li::marker{color:var(--amber)}
+
+.fin-link{display:inline-block;margin-top:2px;font-size:11px;font-weight:700;color:var(--accent);text-decoration:none}
+.fin-link:hover{text-decoration:underline}
+
+/* Rationale and pending purchase sit side by side; neither is tall enough to
+   deserve a full-width row of its own. */
+.decision-cols{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:10px;align-items:start;margin-bottom:9px}
+.decision-cols .box,.decision-cols .shopping-card{margin-bottom:0}
+/* Rationale reads fine in two columns here, which keeps this row as short as
+   the pending-purchase card beside it. */
+@media(min-width:1100px){.why-preferred ul{columns:2;column-gap:20px}}
+
+.intro-box p{margin:0 0 5px}
+.intro-box p:last-child{margin-bottom:0}
+@media(min-width:1100px){
+  .intro-box{columns:2;column-gap:22px}
+  .intro-box p{break-inside:avoid}
+}
+
+.why-preferred h3{font-size:12.5px;margin:0 0 5px;font-weight:800}
+.why-preferred ul{margin:0;padding-left:16px}
+.why-preferred li{margin:0 0 3px;font-size:11.5px;line-height:1.32;break-inside:avoid}
+
+.accordion-body h4{font-size:11.5px;margin:9px 0 4px;font-weight:800}
+.accordion-body h4:first-child{margin-top:0}
+
 /* Phase 2's candidate notes are long; tighten the table so the panel fits. */
 .candidate-table td{padding:4px 7px}
 .candidate-table td.cand-notes{line-height:1.28}
@@ -149,6 +202,8 @@
   /* Laptop viewports are short as well as narrow; the photo is the one
      element that can give up height without losing information. */
   .completion-card img{max-height:180px}
+  /* A fixed 430px sidebar cramps the rationale at this width; stack instead. */
+  .decision-cols{grid-template-columns:minmax(0,1fr)}
   .shopping-card{padding:7px 9px}
   .phase-shopping th,.phase-shopping td{padding:2px 4px}
   /* Reclaim page chrome so the panel itself gets the vertical room. */
@@ -173,6 +228,8 @@
   .cost-fig{flex:1 1 auto;min-width:96px}
   /* Stack main content, image and shopping list vertically. */
   .phase-layout{grid-template-columns:minmax(0,1fr)}
+  .finalists{grid-template-columns:minmax(0,1fr)}
+  .decision-cols{grid-template-columns:minmax(0,1fr)}
   .phase-side{flex-direction:row;flex-wrap:wrap;align-items:flex-start}
   .completion-card{flex:1 1 260px;max-width:340px}
   .shopping-card{flex:1 1 300px}
