@@ -168,6 +168,9 @@
 .money-card .cost-label{display:block;font-size:9px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .money-card .money-value{display:block;font-size:14px;font-weight:800;line-height:1.2;white-space:nowrap}
 .money-card.is-actual{background:var(--accent-soft)}
+/* Nothing spent yet is neither good nor bad news — a red em-dash is noise. */
+.money-card.is-actual.is-empty{background:var(--soft)}
+.money-card.is-actual.is-empty .money-value{color:var(--muted)}
 .money-card.is-actual .money-value{color:var(--accent)}
 /* Settled spend on a finished phase reads green, not live-accent. */
 .money-card.is-actual.is-final{background:var(--green-soft)}
@@ -218,7 +221,11 @@
 .fin-brief-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px}
 .fin-brief-name{font-size:12px;font-weight:800;line-height:1.2}
 .fin-brief-meta{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-.fin-brief-price{font-size:15px;font-weight:800;color:var(--accent);line-height:1.1}
+.fin-brief-price{font-size:15px;font-weight:800;color:var(--ink);line-height:1.1}
+/* Only the chosen option's price is coloured — accent while live, green once
+   settled. A price on a rejected alternate is just a reference number. */
+.fin-brief.is-chosen .fin-brief-price{color:var(--accent)}
+.fin-brief.is-chosen.is-settled .fin-brief-price{color:var(--green)}
 .fin-brief-meta .caption-note{display:inline;margin-top:0}
 
 /* Per-phase purchase records, kept collapsed under the primary list. */
@@ -236,7 +243,9 @@
 .finalist.is-chosen.is-settled .fin-price{color:var(--green)}
 .fin-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px}
 .fin-head h3{font-size:12.5px;margin:0;line-height:1.2;font-weight:800}
-.fin-price{font-size:15px;font-weight:800;color:var(--accent);margin-bottom:5px;line-height:1.1}
+.fin-price{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:5px;line-height:1.1}
+.finalist.is-chosen .fin-price{color:var(--accent)}
+.finalist.is-chosen.is-settled .fin-price{color:var(--green)}
 .fin-price .caption-note{font-weight:500;color:var(--muted);margin-top:0}
 
 .fin-specs{display:grid;gap:1px;margin-bottom:5px}
@@ -255,7 +264,9 @@
 .fin-list.tradeoffs li{color:var(--muted)}
 .fin-list.tradeoffs li::marker{color:var(--amber)}
 
-.fin-link{display:inline-block;margin-top:2px;font-size:11px;font-weight:700;color:var(--accent);text-decoration:none}
+.fin-link{display:inline-block;margin-top:2px;font-size:11px;font-weight:700;color:var(--muted);text-decoration:none}
+.finalist.is-chosen .fin-link{color:var(--accent)}
+.finalist.is-chosen.is-settled .fin-link{color:var(--green)}
 .fin-link:hover{text-decoration:underline}
 
 /* Cross-panel link, e.g. Phase 2 -> Decisions for the full rationale. */
@@ -265,6 +276,8 @@
   padding:6px 10px;font-size:11.5px;font-weight:700;color:var(--accent);text-decoration:none;
 }
 .xref:hover{background:#fbdcd4}
+.xref.is-settled{background:var(--green-soft);border-color:#bcdcc2;color:var(--green)}
+.xref.is-settled:hover{background:#d9eddd}
 
 /* Decision rationale blocks inside the Decisions panel. */
 .rationale{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
@@ -307,7 +320,7 @@
 #shopping table th,#shopping table td{padding:4px 7px}
 #shopping .cand-priority{margin-top:1px;line-height:1.25}
 
-.decision-item{color:var(--accent);font-weight:700}
+.decision-item{color:var(--ink);font-weight:700}
 
 /* Narrower sidebar before stacking, so the main column keeps a readable
    measure on laptop widths. Must precede the 980px rule below. */

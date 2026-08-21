@@ -347,7 +347,7 @@
           <span class="cost-label">${esc(estLabel)}</span>
           <span class="money-value">${esc(estValue)}</span>
         </div>
-        <div class="money-card is-actual${isFinal ? ' is-final' : ''}">
+        <div class="money-card is-actual${isFinal ? ' is-final' : ''}${actualValue == null ? ' is-empty' : ''}">
           <span class="cost-label">Actual${isFinal ? ' <span class="done-tick">✓</span>' : ''}</span>
           <span class="money-value">${actualValue == null ? '&mdash;' : esc(money(actualValue, currency))}</span>
         </div>
@@ -827,7 +827,7 @@
 
   // ---- Decision panels (a phase's narrowed finalist comparison) -------------
 
-  function finalistCard(c, currency) {
+  function finalistCard(c, currency, settled) {
     const spec = (label, value) => value
       ? `<div class="spec"><span class="spec-label">${esc(label)}</span><span>${esc(value)}</span></div>`
       : '';
@@ -838,7 +838,7 @@
       ? `<div class="fin-price">${esc(money(c.priceSnapshot, currency))}${c.priceSnapshotDate ? `<span class="caption-note">Price snapshot ${esc(c.priceSnapshotDate)}</span>` : ''}</div>`
       : '';
     return `
-      <article class="finalist ${isChosen(c.status) ? 'is-chosen' : ''} ${isSettledStatus(c.status) ? 'is-settled' : ''}">
+      <article class="finalist ${isChosen(c.status) ? 'is-chosen' : ''} ${(settled || isSettledStatus(c.status)) ? 'is-settled' : ''}">
         <header class="fin-head">
           <div>
             <h3>${esc(c.name)}</h3>
@@ -924,7 +924,7 @@
     const settled = isSettledStatus(decision.decisionState) || isSettledStatus(decision.status) || phase.status === 'complete';
     // A compact strip here; the full spec cards live in the Decisions log.
     const finalists = (decision.comparison || []).map((c) => `
-      <div class="fin-brief ${isChosen(c.status) ? 'is-chosen' : ''} ${isSettledStatus(c.status) ? 'is-settled' : ''}">
+      <div class="fin-brief ${isChosen(c.status) ? 'is-chosen' : ''} ${(settled || isSettledStatus(c.status)) ? 'is-settled' : ''}">
         <div class="fin-brief-top">
           <span class="fin-brief-name">${esc(c.name)}</span>
           <span class="pill ${statusPillClass(c.status)}">${esc(humanizeSlug(c.status))}</span>
@@ -951,7 +951,7 @@
     // The rationale itself lives in the Decisions tab; this panel links across
     // to it rather than repeating it. The pending list is in the sidebar.
     const rationaleLink = why
-      ? `<a class="xref" data-goto="decisions" href="#decisions">
+      ? `<a class="xref ${settled ? 'is-settled' : ''}" data-goto="decisions" href="#decisions">
            ${whyTitle} — see the options and rationale in Decisions →
          </a>`
       : '';
@@ -1023,14 +1023,15 @@
       if (!decision) return;
 
       // The full spec cards live here in the log, not in the phase panel.
-      const fullCards = (decision.comparison || []).map((c) => finalistCard(c, currency)).join('');
+      const settled = isSettledStatus(decision.decisionState) || isSettledStatus(decision.status) || phase.status === 'complete';
+      const fullCards = (decision.comparison || []).map((c) => finalistCard(c, currency, settled)).join('');
       const why = (decision.whyPreferred || []).map((w) => `<li>${esc(w)}</li>`).join('');
 
       blocks.push(`
         <section class="rationale">
           <div class="rationale-head">
             <h2>Phase ${phase.number} — ${esc(decision.title || phase.name)}</h2>
-            <a class="xref" data-goto="p${phase.number}" href="#p${phase.number}">Open Phase ${phase.number} →</a>
+            <a class="xref ${settled ? 'is-settled' : ''}" data-goto="p${phase.number}" href="#p${phase.number}">Open Phase ${phase.number} →</a>
           </div>
           ${decision.preferredChoice ? `
             <div class="notice accent">
