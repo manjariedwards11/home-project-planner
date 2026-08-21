@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "projectId": "zen-lotus-pond",
+  "phase": 4,
+  "phaseId": "pond-placement",
+  "title": "Pond Placement + Setup",
+  "status": "planned",
+  "goal": "Choose the final location, level the Manhattan pond and test the setup before planting.",
+  "shoppingList": {
+    "status": "planning",
+    "estimatedTotalMin": null,
+    "estimatedTotalMax": null,
+    "actualTotal": null,
+    "items": [
+      {
+        "item": "Leveling/base materials, only if needed",
+        "status": "conditional",
+        "estimatedCost": null,
+        "actualCost": null,
+        "note": "Buy only if the chosen location is not already flat, level and stable."
+      }
+    ],
+    "note": "No liner is needed; the Manhattan is the waterproof pond vessel."
+  },
+  "completionMemory": {
+    "title": "End of Phase 4",
+    "status": "awaiting-completion",
+    "image": null,
+    "caption": "Manhattan pond placed, leveled and leak-tested in its permanent location."
+  }
+}
