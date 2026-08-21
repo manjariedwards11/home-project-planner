@@ -14,6 +14,39 @@
   },
   "actualSpentToDate": 137.13,
   "currency": "USD",
+  "phase1Completion": {
+    "status": "complete",
+    "label": "Lotus Nursery",
+    "actualTotal": 107.13,
+    "goal": "Keep the babies growing while the permanent pond is built.",
+    "items": [
+      {
+        "item": "22-inch temporary nursery pond",
+        "actual": 15.0,
+        "status": "complete"
+      },
+      {
+        "item": "3 germinated lotus seedlings",
+        "actual": 10.0,
+        "status": "complete"
+      },
+      {
+        "item": "Lotus fertilizer",
+        "actual": 12.0,
+        "status": "complete"
+      },
+      {
+        "item": "Small solar fountain",
+        "actual": 9.74,
+        "status": "complete"
+      },
+      {
+        "item": "Aquatic soil, lotus pot, pea gravel, water conditioner",
+        "actual": 60.39,
+        "status": "complete"
+      }
+    ]
+  },
   "phases": [
     {
       "phase": 1,
