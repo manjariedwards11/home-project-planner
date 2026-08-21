@@ -61,6 +61,7 @@
 
   function statusPillClass(status) {
     if (status === 'locked' || status === 'complete' || status === 'bought') return 'green';
+    if (status === 'future-idea' || status === 'not-active' || status === 'paused') return '';
     if (status === 'open' || status === 'conditional' || status === 'under-evaluation' || status === 'candidate' || status === 'considering' || status === 'need-to-buy') return 'amber';
     return '';
   }
@@ -177,7 +178,7 @@
 
     const rows = phases.map((phase) => {
       const { badge, rowCls } = phaseBadge(phase, nextPlannedNumber);
-      const statusLabel = badge || capitalize(phase.status);
+      const statusLabel = badge || humanizeSlug(phase.status);
       const costRow = costRowFor(costPlan, phase);
       const estimated = costRow
         ? moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency)
@@ -336,12 +337,19 @@
     const rows = items.map((i) => {
       const actual = i.actualCost != null ? i.actualCost : i.actual;
       const done = (i.status === 'complete' || i.status === 'bought');
+      const est = i.estimatedCost != null ? i.estimatedCost
+        : (i.estimatedMin != null && i.estimatedMax != null ? null : null);
+      const estCell = i.estimatedCost != null ? esc(money(i.estimatedCost, currency))
+        : (i.estimatedMin != null && i.estimatedMax != null ? esc(moneyRange(i.estimatedMin, i.estimatedMax, currency)) : '&mdash;');
       return `
         <tr>
           <td class="col-check">${done ? '<span class="check" title="Complete">&#10003;</span>' : ''}</td>
-          <td>${esc(i.item)}</td>
-          <td class="col-est">${i.estimatedCost == null ? '&mdash;' : esc(money(i.estimatedCost, currency))}</td>
-          <td class="col-actual"><span class="actual-amount">${esc(money(actual, currency))}</span></td>
+          <td>${esc(i.item)}
+            ${i.role ? `<span class="caption-note">${esc(i.role)}</span>` : ''}
+            ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
+          </td>
+          <td class="col-est">${estCell}</td>
+          <td class="col-actual">${actual == null ? '&mdash;' : `<span class="actual-amount">${esc(money(actual, currency))}</span>`}</td>
         </tr>`;
     }).join('');
 
@@ -370,7 +378,7 @@
 
     return `
       <div class="shopping-card">
-        <h3>Shopping list</h3>
+        <h3>Shopping list${list.status ? ` <span class="pill ${statusPillClass(list.status)}">${esc(humanizeSlug(list.status))}</span>` : ''}</h3>
         ${renderMoneyCards('Phase estimate', moneyRange(estMin, estMax, currency), actualTotal, currency, phase.status === 'complete')}
         <div class="shop-scroll">
           ${shoppingTable(`
@@ -385,7 +393,9 @@
             </tr>
             ${elsewhereRows}`)}
         </div>
+        ${list.note ? `<p class="caption-note">${esc(list.note)}</p>` : ''}
         ${list.estimateNote ? `<p class="caption-note">${esc(list.estimateNote)}</p>` : ''}
+        ${completion.phaseEstimate && completion.phaseEstimate.label ? `<p class="caption-note">${esc(completion.phaseEstimate.label)}: ${esc(moneyRange(completion.phaseEstimate.min, completion.phaseEstimate.max, currency))}</p>` : ''}
         ${completion.crossPhaseAccountingNote ? `<p class="caption-note">${esc(completion.crossPhaseAccountingNote)}</p>` : ''}
       </div>`;
   }
@@ -662,6 +672,24 @@
       html += `<div class="box goal-box"><p><strong>Goal:</strong> ${esc(comp.goal)}</p></div>`;
     }
 
+    if (phase.timeHorizon || comp.timeHorizon) {
+      html += `<div class="notice"><strong>Time horizon:</strong> ${esc(phase.timeHorizon || comp.timeHorizon)}</div>`;
+    }
+
+    if (comp.currentDecision) {
+      html += `<div class="notice accent"><strong>Current decision:</strong> ${esc(comp.currentDecision)}</div>`;
+    }
+
+    // designIntent contrasts how the phase is built now vs what it leaves room
+    // for later; render whatever keys it carries rather than a fixed pair.
+    if (comp.designIntent && typeof comp.designIntent === 'object') {
+      const rows = Object.entries(comp.designIntent)
+        .filter(([, v]) => v)
+        .map(([k, v]) => `<div class="spec"><span class="spec-label">${esc(humanizeSlug(k.replace(/([A-Z])/g, '-$1').toLowerCase()))}</span><span>${esc(v)}</span></div>`)
+        .join('');
+      if (rows) html += `<div class="box"><h3>Design intent</h3><div class="fin-specs">${rows}</div></div>`;
+    }
+
     // The detail file may restate the summary; render it only if it differs,
     // so identical text is not shown twice.
     const summaries = [phase.summary, comp.summary]
@@ -708,6 +736,14 @@
         <tr><th>Item</th><th>Amount</th></tr>
         ${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td>${esc(money(s.amount, currency))}</td></tr>`).join('')}
       </table></div>`;
+    }
+
+    if (comp.brainstormingTopics && comp.brainstormingTopics.length) {
+      html += `<div class="box"><h3>To review before deciding</h3><ul>${comp.brainstormingTopics.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
+    }
+
+    if (comp.notBuyingNow && comp.notBuyingNow.length) {
+      html += `<div class="box"><h3>Deliberately not buying now</h3><ul>${comp.notBuyingNow.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
     }
 
     // Union again: every note from either source appears exactly once.
@@ -1027,25 +1063,43 @@
   //   data/<projectId>-phase-2-decision.json
   //   data/<projectId>-phase-1-completion.json
   // A missing file is normal, not an error.
+  // Detail files are named data/<project>-phase-<N>-<slug>.json but the slug is
+  // arbitrary ("completion", "decision", "system", "future-fish"), and a static
+  // host offers no directory listing. So: use the phase's own detailFile when
+  // the data supplies one, else this map, else fall back to the slug implied by
+  // status. Adding "detailFile" to a phase in the project JSON removes the need
+  // to touch this map at all.
+  const PHASE_DETAIL_SLUGS = {
+    1: 'completion',
+    2: 'decision',
+    3: 'system',
+    7: 'future-fish',
+  };
+
+  function detailSlugFor(phase) {
+    if (phase.detailFile) return null;               // explicit path wins
+    if (PHASE_DETAIL_SLUGS[phase.number]) return PHASE_DETAIL_SLUGS[phase.number];
+    if (phase.status === 'current') return 'decision';
+    if (phase.status === 'complete') return 'completion';
+    return null;
+  }
+
   async function loadPhaseDetails(project) {
     const details = new Map();
     const id = project.projectId;
     if (!id) return details;
 
-    const wanted = [];
-    project.phases.forEach((p) => {
-      if (p.status === 'current') wanted.push([p.number, 'decision']);
-      if (p.status === 'complete') wanted.push([p.number, 'completion']);
-    });
-
-    await Promise.all(wanted.map(async ([num, kind]) => {
+    await Promise.all(project.phases.map(async (phase) => {
+      const slug = detailSlugFor(phase);
+      const url = phase.detailFile || (slug ? `data/${id}-phase-${phase.number}-${slug}.json` : null);
+      if (!url) return;
       try {
-        const res = await fetch(`data/${id}-phase-${num}-${kind}.json`);
+        const res = await fetch(url);
         if (!res.ok) return;
         const json = await res.json();
-        const entry = details.get(num) || {};
-        entry[kind] = json;
-        details.set(num, entry);
+        // A file listing options is a decision; anything else is phase detail.
+        const kind = json.comparison ? 'decision' : 'completion';
+        details.set(phase.number, { [kind]: json });
       } catch (err) {
         /* optional file — absence is expected */
       }
