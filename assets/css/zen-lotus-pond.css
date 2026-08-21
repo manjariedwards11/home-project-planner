@@ -46,7 +46,12 @@
   display:flex;align-items:center;gap:6px;line-height:1.25;
 }
 .side-nav .tab:hover{background:var(--soft)}
-.side-nav .tab.active{background:var(--accent-soft);color:var(--accent);font-weight:800}
+/* The selected tab takes its colour from the phase's own state, so choosing a
+   finished phase reads green and only the genuinely live phase reads accent.
+   A fixed accent highlight made every selection look like an alert. */
+.side-nav .tab.active{background:var(--soft);color:var(--ink);font-weight:800;box-shadow:inset 3px 0 0 var(--line)}
+.side-nav .tab.active.status-complete{background:var(--green-soft);color:var(--green);box-shadow:inset 3px 0 0 var(--green)}
+.side-nav .tab.active.status-current{background:var(--accent-soft);color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
 .side-nav .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--line);flex:0 0 auto}
 .side-nav .tab.status-complete .dot{background:var(--green)}
 .side-nav .tab.status-current .dot{background:var(--accent)}

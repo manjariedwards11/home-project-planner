@@ -22,6 +22,8 @@
     'pump-filter': 'Pump/Filter',
     'lotus-buddha': 'Lotus/Buddha',
     'future-fish-ready': 'Future / Fish',
+    'pond-placement': 'Placement',
+    'lighting': 'Lighting',
   };
 
   function tabLabel(phase) {
