@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "projectId": "zen-lotus-pond",
+  "phase": 7,
+  "phaseId": "lighting",
+  "title": "Lighting + Finishing",
+  "status": "planned",
+  "goal": "Add restrained warm lighting and finish visible details after the pond is stable.",
+  "shoppingList": {
+    "status": "planning",
+    "estimatedTotalMin": 50,
+    "estimatedTotalMax": 125,
+    "actualTotal": null,
+    "items": [
+      {
+        "item": "Warm accent lighting",
+        "status": "need-to-buy",
+        "estimatedMin": 50.0,
+        "estimatedMax": 125.0,
+        "actualCost": null
+      }
+    ]
+  },
+  "completionMemory": {
+    "title": "End of Phase 7",
+    "status": "awaiting-completion",
+    "image": null,
+    "caption": "Final warm lighting and visible finishing details completed."
+  }
+}
