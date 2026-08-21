@@ -64,6 +64,24 @@
       "link": "https://www.walmart.com/ip/Pennington-50-gal-Aquagarden-Resin-Pond-Kit-Multi-Color/13240014659"
     }
   ],
+  "pendingShoppingList": {
+    "phaseEstimateMin": 125,
+    "phaseEstimateMax": 200,
+    "actualTotal": null,
+    "status": "pending-purchase",
+    "items": [
+      {
+        "item": "Algreen Manhattan 40-inch Balcony Planter & Pond",
+        "retailer": "Wayfair",
+        "status": "pending",
+        "estimatedCost": 134.99,
+        "actualCost": null,
+        "note": "Preferred permanent pond vessel. Purchase has not been completed yet.",
+        "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036"
+      }
+    ],
+    "note": "Only the preferred vessel belongs in the Phase 2 pending shopping list. Pump, filtration, tubing and fountain equipment remain Phase 3 purchases."
+  },
   "excludedReference": {
     "item": "Official Algreen Manhattan Balcony Pond Kit",
     "reason": "Do not use or render this as a purchase option. Although search indexing may surface a manufacturer page for a bundled Manhattan kit, the user could not find a usable product at that link in the live site. The Phase 2 decision should rely only on the directly accessible Wayfair Manhattan and Walmart Aquagarden listings."
