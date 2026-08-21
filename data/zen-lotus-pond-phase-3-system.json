@@ -5,22 +5,13 @@
   "phaseId": "pump-filter",
   "title": "Pump + Filter + Fountain",
   "status": "current",
-  "goal": "Build the permanent circulation and filtration system so the pond runs fishless now but has enough mechanical and biological capacity for a small, appropriate fish population later without rebuilding the system.",
+  "goal": "Install reliable circulation and filtration now with enough capacity for possible small fish later.",
   "phaseEstimate": {
     "min": 150,
     "max": 250,
     "currency": "USD"
   },
   "actualTotal": 30.0,
-  "designIntent": {
-    "currentState": "Fishless lotus pond",
-    "futureState": "Fish-ready infrastructure for a possible small fish population after the pond has been stable for about a year",
-    "selectedVessel": "Algreen Manhattan 40-inch Balcony Planter & Pond in Brownstone, purchased from Wayfair",
-    "mainPumpTarget": "Adjustable pump in roughly the 300–500 GPH rated range, sized to deliver approximately 200–300 GPH through filtration after normal flow losses",
-    "fountainRole": "Keep the existing Smartpond kit as the gentle visible fountain/surface-movement feature rather than relying on it as the main filtration system",
-    "filterRole": "Use separate mechanical and biological filtration with enough bio-media capacity to avoid rebuilding the system if small fish are added later",
-    "uv": "Optional later only if persistent free-floating green water becomes a problem"
-  },
   "shoppingList": {
     "status": "active",
     "estimatedTotalMin": 150,
@@ -30,52 +21,42 @@
       {
         "item": "Smartpond Filter Kit with Pump from Lowe's",
         "status": "bought",
-        "role": "Gentle visible fountain and surface movement",
+        "role": "Gentle visible fountain",
         "estimatedMin": 30.0,
         "estimatedMax": 30.0,
-        "actualCost": 30.0,
-        "note": "Already purchased. Keep it as the fountain component; do not depend on it as the permanent mechanical/biological filtration system."
+        "actualCost": 30.0
       },
       {
         "item": "Adjustable main pond pump, approximately 300–500 GPH rated",
         "status": "need-to-buy",
-        "role": "Main circulation through the permanent filter",
+        "role": "Main circulation",
         "estimatedMin": 35.0,
         "estimatedMax": 60.0,
-        "actualCost": null,
-        "note": "The Manhattan vessel is now purchased, so final pump selection can be made around its approximately 40 x 20 x 18-inch footprint and the actual plumbing/head layout."
+        "actualCost": null
       },
       {
-        "item": "Mechanical + biological filter with generous bio-media capacity",
+        "item": "Mechanical + biological filter with bio-media",
         "status": "need-to-buy",
-        "role": "Solids capture plus beneficial-bacteria capacity sized with possible future fish in mind",
+        "role": "Permanent filtration",
         "estimatedMin": 65.0,
         "estimatedMax": 110.0,
-        "actualCost": null,
-        "note": "Choose a filter that comfortably exceeds the needs of the fishless pond so a small future fish load does not require a system rebuild."
+        "actualCost": null
       },
       {
-        "item": "Tubing, valves/flow control and quiet return fittings",
+        "item": "Tubing, flow control and quiet return fittings",
         "status": "need-to-buy",
-        "role": "Connect pump to filter and return filtered water without adding another large visible fountain",
+        "role": "Connect and return filtered water",
         "estimatedMin": 20.0,
         "estimatedMax": 35.0,
-        "actualCost": null,
-        "note": "Exact fittings depend on the selected pump/filter and placement."
+        "actualCost": null
       }
     ],
-    "note": "The item estimates total roughly $150–235; the existing Phase 3 allowance remains $150–250 to leave room for small fittings, tax or minor adjustments. UV is not included as a required purchase."
+    "note": "UV is optional later only if persistent green water becomes a problem."
   },
-  "notBuyingNow": [
-    "Fish",
-    "UV clarifier unless persistent green water later justifies it",
-    "Dedicated fish aeration equipment unless the future fish-readiness review shows it is needed"
-  ],
   "completionMemory": {
     "title": "End of Phase 3",
     "status": "awaiting-completion",
     "image": null,
-    "caption": "Permanent circulation, filtration and fountain system installed and running."
-  },
-  "contentNote": "Preserve existing Phase 3 notes and decision history when rendering this data. This file adds the fish-ready system design and estimated-vs-actual shopping structure."
+    "caption": "Permanent pump, filtration and fountain system installed and running."
+  }
 }
