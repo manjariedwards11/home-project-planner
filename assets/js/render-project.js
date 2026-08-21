@@ -211,6 +211,7 @@
       </div>
       <div class="progress-strip">${strip}</div>
       ${nextActionNotice}
+      ${renderProjectBudget(project)}
       ${renderOverviewAccordion(project, costPlan)}
       <table class="road-table">
         <tr>
@@ -560,12 +561,74 @@
     });
   }
 
+  // Every item in project.shopping belongs to a phase, so each phase shows its
+  // own. Phases that also have a detail file show that list as the primary one
+  // and keep these records in a collapsed section, so both itemizations survive.
+  function phaseShoppingItems(phase, project) {
+    return (project.shopping || []).filter((i) => i.phase === phase.number);
+  }
+
+  function renderPhaseShoppingRecords(phase, project, collapsed) {
+    const items = phaseShoppingItems(phase, project);
+    if (!items.length) return '';
+    const currency = project.currency;
+    const rows = items.map((i) => `
+      <tr>
+        <td class="col-check">${i.status === 'bought' ? '<span class="check">&#10003;</span>' : ''}</td>
+        <td>${esc(i.item)}
+          <span class="caption-note">
+            <span class="pill ${statusPillClass(i.status)}">${esc(shoppingStatusLabel(i.status))}</span>
+            ${i.store ? ' ' + esc(i.store) : ''}${i.link ? ` &middot; <a href="${esc(i.link)}" target="_blank" rel="noopener">link</a>` : ''}
+          </span>
+          ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
+        </td>
+        <td class="col-est">${esc(optionalMoney(i.price, currency))}</td>
+        <td class="col-actual">${esc(optionalMoney(i.actualCost, currency))}</td>
+      </tr>`).join('');
+
+    if (collapsed) {
+      return `
+        <details class="accordion records">
+          <summary>All recorded items <span class="pill">${items.length}</span></summary>
+          <div class="accordion-body"><div class="shop-scroll">${shoppingTable(rows)}</div></div>
+        </details>`;
+    }
+    return `<div class="shop-scroll">${shoppingTable(rows)}</div>`;
+  }
+
+  // Phases without a detail file still get a shopping card, built from the
+  // project-level list plus the cost plan's phase estimate.
+  function renderPlainShoppingCard(phase, project, costRow) {
+    const items = phaseShoppingItems(phase, project);
+    if (!items.length) return '';
+    const currency = project.currency;
+    const actual = items.reduce((sum, i) => (i.actualCost != null ? sum + i.actualCost : sum), 0);
+    const anyActual = items.some((i) => i.actualCost != null);
+    return `
+      <div class="shopping-card">
+        <h3>Shopping list</h3>
+        ${renderMoneyCards(
+          'Phase estimate',
+          costRow ? moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency) : '—',
+          anyActual ? actual : null,
+          currency,
+          phase.status === 'complete'
+        )}
+        ${renderPhaseShoppingRecords(phase, project, false)}
+      </div>`;
+  }
+
   function renderPhaseSidebar(phase, project, opts) {
-    const card = opts.completion
-      ? renderCompletionShopping(phase, project, opts.completion, opts.costRow)
-      : opts.decision
-        ? renderPendingShoppingCard(phase, project, opts.decision)
-        : '';
+    let card;
+    if (opts.completion) {
+      card = renderCompletionShopping(phase, project, opts.completion, opts.costRow)
+        + renderPhaseShoppingRecords(phase, project, true);
+    } else if (opts.decision) {
+      card = renderPendingShoppingCard(phase, project, opts.decision)
+        + renderPhaseShoppingRecords(phase, project, true);
+    } else {
+      card = renderPlainShoppingCard(phase, project, opts.costRow);
+    }
     return `
       <aside class="phase-side">
         ${renderMemoryCard(phase, project, opts.memory)}
@@ -726,7 +789,18 @@
 
   function renderDecisionPanel(decision, phase, project) {
     const currency = project.currency;
-    const finalists = (decision.comparison || []).map((c) => finalistCard(c, currency)).join('');
+    // A compact strip here; the full spec cards live in the Decisions log.
+    const finalists = (decision.comparison || []).map((c) => `
+      <div class="fin-brief ${c.status === 'preferred' ? 'is-preferred' : ''}">
+        <div class="fin-brief-top">
+          <span class="fin-brief-name">${esc(c.name)}</span>
+          <span class="pill ${c.status === 'preferred' ? 'accent' : ''}">${esc(humanizeSlug(c.status))}</span>
+        </div>
+        <div class="fin-brief-meta">
+          <span class="fin-brief-price">${c.priceSnapshot != null ? esc(money(c.priceSnapshot, currency)) : '—'}</span>
+          <span class="caption-note">${esc(c.retailer || '')}${c.dimensions ? ' · ' + esc(c.dimensions) : c.capacity ? ' · ' + esc(c.capacity) : ''}</span>
+        </div>
+      </div>`).join('');
     const why = (decision.whyPreferred || []).map((w) => `<li>${esc(w)}</li>`).join('');
     const preferredName = (decision.comparison || []).find((c) => c.status === 'preferred');
     const whyTitle = preferredName
@@ -756,7 +830,7 @@
           — <em>${esc(humanizeSlug(decision.decisionState || ''))}</em>
         </div>` : ''}
       ${intro ? `<div class="box intro-box">${intro}</div>` : ''}
-      <div class="finalists">${finalists}</div>
+      <div class="fin-briefs">${finalists}</div>
       ${rationaleLink}
       ${decision.completionRule ? `<div class="notice">${esc(decision.completionRule)}</div>` : ''}`;
   }
@@ -773,9 +847,9 @@
         || (completion && completion.completionMemory)
         || null;
 
-      // Every phase with detail data uses the same two-column pattern:
-      // main content left, memory card + shopping list right.
-      const hasSidebar = !!(decision || completion);
+      // Every phase uses the same two-column pattern: main content left,
+      // memory card + that phase's shopping list right.
+      const hasSidebar = true;
 
       let main;
       if (decision) {
@@ -814,13 +888,8 @@
       const decision = (phaseDetails.get(phase.number) || {}).decision;
       if (!decision) return;
 
-      const optionRows = (decision.comparison || []).map((c) => `
-        <tr class="${c.status === 'preferred' ? 'is-chosen' : ''}">
-          <td>${esc(c.name)}${c.link ? `<span class="caption-note"><a href="${esc(c.link)}" target="_blank" rel="noopener">${esc(c.retailer || 'link')}</a></span>` : ''}</td>
-          <td><span class="pill ${c.status === 'preferred' ? 'accent' : ''}">${esc(humanizeSlug(c.status))}</span></td>
-          <td class="col-actual">${c.priceSnapshot != null ? esc(money(c.priceSnapshot, currency)) : '&mdash;'}</td>
-        </tr>`).join('');
-
+      // The full spec cards live here in the log, not in the phase panel.
+      const fullCards = (decision.comparison || []).map((c) => finalistCard(c, currency)).join('');
       const why = (decision.whyPreferred || []).map((w) => `<li>${esc(w)}</li>`).join('');
 
       blocks.push(`
@@ -834,12 +903,9 @@
               <strong>Chosen:</strong> ${esc(decision.preferredChoice)}
               — <em>${esc(humanizeSlug(decision.decisionState || ''))}</em>
             </div>` : ''}
-          ${optionRows ? `
+          ${fullCards ? `
             <h3 class="rationale-sub">Options considered</h3>
-            <table>
-              <tr><th>Option</th><th>Status</th><th class="col-actual">Price</th></tr>
-              ${optionRows}
-            </table>` : ''}
+            <div class="finalists">${fullCards}</div>` : ''}
           ${why ? `
             <h3 class="rationale-sub">Why this one</h3>
             <div class="box why-preferred"><ul>${why}</ul></div>` : ''}
@@ -895,50 +961,22 @@
     return SHOPPING_STATUS_LABELS[status] || humanizeSlug(status || '');
   }
 
-  function renderShopping(project) {
-    const items = project.shopping || [];
-    if (!items.length) return '';
-
-    const budget = project.budget || {};
-    const budgetSummary = `
-      <div class="box">
-        <p>
-          <strong>Planned:</strong> ${esc(optionalMoney(budget.planned, project.currency))}
-          &nbsp;·&nbsp; <strong>Spent:</strong> ${esc(optionalMoney(budget.spentToDate != null ? budget.spentToDate : project.spentToDate, project.currency))}
-          &nbsp;·&nbsp; <strong>Remaining:</strong> ${esc(optionalMoney(budget.remaining, project.currency))}
-        </p>
-        ${budget.note ? `<p>${esc(budget.note)}</p>` : ''}
-      </div>`;
-
-    const order = ['bought', 'considering', 'need-to-buy', 'rejected'];
-    const groups = order.map((status) => {
-      const rows = items.filter((i) => i.status === status);
-      if (!rows.length) return '';
-      return `
-        <details class="accordion" ${status === 'need-to-buy' ? 'open' : ''}>
-          <summary>${esc(shoppingStatusLabel(status))} <span class="pill ${statusPillClass(status)}">${rows.length}</span></summary>
-          <div class="accordion-body">
-            <table>
-              <tr><th>Phase</th><th>Item</th><th>Store / link</th><th>Price</th><th>Actual</th></tr>
-              ${rows.map((i) => `
-                <tr>
-                  <td>${i.phase != null ? 'P' + esc(i.phase) : '—'}</td>
-                  <td><strong>${esc(i.item)}</strong>${i.note ? `<div class="cand-priority">${esc(i.note)}</div>` : ''}</td>
-                  <td>${i.store ? esc(i.store) : '—'}${i.link ? ` · <a href="${esc(i.link)}" target="_blank" rel="noopener">link</a>` : ''}</td>
-                  <td>${esc(optionalMoney(i.price, project.currency))}</td>
-                  <td>${esc(optionalMoney(i.actualCost, project.currency))}</td>
-                </tr>`).join('')}
-            </table>
-          </div>
-        </details>`;
-    }).join('');
-
+  // The project-level budget block used to live in the Shopping panel. That
+  // panel is gone (each phase carries its own list), so the figures and note
+  // surface on the roadmap instead.
+  function renderProjectBudget(project) {
+    const b = project.budget;
+    if (!b) return '';
+    const c = project.currency;
     return `
-      <section id="shopping" class="panel">
-        <h2>Shopping + budget</h2>
-        ${budgetSummary}
-        <div class="shopping-groups">${groups}</div>
-      </section>`;
+      <div class="notice">
+        <strong>Project budget:</strong>
+        planned ${esc(optionalMoney(b.planned, c))}
+        &middot; spent ${esc(optionalMoney(b.spentToDate != null ? b.spentToDate : project.spentToDate, c))}
+        &middot; remaining ${esc(optionalMoney(b.remaining, c))}
+        ${b.status ? ` &middot; ${esc(humanizeSlug(b.status))}` : ''}
+        ${b.note ? `<br>${esc(b.note)}` : ''}
+      </div>`;
   }
 
   function renderSideNav(project) {
@@ -950,17 +988,13 @@
       return `<button class="tab ${navCls}" data-tab="p${phase.number}"><span class="dot"></span>${phase.number} — ${esc(tabLabel(phase))}</button>`;
     }).join('');
 
-    const shoppingTab = project.shopping && project.shopping.length
-      ? `<button class="tab" data-tab="shopping"><span class="dot"></span>Shopping</button>`
-      : '';
-
+    // No global shopping tab: each phase carries its own list in its sidebar.
     return `
       <button class="tab active" data-tab="roadmap"><span class="dot"></span>Roadmap</button>
       <div class="divider"></div>
       ${phaseTabs}
       <div class="divider"></div>
-      <button class="tab" data-tab="decisions"><span class="dot"></span>Decisions</button>
-      ${shoppingTab}`;
+      <button class="tab" data-tab="decisions"><span class="dot"></span>Decisions</button>`;
   }
 
   function initTabs() {
@@ -1062,8 +1096,7 @@
       panelsMount.innerHTML = `
         <section id="roadmap" class="panel active">${renderRoadmap(project, costPlan)}</section>
         ${renderPhasePanels(project, costPlan, phaseDetails)}
-        ${renderDecisions(project, phaseDetails)}
-        ${renderShopping(project)}`;
+        ${renderDecisions(project, phaseDetails)}`;
     }
 
     initTabs();

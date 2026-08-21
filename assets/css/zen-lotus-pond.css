@@ -205,7 +205,24 @@
 /* Kept single-column on purpose: splitting these into two columns narrows the
    five-column tables enough that rows wrap, making the panel taller overall. */
 
-/* Finalist comparison — the primary content of a decision phase. */
+/* Compact comparison strip in the phase panel; full cards live in Decisions. */
+.fin-briefs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:9px}
+.fin-brief{
+  background:var(--card);border:1px solid var(--line);border-radius:6px;
+  padding:8px 10px;min-width:0;
+}
+.fin-brief.is-preferred{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.fin-brief-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px}
+.fin-brief-name{font-size:12px;font-weight:800;line-height:1.2}
+.fin-brief-meta{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.fin-brief-price{font-size:15px;font-weight:800;color:var(--accent);line-height:1.1}
+.fin-brief-meta .caption-note{display:inline;margin-top:0}
+
+/* Per-phase purchase records, kept collapsed under the primary list. */
+.records{margin-top:9px}
+.records summary{font-size:11.5px}
+
+/* Finalist comparison cards — full detail, shown in the Decisions log. */
 .finalists{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:9px}
 .finalist{
   background:var(--card);border:1px solid var(--line);border-radius:6px;
@@ -319,7 +336,7 @@
   .cost-fig{flex:1 1 auto;min-width:96px}
   /* Stack main content, image and shopping list vertically. */
   .phase-layout{grid-template-columns:minmax(0,1fr)}
-  .finalists{grid-template-columns:minmax(0,1fr)}
+  .finalists,.fin-briefs{grid-template-columns:minmax(0,1fr)}
   .phase-side{flex-direction:row;flex-wrap:wrap;align-items:flex-start}
   .completion-card{flex:1 1 260px;max-width:340px}
   .shopping-card{flex:1 1 300px}
