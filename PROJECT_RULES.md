@@ -37,12 +37,24 @@ Claude must treat files under `data/` as read-only project facts unless the user
 - Responsive on desktop, tablet, and mobile.
 - Preserve existing functionality when restyling.
 
+## Phase-page standard
+Every phase should use the same concise information pattern:
+1. Phase title, status, estimate, and actual.
+2. One clear goal.
+3. Only the essential actions or decisions needed for that phase.
+4. A phase-specific shopping list with estimated and actual costs.
+5. An `End of Phase X` completion-photo area.
+
+Phase pages are project records, not conversation transcripts. Do not repeat the same idea in summary, notes, warnings, design intent, and shopping descriptions. Keep the primary phase view focused on what was decided, what needs to happen, what needs to be bought, and what it cost. Historical alternatives or rationale may live in the Decisions area or collapsed history when still useful.
+
 ## Data rules
 - Do not hard-code project facts in UI files when they belong in `data/`.
 - The UI should render project state from JSON.
 - When a fact changes, update the JSON rather than duplicating the fact in HTML.
 - Never silently overwrite a locked decision.
-- Keep rejected/paused options distinguishable from active decisions.
+- Keep rejected/paused options distinguishable from active decisions when history is intentionally retained.
+- Do not invent item-level estimates after purchase; use `—` when the estimate was never recorded.
+- Do not carry obsolete phases, purchases, or budget allowances forward after a decision makes them unnecessary.
 
 ## Workflow
 1. User discusses project decisions with ChatGPT.
