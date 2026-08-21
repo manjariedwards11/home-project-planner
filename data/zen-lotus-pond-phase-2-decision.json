@@ -3,65 +3,46 @@
   "projectId": "zen-lotus-pond",
   "phase": 2,
   "phaseId": "pond-decision",
-  "title": "Permanent Pond Decision",
+  "title": "Pond Selection",
   "status": "complete",
-  "goal": "Choose and purchase the permanent pond vessel that best fits the rectangular Zen design, gives the lotus a stable long-term home, and leaves permanent pump and filtration selection to Phase 3.",
+  "goal": "Choose and purchase the permanent pond vessel.",
   "decisionState": "complete-purchased",
-  "preferredChoice": "Algreen Manhattan 40-inch Balcony Planter & Pond from Wayfair — Brownstone",
-  "decisionSummary": "Phase 2 is complete. The Algreen Manhattan 40-inch Balcony Planter & Pond in Brownstone was selected over the Walmart Aquagarden and purchased from Wayfair on August 21, 2026.",
+  "preferredChoice": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
   "whyPreferred": [
-    "The clean 40 x 20 x 18-inch rectangular shape fits the planned architectural Zen pond design better than the more traditional pond-kit appearance.",
-    "Wayfair lists the Manhattan for use as an above-ground water garden, with durable rotomolded outdoor construction.",
-    "The Manhattan vessel can be paired with a separately selected Phase 3 pump, mechanical filtration and biological filtration instead of being locked into bundled equipment.",
-    "The Manhattan vessel was less expensive than the Walmart Aquagarden kit at the time of the decision, leaving more room in the project budget for the filtration system we actually want.",
-    "The overall visual design was the deciding factor: the Manhattan looks more like an intentional rectangular garden feature and better supports the planned jasmine, lotus and Buddha composition."
+    "Clean rectangular shape fits the Zen design.",
+    "Works better visually with lotus, Buddha and jasmine.",
+    "Allows the permanent pump and filtration to be selected separately."
   ],
   "comparison": [
     {
       "name": "Algreen Manhattan 40-inch Balcony Planter & Pond",
       "retailer": "Wayfair",
-      "status": "selected-purchased",
+      "status": "preferred",
       "color": "Brownstone",
       "priceSnapshot": 134.99,
-      "priceSnapshotDate": "2026-08-21",
-      "dimensions": "40 in W x 20 in D x 18 in H",
-      "shape": "Rectangular architectural planter/pond",
-      "pondUse": "Designed to function as an above-ground water garden",
-      "construction": "Rotomolded plastic; weather and UV resistant",
-      "includedEquipment": "Vessel only on the referenced Wayfair listing; permanent pump/filter system remains a Phase 3 decision",
+      "dimensions": "40 in W × 20 in D × 18 in H",
+      "includedEquipment": "Vessel only",
       "strengths": [
-        "Best match for the desired architectural rectangular look",
-        "18-inch height gives the lotus more useful depth than a shallow decorative basin",
-        "Lower recorded vessel price than the complete Aquagarden kit",
-        "Lets the project choose filtration separately in Phase 3",
-        "Simple clean form works with the planned jasmine, Buddha and open-water layout"
+        "Best architectural fit",
+        "Lets Phase 3 choose filtration separately"
       ],
       "tradeoffs": [
-        "Pump, filtration and fountain return are not included on the referenced Wayfair listing",
-        "Final system cost will increase once Phase 3 equipment is added"
+        "Pump and permanent filtration are separate purchases"
       ],
       "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036"
     },
     {
-      "name": "Blagdon/Pennington Aquagarden 50-gallon Resin Pond Kit",
+      "name": "Pennington Aquagarden 50-gallon Pond Kit",
       "retailer": "Walmart",
-      "status": "not-selected-final-alternate",
+      "status": "final-alternate",
       "priceSnapshot": 214.47,
-      "priceSnapshotDate": "2026-08-21",
       "capacity": "50 gallons",
-      "shape": "Traditional packaged pond-kit form",
-      "pondUse": "Complete no-dig pond system",
-      "includedEquipment": "Pond kit with fountain displays/fittings and integrated wildlife features",
+      "includedEquipment": "Complete pond kit",
       "strengths": [
-        "More complete out of the box",
-        "50-gallon capacity",
-        "Fast no-dig setup",
-        "Includes fountain features and wildlife-oriented details"
+        "More complete out of the box"
       ],
       "tradeoffs": [
-        "Less aligned with the clean rectangular architectural design",
-        "Higher recorded purchase price than the Wayfair Manhattan vessel",
-        "Bundled components reduce the benefit of separately selecting the exact Phase 3 pump/filter system"
+        "Less aligned with the rectangular architectural look"
       ],
       "link": "https://www.walmart.com/ip/Pennington-50-gal-Aquagarden-Resin-Pond-Kit-Multi-Color/13240014659"
     }
@@ -69,6 +50,8 @@
   "shoppingList": {
     "phaseEstimateMin": 125,
     "phaseEstimateMax": 200,
+    "estimatedTotalMin": 125,
+    "estimatedTotalMax": 200,
     "actualTotal": 146.19,
     "status": "complete",
     "items": [
@@ -86,34 +69,14 @@
         "purchaseDate": "2026-08-21",
         "estimatedDeliveryStart": "2026-08-26",
         "estimatedDeliveryEnd": "2026-08-29",
-        "note": "Purchased. Actual Phase 2 spend uses the all-in amount paid including tax.",
         "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036"
       }
-    ],
-    "note": "Phase 2 is complete. Pump, filtration, tubing and fountain equipment remain Phase 3 purchases."
-  },
-  "purchase": {
-    "date": "2026-08-21",
-    "retailer": "Wayfair",
-    "item": "Manhattan 40-inch Balcony Planter & Pond — Large Outdoor Rectangular Planter Box",
-    "color": "Brownstone",
-    "quantity": 1,
-    "subtotal": 134.99,
-    "shipping": 0.0,
-    "tax": 11.20,
-    "totalPaid": 146.19,
-    "estimatedDelivery": "Between Wednesday, August 26 and Saturday, August 29, 2026"
+    ]
   },
   "completionMemory": {
     "title": "End of Phase 2",
     "status": "awaiting-delivery-photo",
     "image": null,
-    "caption": "Brownstone Algreen Manhattan permanent pond vessel purchased from Wayfair. Add the completion photo after delivery and placement."
-  },
-  "excludedReference": {
-    "item": "Official Algreen Manhattan Balcony Pond Kit",
-    "reason": "Do not use or render this as a purchase option. The Phase 2 decision relied only on the directly accessible Wayfair Manhattan and Walmart Aquagarden listings."
-  },
-  "completionRule": "Complete — the permanent pond vessel was purchased on August 21, 2026.",
-  "contentNote": "Preserve the older candidate history on the project page. The final selected vessel is the Brownstone Wayfair Manhattan; the comparison history remains part of the decision record."
+    "caption": "Brownstone Manhattan pond purchased; add the placed-pond photo after delivery."
+  }
 }
