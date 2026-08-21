@@ -6,6 +6,19 @@
   "title": "Pond Placement + Setup",
   "status": "planned",
   "goal": "Choose the final location, level the Manhattan pond and test the setup before planting.",
+  "recommendation": {
+    "status": "provisional",
+    "topChoice": "Option 2 — Zen Wall",
+    "runnerUp": "Option 1 — Clock Wall",
+    "summary": "Option 2 is the best overall fit for the finished pond design, utilities, maintenance access and jasmine layout. Confirm that it receives enough true direct sun for healthy lotus growth before locking the location.",
+    "why": [
+      "Best fit for the complete Jasmine — Pond — Jasmine composition",
+      "Easy water, GFCI and filter access",
+      "Good maintenance access and low dog/predator concern",
+      "Option 1 remains the backup because its north placement and possible 4–6 hours of sun may be better for lotus"
+    ],
+    "decisionGate": "Do not lock Option 2 until direct-sun exposure is verified."
+  },
   "shoppingList": {
     "status": "planning",
     "estimatedTotalMin": null,
