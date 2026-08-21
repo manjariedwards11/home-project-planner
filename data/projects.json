@@ -11,7 +11,8 @@
       "spentToDate": 137.13,
       "currency": "USD",
       "currentLabel": "Pond Decision",
-      "dataFile": "data/zen-lotus-pond.json"
+      "dataFile": "data/zen-lotus-pond.json",
+      "costPlanFile": "data/zen-lotus-pond-cost-plan.json"
     }
   ]
 }
