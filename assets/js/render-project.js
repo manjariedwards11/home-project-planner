@@ -11,6 +11,8 @@
 (() => {
   'use strict';
 
+  let currentProjectId = '';
+
   // Short nav-tab labels are a display/navigation concern (owned by Claude per
   // PROJECT_RULES.md), not a duplicated fact — the full phase name (the fact)
   // still comes from JSON and is used everywhere else. Falls back to the full
@@ -306,11 +308,14 @@
     const caption = mem.caption || '';
     const projectId = project.projectId || '';
     const src = mem.image || `assets/img/${projectId}-phase${phase.number}.png`;
-    const awaiting = phase.status === 'complete' ? 'Awaiting photo' : 'Awaiting completion';
+    const inactive = phase.status === 'future-idea' || phase.status === 'not-active';
+    const awaiting = phase.status === 'complete' ? 'Awaiting photo'
+      : inactive ? 'Future decision'
+      : 'Awaiting completion';
 
     const key = `${projectId}:phase${phase.number}`;
     return `
-      <figure class="completion-card">
+      <figure class="completion-card ${inactive ? 'is-inactive' : ''}">
         <!-- The placeholder is the default. attachMemoryImages() probes the
              candidate path with fetch and swaps the photo in only if it is
              actually there — a plain <img> would log a 404 on every load. -->
@@ -724,105 +729,149 @@
 
   // One field type -> one rendering treatment, applied uniformly across every
   // phase regardless of phase number.
+  // Two texts saying the same thing (the goal restated as a summary) should
+  // appear once. Compared loosely, since wording drifts between files.
+  function saysTheSame(a, b) {
+    if (!a || !b) return false;
+    const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+    const x = norm(a);
+    const y = norm(b);
+    return x === y || x.includes(y) || y.includes(x);
+  }
+
+  // Placement concepts are a presentation-only gallery until they exist in
+  // /data; if the phase or its detail file supplies options, those win.
+  const PLACEMENT_FALLBACK = [
+    { label: 'Option 1 — Courtyard Clock Wall', file: 'option-1-courtyard-clock-wall' },
+    { label: 'Option 2 — Courtyard Zen Feature Wall', file: 'option-2-courtyard-zen-feature-wall' },
+    { label: 'Option 3 — Large Covered Patio Wall', file: 'option-3-large-covered-patio-wall' },
+    { label: 'Option 4 — Back Patio Window Wall', file: 'option-4-back-patio-window-wall' },
+    { label: 'Option 5 — Back Patio TV Corner', file: 'option-5-back-patio-tv-corner' },
+  ];
+
+  function renderPlacementGallery(phase, project, detail) {
+    const fromData = (detail && detail.placementOptions) || phase.placementOptions;
+    const options = fromData || PLACEMENT_FALLBACK;
+    if (!options.length) return '';
+    const base = `assets/images/${project.projectId}/phase-${phase.number}/`;
+    const cards = options.map((o, i) => {
+      const src = o.image || `${base}${o.file || 'option-' + (i + 1)}.jpg`;
+      return `
+        <figure class="placement">
+          <a class="placement-shot" href="${esc(src)}" target="_blank" rel="noopener"
+             data-memory-src="${esc(src)}" data-memory-alt="${esc(o.label)}">
+            <div class="memory-placeholder">
+              <span class="ph-mark" aria-hidden="true">&#9707;</span>
+              <span class="ph-text">Image pending</span>
+            </div>
+          </a>
+          <figcaption>${esc(o.label)}</figcaption>
+        </figure>`;
+    }).join('');
+    return `
+      <section class="placement-block">
+        <div class="placement-head">
+          <h3>Pond placement options</h3>
+          <span class="pill amber">Decision pending</span>
+        </div>
+        <div class="placement-grid">${cards}</div>
+      </section>`;
+  }
+
+  // A phase page is a concise operational view: goal, the few things to do,
+  // and the money. Anything discursive — restated summaries, design rationale,
+  // extra notes — goes into a collapsed Details block so it is preserved
+  // without dominating the page.
   function renderPhaseBody(phase, currency, costPlan, hasSidebar, completion) {
-    let html = '';
     const comp = completion || {};
+    const primary = [];
+    const extra = [];
 
     const costRow = costRowFor(costPlan, phase);
-    html += renderPhaseCostLine(costRow, currency);
+    primary.push(renderPhaseCostLine(costRow, currency));
 
-    if (comp.goal) {
-      html += `<div class="box goal-box"><p><strong>Goal:</strong> ${esc(comp.goal)}</p></div>`;
+    const goal = comp.goal || phase.goal || phase.summary;
+    if (goal) {
+      primary.push(`<div class="box goal-box"><p><strong>Goal:</strong> ${esc(goal)}</p></div>`);
     }
+
+    // Summaries that merely restate the goal are dropped rather than collapsed:
+    // keeping a duplicate sentence behind a toggle adds nothing.
+    [phase.summary, comp.summary].forEach((s) => {
+      if (!s || saysTheSame(s, goal)) return;
+      extra.push(`<p>${esc(s)}</p>`);
+    });
 
     if (phase.timeHorizon || comp.timeHorizon) {
-      html += `<div class="notice"><strong>Time horizon:</strong> ${esc(phase.timeHorizon || comp.timeHorizon)}</div>`;
-    }
-
-    if (phase.purchase) {
-      html += renderPurchase(phase.purchase, currency);
+      primary.push(`<div class="notice"><strong>Time horizon:</strong> ${esc(phase.timeHorizon || comp.timeHorizon)}</div>`);
     }
 
     if (comp.currentDecision) {
-      html += `<div class="notice accent"><strong>Current decision:</strong> ${esc(comp.currentDecision)}</div>`;
+      primary.push(`<div class="notice ${phase.status === 'complete' ? 'success' : ''}">${esc(comp.currentDecision)}</div>`);
     }
-
-    // designIntent contrasts how the phase is built now vs what it leaves room
-    // for later; render whatever keys it carries rather than a fixed pair.
-    if (comp.designIntent && typeof comp.designIntent === 'object') {
-      const rows = Object.entries(comp.designIntent)
-        .filter(([, v]) => v)
-        .map(([k, v]) => `<div class="spec"><span class="spec-label">${esc(humanizeSlug(k.replace(/([A-Z])/g, '-$1').toLowerCase()))}</span><span>${esc(v)}</span></div>`)
-        .join('');
-      if (rows) html += `<div class="box"><h3>Design intent</h3><div class="fin-specs">${rows}</div></div>`;
-    }
-
-    // The detail file may restate the summary; render it only if it differs,
-    // so identical text is not shown twice.
-    const summaries = [phase.summary, comp.summary]
-      .filter(Boolean)
-      .filter((s, i, a) => a.indexOf(s) === i);
-    summaries.forEach((s) => {
-      html += `<div class="box"><p>${esc(s)}</p></div>`;
-    });
 
     if (phase.layout) {
-      html += `<div class="box"><p><strong>Layout:</strong> ${esc(phase.layout)}</p></div>`;
+      primary.push(`<div class="box"><p><strong>Layout:</strong> ${esc(phase.layout)}</p></div>`);
     }
 
-    // Union of the phase item list and any completed-work entries the detail
-    // file adds, so neither source loses an entry.
-    const items = (phase.items || []).slice();
-    (comp.completedWork || []).forEach((w) => {
-      if (!items.includes(w)) items.push(w);
-    });
-    if (items.length) {
-      html += `<div class="box"><ul>${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>`;
+    // The essential actions for this phase — the heart of the page.
+    const actions = (phase.requirements || []).slice();
+    (comp.completedWork || []).forEach((w) => { if (!actions.includes(w)) actions.push(w); });
+    (phase.items || []).forEach((i) => { if (!actions.includes(i)) actions.push(i); });
+    if (actions.length) {
+      primary.push(`<div class="box"><ul>${actions.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></div>`);
     }
 
-    if (phase.decisionCriteria && phase.decisionCriteria.length) {
-      html += `<div class="box"><h3>Decision criteria</h3><ul>${phase.decisionCriteria.map((r) => `<li>${esc(r)}</li>`).join('')}</ul></div>`;
+    if (phase.purchase) primary.push(renderPurchase(phase.purchase, currency));
+
+    if (phase.id === 'pond-placement' || /placement/.test(String(phase.id))) {
+      primary.push(renderPlacementGallery(phase, { projectId: currentProjectId }, comp));
     }
 
-    if (phase.candidates && phase.candidates.length) {
-      html += renderCandidates(phase.candidates);
-    }
-
-    if (phase.decisionGate) {
-      html += `<div class="notice">${esc(phase.decisionGate)}</div>`;
-    }
-
-    if (phase.requirements && phase.requirements.length) {
-      html += `<div class="box"><ul>${phase.requirements.map((r) => `<li>${esc(r)}</li>`).join('')}</ul></div>`;
-    }
-
-    // The sidebar's shopping list reproduces every spendBreakdown amount, so
-    // the Spend table is only suppressed when that sidebar is actually shown.
-    if (!hasSidebar && phase.spendBreakdown && phase.spendBreakdown.length) {
-      html += `<div class="box"><h3>Spend</h3><table>
-        <tr><th>Item</th><th>Amount</th></tr>
-        ${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td>${esc(money(s.amount, currency))}</td></tr>`).join('')}
-      </table></div>`;
-    }
-
-    if (comp.brainstormingTopics && comp.brainstormingTopics.length) {
-      html += `<div class="box"><h3>To review before deciding</h3><ul>${comp.brainstormingTopics.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
-    }
-
-    if (comp.notBuyingNow && comp.notBuyingNow.length) {
-      html += `<div class="box"><h3>Deliberately not buying now</h3><ul>${comp.notBuyingNow.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></div>`;
-    }
-
-    // Union again: every note from either source appears exactly once.
+    // At most one note stays on the page; the rest are preserved in Details.
     const notes = (phase.notes || []).slice();
-    (comp.notes || []).forEach((n) => {
-      if (!notes.includes(n)) notes.push(n);
-    });
+    (comp.notes || []).forEach((n) => { if (!notes.includes(n)) notes.push(n); });
     if (notes.length) {
-      html += notes.map((n) => `<div class="notice">${esc(n)}</div>`).join('');
+      primary.push(`<div class="notice">${esc(notes[0])}</div>`);
+      notes.slice(1).forEach((n) => extra.push(`<p>${esc(n)}</p>`));
     }
 
-    return html;
+    // Everything below is context rather than instruction.
+    if (comp.designIntent && typeof comp.designIntent === 'object') {
+      const rows = Object.entries(comp.designIntent).filter(([, v]) => v)
+        .map(([k, v]) => `<div class="spec"><span class="spec-label">${esc(humanizeSlug(k.replace(/([A-Z])/g, '-$1').toLowerCase()))}</span><span>${esc(v)}</span></div>`).join('');
+      if (rows) extra.push(`<h4>Design intent</h4><div class="fin-specs">${rows}</div>`);
+    }
+    if (phase.decisionGate) extra.push(`<h4>Decision gate</h4><p>${esc(phase.decisionGate)}</p>`);
+    if (comp.notBuyingNow && comp.notBuyingNow.length) {
+      extra.push(`<h4>Deliberately not buying now</h4><ul>${comp.notBuyingNow.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`);
+    }
+    if (comp.brainstormingTopics && comp.brainstormingTopics.length) {
+      extra.push(`<h4>To review before deciding</h4><ul>${comp.brainstormingTopics.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`);
+    }
+    if (phase.decisionCriteria && phase.decisionCriteria.length) {
+      extra.push(`<h4>Decision criteria</h4><ul>${phase.decisionCriteria.map((r) => `<li>${esc(r)}</li>`).join('')}</ul>`);
+    }
+    if (phase.candidates && phase.candidates.length) {
+      extra.push(`<h4>Earlier candidates</h4>${renderCandidates(phase.candidates)}`);
+    }
+    // The sidebar's shopping list already carries every spendBreakdown amount,
+    // so this is a record rather than a second Spend section.
+    if (phase.spendBreakdown && phase.spendBreakdown.length) {
+      extra.push(`<h4>Recorded spend</h4><table>
+        <tr><th>Item</th><th class="col-actual">Amount</th></tr>
+        ${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td class="col-actual">${esc(money(s.amount, currency))}</td></tr>`).join('')}
+      </table>`);
+    }
+
+    const details = extra.length
+      ? `<details class="accordion">
+           <summary>Details &amp; history</summary>
+           <div class="accordion-body">${extra.join('')}</div>
+         </details>`
+      : '';
+
+    return primary.join('') + details;
   }
 
   // ---- Decision panels (a phase's narrowed finalist comparison) -------------
@@ -1223,6 +1272,7 @@
 
     const res = await fetch(dataFile);
     const project = await res.json();
+    currentProjectId = project.projectId || '';
 
     let costPlan = null;
     if (project.costPlanFile || project.projectId) {

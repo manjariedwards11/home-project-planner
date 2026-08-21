@@ -382,3 +382,24 @@
   .road-table .col-actual{white-space:normal}
   .road-table .qualifier{display:block}
 }
+
+/* Pond placement options — a visual comparison gallery, not a decision yet. */
+.placement-block{margin-bottom:9px}
+.placement-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.placement-head h3{font-size:12.5px;margin:0;font-weight:800}
+.placement-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.placement{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden;min-width:0}
+.placement-shot{display:block;position:relative;aspect-ratio:4/3;text-decoration:none}
+.placement-shot img{display:block;width:100%;height:100%;object-fit:cover}
+.placement-shot .memory-placeholder{aspect-ratio:4/3;max-height:none;gap:3px}
+.placement-shot .memory-placeholder .ph-mark{font-size:20px}
+.placement-shot .memory-placeholder .ph-text{font-size:9px}
+.placement figcaption{padding:6px 8px;font-size:11px;font-weight:700;line-height:1.25;border-top:1px solid var(--line)}
+
+/* A future/inactive phase reserves a smaller memory slot: a full-size photo
+   frame there is mostly empty space. */
+.completion-card.is-inactive .memory-placeholder{aspect-ratio:auto;min-height:72px}
+.completion-card.is-inactive .ph-pick{display:none}
+
+@media(max-width:1200px){ .placement-grid{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media(max-width:620px){ .placement-grid{grid-template-columns:minmax(0,1fr)} }
