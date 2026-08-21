@@ -5,15 +5,112 @@
   "phaseId": "pump-filter",
   "title": "Pump + Filter + Fountain",
   "status": "current",
-  "goal": "Install reliable circulation and filtration now with enough capacity for possible small fish later.",
+  "goal": "Choose and install a low-maintenance circulation and filtration setup with enough capacity for possible small fish later.",
+  "decisionStatus": "pending",
   "phaseEstimate": {
     "min": 150,
     "max": 250,
-    "currency": "USD"
+    "currency": "USD",
+    "note": "Current project allowance includes the $30 Smartpond already purchased. Final cost depends on which system option is selected."
   },
   "actualTotal": 30.0,
+  "ownedEquipment": {
+    "item": "Smartpond Filter Kit with Pump from Lowe's",
+    "actualCost": 30.0,
+    "status": "bought",
+    "note": "Already purchased. It can be used in Option A or kept as nursery/backup equipment if Option B is selected."
+  },
+  "systemOptions": [
+    {
+      "id": "keep-smartpond",
+      "label": "Option A — Keep the Smartpond",
+      "status": "considering",
+      "summary": "Use the Smartpond as the visible fountain and add a separate pump and permanent mechanical/biological filter.",
+      "systemEstimatedMin": 150.0,
+      "systemEstimatedMax": 235.0,
+      "remainingEstimatedMin": 120.0,
+      "remainingEstimatedMax": 205.0,
+      "pumpCount": 2,
+      "maintenance": "Higher than Option B because there are two pumps/fountain components to maintain.",
+      "items": [
+        {
+          "item": "Smartpond Filter Kit with Pump",
+          "status": "bought",
+          "estimatedMin": 30.0,
+          "estimatedMax": 30.0,
+          "actualCost": 30.0,
+          "role": "Visible gentle fountain / surface movement"
+        },
+        {
+          "item": "Adjustable main pond pump, approximately 300–500 GPH",
+          "status": "need-to-buy-if-selected",
+          "estimatedMin": 35.0,
+          "estimatedMax": 60.0,
+          "actualCost": null,
+          "role": "Main circulation through filtration"
+        },
+        {
+          "item": "Mechanical + biological filter with bio-media",
+          "status": "need-to-buy-if-selected",
+          "estimatedMin": 65.0,
+          "estimatedMax": 110.0,
+          "actualCost": null,
+          "role": "Permanent water filtration"
+        },
+        {
+          "item": "Tubing, flow control and quiet return fittings",
+          "status": "need-to-buy-if-selected",
+          "estimatedMin": 20.0,
+          "estimatedMax": 35.0,
+          "actualCost": null,
+          "role": "Connect filtration and return water"
+        }
+      ]
+    },
+    {
+      "id": "integrated-system",
+      "label": "Option B — One Integrated System",
+      "status": "considering",
+      "summary": "Do not use the Smartpond in the permanent pond. Use one proper pump/filter system with a gentle fountain or return attachment.",
+      "systemEstimatedMin": 125.0,
+      "systemEstimatedMax": 215.0,
+      "additionalSpendFromTodayMin": 125.0,
+      "additionalSpendFromTodayMax": 215.0,
+      "pumpCount": 1,
+      "maintenance": "Lower-maintenance option with fewer pumps, fittings and failure points.",
+      "qualityNote": "Best fit for the goal of simpler maintenance and consistent filtration, provided the integrated system has proper mechanical and biological filtration.",
+      "accountingNote": "The $30 already spent on the Smartpond remains part of project actual spend even if it is not used in the permanent pond.",
+      "items": [
+        {
+          "item": "Integrated pump + mechanical/biological filter system",
+          "status": "need-to-buy-if-selected",
+          "estimatedMin": 90.0,
+          "estimatedMax": 150.0,
+          "actualCost": null,
+          "role": "Single main circulation and filtration system"
+        },
+        {
+          "item": "Gentle fountain head / return attachment",
+          "status": "need-to-buy-if-selected",
+          "estimatedMin": 15.0,
+          "estimatedMax": 30.0,
+          "actualCost": null,
+          "role": "Surface movement / visual fountain"
+        },
+        {
+          "item": "Tubing, flow control and fittings",
+          "status": "need-to-buy-if-selected",
+          "estimatedMin": 20.0,
+          "estimatedMax": 35.0,
+          "actualCost": null,
+          "role": "Connect and control the system"
+        }
+      ]
+    }
+  ],
+  "decisionNote": "No option is selected yet. Option B is expected to require less maintenance; final selection will be made later.",
   "shoppingList": {
-    "status": "active",
+    "status": "decision-pending",
     "estimatedTotalMin": 150,
     "estimatedTotalMax": 250,
     "actualTotal": 30.0,
@@ -21,42 +118,17 @@
       {
         "item": "Smartpond Filter Kit with Pump from Lowe's",
         "status": "bought",
-        "role": "Gentle visible fountain",
         "estimatedMin": 30.0,
         "estimatedMax": 30.0,
-        "actualCost": 30.0
-      },
-      {
-        "item": "Adjustable main pond pump, approximately 300–500 GPH rated",
-        "status": "need-to-buy",
-        "role": "Main circulation",
-        "estimatedMin": 35.0,
-        "estimatedMax": 60.0,
-        "actualCost": null
-      },
-      {
-        "item": "Mechanical + biological filter with bio-media",
-        "status": "need-to-buy",
-        "role": "Permanent filtration",
-        "estimatedMin": 65.0,
-        "estimatedMax": 110.0,
-        "actualCost": null
-      },
-      {
-        "item": "Tubing, flow control and quiet return fittings",
-        "status": "need-to-buy",
-        "role": "Connect and return filtered water",
-        "estimatedMin": 20.0,
-        "estimatedMax": 35.0,
-        "actualCost": null
+        "actualCost": 30.0,
+        "note": "Only committed Phase 3 purchase so far. Remaining purchases depend on Option A vs Option B."
       }
-    ],
-    "note": "UV is optional later only if persistent green water becomes a problem."
+    ]
   },
   "completionMemory": {
     "title": "End of Phase 3",
     "status": "awaiting-completion",
     "image": null,
-    "caption": "Permanent pump, filtration and fountain system installed and running."
+    "caption": "Permanent circulation, filtration and fountain system installed and running."
   }
 }
