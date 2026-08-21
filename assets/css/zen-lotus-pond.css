@@ -126,4 +126,7 @@
   .road-table .col-status{width:78px}
   .road-table .col-est,.road-table .col-actual{width:74px}
   .road-table th,.road-table td{padding:5px 6px;font-size:11px}
+  /* "so far" would push the actual column past the viewport if kept inline. */
+  .road-table .col-actual{white-space:normal}
+  .road-table .qualifier{display:block}
 }

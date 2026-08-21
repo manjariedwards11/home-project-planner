@@ -44,18 +44,19 @@
     return symbol + Number(amount).toFixed(2);
   }
 
-  function wholeMoney(amount, currency) {
-    const symbol = { USD: '$' }[currency] || (currency ? currency + ' ' : '$');
-    return symbol + Number(amount).toFixed(0);
+  function wholeAmount(amount) {
+    return Number(amount).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
   function optionalMoney(amount, currency) {
     return amount == null ? '—' : money(amount, currency);
   }
 
+  // Ranges carry the currency symbol once, on the low end: "$660–1,275".
   function moneyRange(min, max, currency) {
     if (min == null || max == null) return '—';
-    return `${wholeMoney(min, currency)}–${wholeMoney(max, currency)}`;
+    const symbol = { USD: '$' }[currency] || (currency ? currency + ' ' : '$');
+    return `${symbol}${wholeAmount(min)}–${wholeAmount(max)}`;
   }
 
   function statusPillClass(status) {
