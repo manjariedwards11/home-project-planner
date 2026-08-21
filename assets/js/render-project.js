@@ -269,15 +269,25 @@
     const src = mem.image || `assets/img/${projectId}-phase${phase.number}.png`;
     const awaiting = phase.status === 'complete' ? 'Awaiting photo' : 'Awaiting completion';
 
+    const key = `${projectId}:phase${phase.number}`;
     return `
       <figure class="completion-card">
         <!-- The placeholder is the default. attachMemoryImages() probes the
              candidate path with fetch and swaps the photo in only if it is
              actually there — a plain <img> would log a 404 on every load. -->
-        <div class="memory-frame" data-memory-src="${esc(src)}" data-memory-alt="${esc(title)}">
+        <div class="memory-frame" data-memory-src="${esc(src)}" data-memory-alt="${esc(title)}" data-memory-key="${esc(key)}">
           <div class="memory-placeholder">
             <span class="ph-mark" aria-hidden="true">&#9707;</span>
             <span class="ph-text">${esc(awaiting)}</span>
+            <label class="ph-pick">
+              <input type="file" accept="image/*" hidden>
+              <span>Choose photo…</span>
+            </label>
+          </div>
+          <div class="memory-tools" hidden>
+            <span class="local-badge">Preview on this device only</span>
+            <button type="button" data-mem-save>Save optimized copy</button>
+            <button type="button" data-mem-clear>Remove</button>
           </div>
         </div>
         <figcaption>
@@ -410,28 +420,139 @@
       </div>`;
   }
 
-  // Swap a memory photo in wherever one actually exists. Drop a file at the
-  // conventional path (or set completionMemory.image) and it appears on the
-  // next load; until then the placeholder stands.
-  function attachMemoryImages() {
-    document.querySelectorAll('.memory-frame[data-memory-src]').forEach(async (frame) => {
-      const src = frame.getAttribute('data-memory-src');
-      if (!src) return;
+  // ---- Memory photos ------------------------------------------------------
+  //
+  // A published photo lives in the repo (set completionMemory.image, or drop a
+  // file at assets/img/<project>-phase<N>.png) and is what everyone sees.
+  //
+  // Because this is a static site with no server, the picker below cannot
+  // publish. It stores a downscaled copy in this browser's localStorage so the
+  // photo can be previewed immediately, and offers that optimized file for
+  // download so it can be committed to the repo to become the real one.
+
+  const MEM_PREFIX = 'hpp:memory:';
+  const MEM_MAX_EDGE = 1000;   // px on the long edge
+  const MEM_QUALITY = 0.82;
+
+  function memRead(key) {
+    try {
+      return localStorage.getItem(MEM_PREFIX + key);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function showMemoryImage(frame, dataUrl, isLocal) {
+    let img = frame.querySelector('img');
+    if (!img) {
+      img = document.createElement('img');
+      img.alt = frame.getAttribute('data-memory-alt') || '';
+      frame.prepend(img);
+    }
+    img.src = dataUrl;
+    const ph = frame.querySelector('.memory-placeholder');
+    if (ph) ph.hidden = true;
+    const tools = frame.querySelector('.memory-tools');
+    if (tools) tools.hidden = !isLocal;
+  }
+
+  function clearMemoryImage(frame) {
+    const img = frame.querySelector('img');
+    if (img) img.remove();
+    const ph = frame.querySelector('.memory-placeholder');
+    if (ph) ph.hidden = false;
+    const tools = frame.querySelector('.memory-tools');
+    if (tools) tools.hidden = true;
+  }
+
+  // Downscale before storing: phone photos are several MB and localStorage
+  // only holds a few, so a full-size original would fail to save.
+  function downscale(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('read failed'));
+      reader.onload = () => {
+        const probe = new Image();
+        probe.onerror = () => reject(new Error('not an image'));
+        probe.onload = () => {
+          const scale = Math.min(1, MEM_MAX_EDGE / Math.max(probe.width, probe.height));
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(probe.width * scale);
+          canvas.height = Math.round(probe.height * scale);
+          canvas.getContext('2d').drawImage(probe, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', MEM_QUALITY));
+        };
+        probe.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function wireMemoryPicker(frame) {
+    const key = frame.getAttribute('data-memory-key');
+    const input = frame.querySelector('input[type=file]');
+    if (!input || !key) return;
+
+    input.addEventListener('change', async () => {
+      const file = input.files && input.files[0];
+      if (!file) return;
       try {
-        const res = await fetch(src, { method: 'HEAD' });
-        if (!res.ok) return;
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = frame.getAttribute('data-memory-alt') || '';
-        img.loading = 'lazy';
-        img.addEventListener('load', () => {
-          const ph = frame.querySelector('.memory-placeholder');
-          if (ph) ph.hidden = true;
-        });
-        frame.prepend(img);
+        const dataUrl = await downscale(file);
+        try {
+          localStorage.setItem(MEM_PREFIX + key, dataUrl);
+        } catch (err) {
+          // Quota exceeded: still show it for this view rather than failing.
+          console.warn('[render-project] photo too large to store locally', err);
+        }
+        showMemoryImage(frame, dataUrl, true);
       } catch (err) {
-        /* no photo yet — placeholder stays */
+        console.warn('[render-project] could not read that image', err);
       }
+      input.value = '';
+    });
+
+    const saveBtn = frame.querySelector('[data-mem-save]');
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        const img = frame.querySelector('img');
+        if (!img) return;
+        const a = document.createElement('a');
+        a.href = img.src;
+        // Name it exactly what the site looks for, so committing it just works.
+        a.download = key.replace(':', '-') + '.jpg';
+        a.click();
+      });
+    }
+
+    const clearBtn = frame.querySelector('[data-mem-clear]');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        try {
+          localStorage.removeItem(MEM_PREFIX + key);
+        } catch (err) { /* nothing stored */ }
+        clearMemoryImage(frame);
+      });
+    }
+  }
+
+  // A published photo always wins over a local preview.
+  function attachMemoryImages() {
+    document.querySelectorAll('.memory-frame').forEach(async (frame) => {
+      wireMemoryPicker(frame);
+
+      const src = frame.getAttribute('data-memory-src');
+      if (src) {
+        try {
+          const res = await fetch(src, { method: 'HEAD' });
+          if (res.ok) {
+            showMemoryImage(frame, src, false);
+            return;
+          }
+        } catch (err) { /* not published yet */ }
+      }
+
+      const local = memRead(frame.getAttribute('data-memory-key'));
+      if (local) showMemoryImage(frame, local, true);
     });
   }
 

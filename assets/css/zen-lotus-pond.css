@@ -122,6 +122,30 @@
 .memory-placeholder[hidden]{display:none}
 .memory-placeholder .ph-mark{font-size:26px;line-height:1;opacity:.5}
 .memory-placeholder .ph-text{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+/* File picker inside the placeholder. */
+.ph-pick{margin-top:4px}
+.ph-pick span{
+  display:inline-block;cursor:pointer;
+  background:var(--card);border:1px solid var(--line);border-radius:5px;
+  padding:4px 10px;font-size:11px;font-weight:700;color:var(--ink);
+}
+.ph-pick span:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Controls shown only while a device-local preview is displayed. */
+.memory-tools{
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  padding:5px 8px;border-top:1px solid var(--line);background:var(--soft);
+}
+.memory-tools[hidden]{display:none}
+.memory-tools .local-badge{
+  font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--amber);background:var(--amber-soft);border-radius:3px;padding:2px 5px;
+}
+.memory-tools button{
+  border:1px solid var(--line);background:var(--card);border-radius:4px;
+  padding:2px 7px;font-size:10.5px;font-weight:700;cursor:pointer;color:var(--ink);
+}
+.memory-tools button:hover{border-color:var(--accent);color:var(--accent)}
 .completion-card figcaption{padding:7px 10px;font-size:11.5px;line-height:1.3;border-top:1px solid var(--line)}
 .completion-card figcaption strong{display:block;font-size:12px}
 .caption-note{display:block;color:var(--muted);font-size:10.5px;line-height:1.3;margin-top:2px}
