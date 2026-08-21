@@ -723,7 +723,7 @@
     });
   }
 
-  function renderPhaseMedia(phase, project, opts) {
+  function renderPhaseRow(phase, project, opts) {
     // A detail file may carry its list as shoppingList (planned, in progress or
     // purchased) or, before a purchase, as pendingShoppingList. Route either
     // through the same renderer rather than tying the shape to the file kind.
@@ -748,9 +748,10 @@
       card = renderPlainShoppingCard(phase, project, opts.costRow);
     }
     return `
-      <div class="phase-media">
-        ${renderMemoryCard(phase, project, opts.memory)}
-        ${card}
+      <div class="phase-row">
+        <div class="row-pic">${renderMemoryCard(phase, project, opts.memory)}</div>
+        <div class="row-todo">${opts.todos || ''}</div>
+        <div class="row-shop">${card}</div>
       </div>`;
   }
 
@@ -1279,15 +1280,16 @@
       }
 
       const title = (decision && decision.title) || (completion && completion.title) || phase.name;
-      const media = renderPhaseMedia(phase, project, { completion, decision, costRow, memory });
+      const row = renderPhaseRow(phase, project, {
+        completion, decision, costRow, memory, todos: parts.todos,
+      });
 
       return `
         <section id="p${phase.number}" class="panel">
           <h2>Phase ${phase.number} — ${esc(title)}</h2>
           ${parts.cost}
           ${parts.goal}
-          ${media}
-          ${parts.todos}
+          ${row}
           ${parts.content}
           ${parts.details}
         </section>`;

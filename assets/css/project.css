@@ -112,11 +112,22 @@
 .phase-cost .qualifier{font-size:10px;color:var(--muted)}
 .phase-cost .muted{color:var(--line)}
 
-/* Every phase reads top to bottom in the same order: goal, then the phase
-   photo beside its shopping list, then the checklist, then detail. The photo
-   is a fixed column so the shopping table always gets the remaining width. */
-.phase-media{display:grid;grid-template-columns:340px minmax(0,1fr);gap:12px;align-items:start;margin-bottom:9px}
-.phase-media > *{min-width:0}
+/* Every phase reads top to bottom in the same order: goal, then a single row
+   carrying the phase photo, its checklist and its shopping list, then any
+   phase-specific detail. Named areas so the row can refold without the cards
+   changing order. */
+.phase-row{
+  display:grid;gap:12px;align-items:start;margin-bottom:9px;
+  grid-template-columns:300px minmax(0,1fr) minmax(0,1.15fr);
+  grid-template-areas:"pic todo shop";
+}
+.row-pic{grid-area:pic;min-width:0}
+.row-todo{grid-area:todo;min-width:0}
+.row-shop{grid-area:shop;min-width:0}
+.phase-row > *:empty{display:none}
+/* In a column this narrow the checklist reads better as a single list. */
+.phase-row .todo-list{columns:1}
+.phase-row .todo-box-wrap{margin-bottom:0}
 
 .completion-card{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .memory-frame{position:relative}
@@ -455,7 +466,17 @@
 .todo.is-future .todo-task{font-style:italic}
 @media(max-width:900px){ .todo-list{columns:1} }
 
-/* Photo and list stack once the row can no longer hold both comfortably. */
-@media(max-width:900px){
-  .phase-media{grid-template-columns:minmax(0,1fr)}
+/* The shopping table needs the most room, so it drops to its own full-width
+   line first, then everything stacks. */
+@media(max-width:1200px){
+  .phase-row{
+    grid-template-columns:280px minmax(0,1fr);
+    grid-template-areas:"pic todo" "shop shop";
+  }
+}
+@media(max-width:820px){
+  .phase-row{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"pic" "todo" "shop";
+  }
 }
