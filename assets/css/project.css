@@ -1,3 +1,4 @@
+/* Shared by every project page. Named for its role, not one project. */
 .project-shell{width:min(1440px,100%);margin:auto;padding:14px 28px 16px}
 
 .project-header{border-bottom:1.5px solid var(--line);padding-bottom:12px;margin-bottom:12px}

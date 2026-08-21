@@ -1,6 +1,6 @@
 /* Shared design system: tokens, reset, topbar, and components common to
    every page (badges, tables, buttons, stat chips, accordions). Page-specific
-   layout (home list vs. project workspace) lives in home.css / zen-lotus-pond.css. */
+   layout (home list vs. project workspace) lives in home.css / project.css. */
 
 :root{
   --ink:#1f2320;
