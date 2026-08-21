@@ -9,8 +9,8 @@
     "label": "Target to actually work toward"
   },
   "estimatedTotal": {
-    "min": 660,
-    "max": 1275
+    "min": 635,
+    "max": 1200
   },
   "actualSpentToDate": 137.13,
   "currency": "USD",
@@ -68,7 +68,7 @@
     {
       "phase": 3,
       "phaseId": "pump-filter",
-      "label": "Pump/filter/UV",
+      "label": "Pump/filter/fountain — fish-ready infrastructure",
       "estimatedMin": 150,
       "estimatedMax": 250,
       "actual": 30,
@@ -100,11 +100,13 @@
     },
     {
       "phase": 7,
-      "phaseId": "pothos",
-      "label": "Pothos",
-      "estimatedMin": 25,
-      "estimatedMax": 75,
-      "actual": null
+      "phaseId": "future-fish-ready",
+      "label": "Future State — Fish Ready Prep",
+      "estimatedMin": null,
+      "estimatedMax": null,
+      "actual": null,
+      "budgetStatus": "not-in-current-budget",
+      "note": "Brainstorming item for roughly one year after the pond is established. No current purchase or budget commitment."
     },
     {
       "phase": 8,
@@ -115,5 +117,5 @@
       "actual": null
     }
   ],
-  "accountingNote": "For the revised phase-cost view, the $30 Smartpond Filter Kit with Pump is counted under Phase 3 pump/filter equipment. Phase 1 actual remains $107.13; total project spend remains $137.13."
+  "accountingNote": "The $30 Smartpond Filter Kit with Pump is counted under Phase 3 pump/filter/fountain equipment. Phase 1 actual remains $107.13; total project spend remains $137.13. Phase 7 is now a future fish-readiness brainstorming item and is excluded from the current estimated build total until activated."
 }
