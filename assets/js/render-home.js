@@ -15,7 +15,7 @@
     const heading = document.querySelector('[data-projects-heading]');
     if (!mount) return;
 
-    const res = await fetch('data/projects.json');
+    const res = await fetch('data/projects.json', { cache: 'no-store' });
     const data = await res.json();
     const projects = data.projects || [];
 
