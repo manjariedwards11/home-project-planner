@@ -37,6 +37,10 @@
     return symbol + Number(amount).toFixed(2);
   }
 
+  function optionalMoney(amount, currency) {
+    return amount == null ? '—' : money(amount, currency);
+  }
+
   // Badges are computed, not stored: "done"/"now" reflect JSON status, and
   // "NEXT" is derived as the lowest-numbered planned phase — no separate
   // hardcoded status category needed to reproduce today's behavior.
@@ -70,7 +74,6 @@
         </div>`;
     }).join('');
 
-    const currentPhase = phases.find((p) => p.number === project.currentPhase);
     const nextActionNotice = project.nextAction
       ? `<div class="notice"><strong>Next action:</strong> ${esc(project.nextAction)}</div>`
       : '';
@@ -99,12 +102,22 @@
         <div class="box">
           <h3>${esc(c.name)}</h3>
           <p><strong>${esc(capitalize(c.status.replace(/-/g, ' ')))}</strong>${c.dimensions ? ' · ' + esc(c.dimensions) : ''}</p>
+          ${c.estimatedVolume ? `<p>${esc(c.estimatedVolume)}</p>` : ''}
           ${c.notes ? `<p>${esc(c.notes)}</p>` : ''}
+          ${c.links && c.links.length ? `<p>${c.links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(' · ')}</p>` : ''}
         </div>`).join('')}</div>`;
+    }
+
+    if (phase.decisionCriteria && phase.decisionCriteria.length) {
+      html += `<div class="box"><h3>Decision criteria</h3><ul>${phase.decisionCriteria.map((r) => `<li>${esc(r)}</li>`).join('')}</ul></div>`;
     }
 
     if (phase.requirements && phase.requirements.length) {
       html += `<div class="box"><ul>${phase.requirements.map((r) => `<li>${esc(r)}</li>`).join('')}</ul></div>`;
+    }
+
+    if (phase.spendBreakdown && phase.spendBreakdown.length) {
+      html += `<div class="box"><h3>Spend</h3><table><tr><th>Item</th><th>Amount</th></tr>${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td>${esc(money(s.amount, 'USD'))}</td></tr>`).join('')}</table></div>`;
     }
 
     if (phase.notes && phase.notes.length) {
@@ -120,6 +133,51 @@
         <h2>Phase ${phase.number} — ${esc(phase.name)}</h2>
         ${renderPhaseBody(phase)}
       </section>`).join('');
+  }
+
+  function shoppingStatusLabel(status) {
+    return {
+      bought: 'Already Bought',
+      considering: 'Considering',
+      'need-to-buy': 'Need to Buy',
+      rejected: 'Rejected',
+    }[status] || capitalize(String(status || '').replace(/-/g, ' '));
+  }
+
+  function renderShopping(project) {
+    const items = project.shopping || [];
+    if (!items.length) return '';
+
+    const budget = project.budget || {};
+    const budgetSummary = `
+      <div class="box">
+        <p><strong>Project budget:</strong> ${esc(optionalMoney(budget.planned, project.currency))} · <strong>Spent:</strong> ${esc(optionalMoney(budget.spentToDate != null ? budget.spentToDate : project.spentToDate, project.currency))} · <strong>Remaining:</strong> ${esc(optionalMoney(budget.remaining, project.currency))}</p>
+        ${budget.note ? `<p>${esc(budget.note)}</p>` : ''}
+      </div>`;
+
+    const order = ['bought', 'considering', 'need-to-buy', 'rejected'];
+    const groups = order.map((status) => {
+      const rows = items.filter((i) => i.status === status);
+      if (!rows.length) return '';
+      return `
+        <div class="box">
+          <h3>${esc(shoppingStatusLabel(status))}</h3>
+          <table>
+            <tr><th>Phase</th><th>Item</th><th>Store / Link</th><th>Price</th><th>Actual</th><th>Budget</th></tr>
+            ${rows.map((i) => `
+              <tr>
+                <td>${i.phase != null ? 'P' + esc(i.phase) : '—'}</td>
+                <td><strong>${esc(i.item)}</strong>${i.note ? `<br>${esc(i.note)}` : ''}</td>
+                <td>${i.store ? esc(i.store) : '—'}${i.link ? `<br><a href="${esc(i.link)}" target="_blank" rel="noopener">Open link</a>` : ''}</td>
+                <td>${esc(optionalMoney(i.price, project.currency))}</td>
+                <td>${esc(optionalMoney(i.actualCost, project.currency))}</td>
+                <td>${esc(optionalMoney(i.budget, project.currency))}</td>
+              </tr>`).join('')}
+          </table>
+        </div>`;
+    }).join('');
+
+    return `<h2 style="margin-top:16px">Shopping + Budget</h2>${budgetSummary}${groups}`;
   }
 
   function renderDecisions(project) {
@@ -141,6 +199,7 @@
           <tr><th>Item</th><th>Status</th><th>Decision</th></tr>
           ${rows}
         </table>
+        ${renderShopping(project)}
         ${maintenance ? `<div class="notice success" style="margin-top:10px"><strong>Maintenance</strong><ul>${maintenance}</ul></div>` : ''}
       </section>`;
   }
