@@ -159,10 +159,12 @@
 
   function actualCell(costRow, currency) {
     if (!costRow || costRow.actual == null) return '<span class="muted">—</span>';
-    const suffix = costRow.actualStatus === 'complete' ? ' ✓'
+    const done = costRow.actualStatus === 'complete';
+    const suffix = done ? ' <span class="done-tick">✓</span>'
       : costRow.actualStatus === 'so-far' ? ' <span class="qualifier">so far</span>'
       : '';
-    return `<span class="actual-amount">${esc(money(costRow.actual, currency))}</span>${suffix}`;
+    // A settled amount is green; anything still moving stays accent.
+    return `<span class="actual-amount${done ? ' is-final' : ''}">${esc(money(costRow.actual, currency))}</span>${suffix}`;
   }
 
   function renderRoadmap(project, costPlan) {
@@ -299,15 +301,17 @@
 
   // Headline figures as info cards, so the phase estimate and actual read at a
   // glance instead of being buried in a table's last row.
-  function renderMoneyCards(estLabel, estValue, actualValue, currency) {
+  // isFinal switches the actual card from "live spend" (accent) to "settled"
+  // (green), matching the roadmap's row states.
+  function renderMoneyCards(estLabel, estValue, actualValue, currency, isFinal) {
     return `
       <div class="money-cards">
         <div class="money-card">
           <span class="cost-label">${esc(estLabel)}</span>
           <span class="money-value">${esc(estValue)}</span>
         </div>
-        <div class="money-card is-actual">
-          <span class="cost-label">Actual</span>
+        <div class="money-card is-actual${isFinal ? ' is-final' : ''}">
+          <span class="cost-label">Actual${isFinal ? ' <span class="done-tick">✓</span>' : ''}</span>
           <span class="money-value">${actualValue == null ? '&mdash;' : esc(money(actualValue, currency))}</span>
         </div>
       </div>`;
@@ -366,7 +370,7 @@
     return `
       <div class="shopping-card">
         <h3>Shopping list</h3>
-        ${renderMoneyCards('Phase estimate', moneyRange(estMin, estMax, currency), actualTotal, currency)}
+        ${renderMoneyCards('Phase estimate', moneyRange(estMin, estMax, currency), actualTotal, currency, phase.status === 'complete')}
         <div class="shop-scroll">
           ${shoppingTable(`
             ${rows}

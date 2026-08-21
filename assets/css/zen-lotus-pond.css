@@ -87,8 +87,16 @@
 .road-table .actual-amount{font-weight:800;color:var(--accent)}
 .road-table .qualifier{font-size:10px;color:var(--muted);font-weight:600}
 .road-table .muted{color:var(--line)}
+/* Row states carry the same weight so "done" reads as strongly as "current":
+   green = settled, accent = live. */
+.road-table tr.is-complete{background:var(--green-soft)}
+.road-table tr.is-complete td:first-child{box-shadow:inset 3px 0 0 var(--green)}
 .road-table tr.is-complete td.phase-name{color:var(--green)}
+/* A finished phase's spend is final, so it reads green rather than as a
+   live figure. */
+.road-table tr.is-complete .actual-amount{color:var(--green)}
 .road-table tr.is-current{background:var(--accent-soft)}
+.road-table tr.is-current td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 .road-table tr.is-current td.phase-name{color:var(--accent)}
 .road-table tr.total-row td{border-top:2px solid var(--line);border-bottom:0;font-weight:800;background:var(--soft)}
 
@@ -161,6 +169,12 @@
 .money-card .money-value{display:block;font-size:14px;font-weight:800;line-height:1.2;white-space:nowrap}
 .money-card.is-actual{background:var(--accent-soft)}
 .money-card.is-actual .money-value{color:var(--accent)}
+/* Settled spend on a finished phase reads green, not live-accent. */
+.money-card.is-actual.is-final{background:var(--green-soft)}
+.money-card.is-actual.is-final .money-value{color:var(--green)}
+.money-card.is-actual.is-final .cost-label{color:var(--green)}
+.done-tick{color:var(--green);font-weight:800}
+.phase-cost .actual-amount.is-final{color:var(--green)}
 
 /* Long lists scroll inside the card rather than lengthening the page. */
 .shop-scroll{max-height:230px;overflow-y:auto}
