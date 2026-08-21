@@ -10,7 +10,7 @@
   "spentToDate": 283.32,
   "currency": "USD",
   "lastContentUpdate": "2026-08-21",
-  "nextAction": "Choose the permanent main pump and mechanical/biological filter for the Brownstone Manhattan pond.",
+  "nextAction": "Return the original small Smartpond kit, then install and test the new 300 GPH integrated filter kit.",
   "goals": [
     "Serene, low-maintenance lotus water garden",
     "Clean moving water with predictable upkeep",
@@ -27,7 +27,7 @@
     "spentToDate": 283.32,
     "remaining": null,
     "status": "tracked-in-cost-plan",
-    "note": "Target budget and phase estimates are maintained in the cost plan."
+    "note": "Actual spend remains at the last receipt-confirmed total until the new 300 GPH purchase and $30 return are finalized."
   },
   "shopping": [
     {
@@ -41,37 +41,29 @@
     },
     {
       "phase": 3,
-      "item": "Smartpond Filter Kit with Pump",
+      "item": "smartpond Filter Kit with 300 GPH Pump",
       "status": "bought",
       "store": "Lowe's",
+      "price": 112.0,
+      "actualCost": null,
+      "note": "Option B selected. Integrated pump, mechanical filtration, biological filtration and fountain hardware. Final receipt total pending."
+    },
+    {
+      "phase": 3,
+      "item": "Existing small Smartpond Filter Kit with Pump",
+      "status": "return-pending",
+      "store": "Lowe's",
       "actualCost": 30.0,
-      "estimatedMin": 30.0,
-      "estimatedMax": 30.0,
-      "note": "Use as the visible gentle fountain, not the main filter."
+      "note": "Being returned because the new 300 GPH integrated system replaces it. Refund pending."
     },
     {
       "phase": 3,
-      "item": "Adjustable main pond pump, approximately 300–500 GPH rated",
-      "status": "need-to-buy",
+      "item": "Extra tubing / flow-control fittings",
+      "status": "optional-if-needed",
       "actualCost": null,
-      "estimatedMin": 35.0,
-      "estimatedMax": 60.0
-    },
-    {
-      "phase": 3,
-      "item": "Mechanical + biological filter with bio-media",
-      "status": "need-to-buy",
-      "actualCost": null,
-      "estimatedMin": 65.0,
-      "estimatedMax": 110.0
-    },
-    {
-      "phase": 3,
-      "item": "Tubing, flow control and quiet return fittings",
-      "status": "need-to-buy",
-      "actualCost": null,
-      "estimatedMin": 20.0,
-      "estimatedMax": 35.0
+      "estimatedMin": 0.0,
+      "estimatedMax": 15.0,
+      "note": "Buy only if final placement requires extra reach or a separate quiet return."
     },
     {
       "phase": 4,
@@ -94,9 +86,10 @@
     },
     {
       "phase": 5,
-      "item": "Jasmine plants — reuse existing if suitable, otherwise buy two",
-      "status": "considering",
-      "actualCost": null
+      "item": "Existing jasmine plants",
+      "status": "owned",
+      "actualCost": null,
+      "note": "Currently in the large SIP system; transfer into the large white pots in Phase 5."
     },
     {
       "phase": 7,
@@ -132,12 +125,12 @@
       "name": "Pump + Filter + Fountain",
       "status": "current",
       "spent": 30.0,
-      "summary": "Install permanent circulation and filtration sized for the pond now and possible small fish later.",
+      "summary": "Option B selected: one integrated 300 GPH pump/filter system for lower maintenance and simpler plumbing.",
       "requirements": [
-        "Keep the Smartpond kit as the gentle visible fountain",
-        "Add an adjustable 300–500 GPH main pump",
-        "Add mechanical + biological filtration with bio-media",
-        "Connect with tubing, flow control and a quiet return"
+        "Install the purchased 300 GPH integrated smartpond filter kit",
+        "Return the original small Smartpond kit",
+        "Add extra tubing or flow-control fittings only if final placement requires them",
+        "Run fishless initially; consider UV later only for persistent green-water algae"
       ],
       "detailFile": "data/zen-lotus-pond-phase-3-system.json"
     },
@@ -164,7 +157,7 @@
       "summary": "Frame the pond with jasmine while keeping the composition light and uncluttered.",
       "layout": "Jasmine — Pond — Jasmine",
       "requirements": [
-        "Use two white planters",
+        "Transfer the existing jasmine from the large SIP system into two large white pots",
         "Use two black trellises",
         "Keep jasmine growth airy rather than forming a dense wall"
       ],
@@ -208,7 +201,7 @@
         "Review summer water temperature and oxygen",
         "Confirm the biological filter is mature and adequate",
         "Choose only a conservative number of small fish if conditions support them",
-        "Add testing or aeration equipment only if the future review shows it is needed"
+        "Add testing, aeration or UV only if future conditions show they are needed"
       ],
       "detailFile": "data/zen-lotus-pond-phase-8-future-fish.json"
     }
@@ -218,6 +211,11 @@
       "item": "Permanent pond",
       "status": "locked",
       "decision": "Brownstone Algreen Manhattan 40-inch pond purchased from Wayfair."
+    },
+    {
+      "item": "Phase 3 filtration system",
+      "status": "locked",
+      "decision": "Option B selected: one integrated smartpond 300 GPH pump/filter system from Lowe's for lower maintenance and simpler plumbing. The original small Smartpond kit will be returned."
     },
     {
       "item": "Pond location",
