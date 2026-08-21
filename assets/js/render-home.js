@@ -31,7 +31,7 @@
           <div class="trellis left"></div>
           <div class="trellis right"></div>
           <div class="pond"></div>
-          <img src="assets/img/${p.id}.png" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">
+          <img src="assets/img/${p.id}.jpg" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">
         </div>
         <div class="card-body">
           <h3>${p.name}</h3>
