@@ -1213,11 +1213,15 @@
 
     // The phase summary, goal and decision summary share one box rather than
     // stacking three near-identical cards; all three texts are kept verbatim.
+    // The goal is rendered once by the panel itself, above the media row, so it
+    // is deliberately absent here; repeating it put a second "Goal:" halfway
+    // down the page.
     const intro = [
       phase.summary ? `<p>${esc(phase.summary)}</p>` : '',
-      decision.goal ? `<p><strong>Goal:</strong> ${esc(decision.goal)}</p>` : '',
       decision.decisionSummary ? `<p>${esc(decision.decisionSummary)}</p>` : '',
-    ].filter(Boolean).join('');
+    ].filter(Boolean)
+      .filter((t, i, a) => a.indexOf(t) === i)
+      .join('');
 
     // The rationale itself lives in the Decisions tab; this panel links across
     // to it rather than repeating it. The pending list is in the sidebar.
