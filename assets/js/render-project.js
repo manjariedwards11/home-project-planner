@@ -255,32 +255,91 @@
     return costPlan[`phase${phase.number}Completion`] || null;
   }
 
-  function renderCompletion(completion, currency) {
-    if (!completion || !completion.items || !completion.items.length) return '';
+  // A completed phase gets a sidebar: completion image on top, itemized
+  // shopping list below. The shopping list carries every amount the phase's
+  // spendBreakdown used to show, so replacing that table loses no figures.
+  function renderCompletionSidebar(completion, phase, project, costRow) {
+    if (!completion) return '';
+    const currency = project.currency;
+    const projectId = project.projectId || '';
+
+    // Prefer a phase-specific photo, fall back to the project photo, then
+    // hide the figure entirely rather than leaving a broken image.
+    const phaseImg = `assets/img/${projectId}-phase${phase.number}.png`;
+    const projectImg = `assets/img/${projectId}.png`;
+    const figure = `
+      <figure class="completion-card">
+        <img src="${esc(phaseImg)}" alt="End of Phase ${phase.number} — ${esc(completion.label || phase.name)}"
+             loading="lazy"
+             data-fallback="${esc(projectImg)}"
+             onerror="if(this.dataset.fallback){this.src=this.dataset.fallback;this.removeAttribute('data-fallback')}else{this.closest('figure').style.display='none'}">
+        <figcaption>
+          <strong>End of Phase ${phase.number}</strong>
+          ${completion.goal ? `<span class="caption-note">${esc(completion.goal)}</span>` : ''}
+        </figcaption>
+      </figure>`;
+
+    // Per-item estimates are not present in the data, so the estimate column
+    // shows a dash per row; the phase-level estimate carries the total.
+    const itemRows = (completion.items || []).map((i) => `
+      <tr>
+        <td class="col-check">${i.status === 'complete' ? '<span class="check" title="Complete">✓</span>' : ''}</td>
+        <td>${esc(i.item)}</td>
+        <td class="col-est">—</td>
+        <td class="col-actual"><span class="actual-amount">${esc(money(i.actual, currency))}</span></td>
+      </tr>`).join('');
+
+    const estTotal = costRow
+      ? moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency)
+      : '—';
+
+    // The spendBreakdown entry matching this phase's total is now itemized
+    // above, so its original label rides along on the total row instead of
+    // disappearing with the old Spend table.
+    const totalLabels = (phase.spendBreakdown || [])
+      .filter((s) => Number(s.amount) === Number(completion.actualTotal))
+      .map((s) => s.label);
+
+    // Amounts recorded against this phase but accounted for elsewhere are kept
+    // visible and labelled, rather than dropped from the page.
+    const elsewhere = (phase.spendBreakdown || []).filter((s) => {
+      const amt = Number(s.amount);
+      return amt !== Number(completion.actualTotal);
+    });
+    const elsewhereRows = elsewhere.map((s) => `
+      <tr class="offphase-row">
+        <td class="col-check"></td>
+        <td>${esc(s.label)}<span class="caption-note">Counted under Phase 3, not in the Phase ${phase.number} total</span></td>
+        <td class="col-est">—</td>
+        <td class="col-actual">${esc(money(s.amount, currency))}</td>
+      </tr>`).join('');
+
     return `
-      <details class="accordion" open>
-        <summary>Itemized actual cost <span class="pill green">${esc(money(completion.actualTotal, currency))}</span></summary>
-        <div class="accordion-body">
-          ${completion.goal ? `<p>${esc(completion.goal)}</p>` : ''}
-          <table>
-            <tr><th>Item</th><th class="col-actual">Actual</th></tr>
-            ${completion.items.map((i) => `
-              <tr>
-                <td>${esc(i.item)}</td>
-                <td class="col-actual"><span class="actual-amount">${esc(money(i.actual, currency))}</span></td>
-              </tr>`).join('')}
+      <aside class="phase-side">
+        ${figure}
+        <div class="shopping-card">
+          <h3>Shopping list</h3>
+          <table class="phase-shopping">
+            <tr><th class="col-check"></th><th>Item</th><th class="col-est">Est.</th><th class="col-actual">Actual</th></tr>
+            ${itemRows}
             <tr class="total-row">
-              <td>Total</td>
+              <td class="col-check"></td>
+              <td>
+                Phase ${phase.number} total
+                ${totalLabels.map((l) => `<span class="caption-note">${esc(l)}</span>`).join('')}
+              </td>
+              <td class="col-est">${esc(estTotal)}</td>
               <td class="col-actual"><span class="actual-amount">${esc(money(completion.actualTotal, currency))}</span></td>
             </tr>
+            ${elsewhereRows}
           </table>
         </div>
-      </details>`;
+      </aside>`;
   }
 
   // One field type -> one rendering treatment, applied uniformly across every
   // phase regardless of phase number.
-  function renderPhaseBody(phase, currency, costPlan) {
+  function renderPhaseBody(phase, currency, costPlan, hasSidebar) {
     let html = '';
 
     const costRow = costRowFor(costPlan, phase);
@@ -319,14 +378,14 @@
       html += `<div class="box"><ul>${phase.requirements.map((r) => `<li>${esc(r)}</li>`).join('')}</ul></div>`;
     }
 
-    if (phase.spendBreakdown && phase.spendBreakdown.length) {
+    // The sidebar's shopping list reproduces every spendBreakdown amount, so
+    // the Spend table is only suppressed when that sidebar is actually shown.
+    if (!hasSidebar && phase.spendBreakdown && phase.spendBreakdown.length) {
       html += `<div class="box"><h3>Spend</h3><table>
         <tr><th>Item</th><th>Amount</th></tr>
         ${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td>${esc(money(s.amount, currency))}</td></tr>`).join('')}
       </table></div>`;
     }
-
-    html += renderCompletion(completionFor(costPlan, phase), currency);
 
     if (phase.notes && phase.notes.length) {
       html += phase.notes.map((n) => `<div class="notice">${esc(n)}</div>`).join('');
@@ -336,11 +395,24 @@
   }
 
   function renderPhasePanels(project, costPlan) {
-    return project.phases.map((phase) => `
-      <section id="p${phase.number}" class="panel">
-        <h2>Phase ${phase.number} — ${esc(phase.name)}</h2>
-        ${renderPhaseBody(phase, project.currency, costPlan)}
-      </section>`).join('');
+    return project.phases.map((phase) => {
+      const completion = completionFor(costPlan, phase);
+      const costRow = costRowFor(costPlan, phase);
+      const body = renderPhaseBody(phase, project.currency, costPlan, !!completion);
+      // Phases with a completion record get a two-column layout; the rest keep
+      // the single-column form.
+      const inner = completion
+        ? `<div class="phase-layout">
+             <div class="phase-main">${body}</div>
+             ${renderCompletionSidebar(completion, phase, project, costRow)}
+           </div>`
+        : body;
+      return `
+        <section id="p${phase.number}" class="panel">
+          <h2>Phase ${phase.number} — ${esc(phase.name)}</h2>
+          ${inner}
+        </section>`;
+    }).join('');
   }
 
   function renderDecisions(project) {

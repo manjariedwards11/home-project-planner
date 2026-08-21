@@ -82,6 +82,29 @@
 .phase-cost .qualifier{font-size:10px;color:var(--muted)}
 .phase-cost .muted{color:var(--line)}
 
+/* Completed phases: main content left, completion image + shopping list right */
+.phase-layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:14px;align-items:start}
+.phase-main{min-width:0}
+.phase-side{min-width:0;display:flex;flex-direction:column;gap:10px}
+
+.completion-card{margin:0;background:var(--card);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.completion-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.completion-card figcaption{padding:8px 10px;font-size:11.5px;line-height:1.35;border-top:1px solid var(--line)}
+.completion-card figcaption strong{display:block;font-size:12px}
+.caption-note{display:block;color:var(--muted);font-size:10.5px;line-height:1.3;margin-top:2px}
+
+.shopping-card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:9px 10px}
+.shopping-card h3{font-size:12px;margin:0 0 6px;font-weight:800}
+.phase-shopping{font-size:11px}
+.phase-shopping th,.phase-shopping td{padding:4px 5px}
+.phase-shopping .col-check{width:16px;text-align:center;padding-left:0;padding-right:0}
+.phase-shopping .check{color:var(--green);font-weight:800}
+.phase-shopping .col-est{width:52px;text-align:right;color:var(--muted)}
+.phase-shopping .col-actual{width:60px;text-align:right;white-space:nowrap}
+/* Spend recorded here but booked to another phase — visible, clearly not counted. */
+.phase-shopping tr.offphase-row td{border-top:1px solid var(--line);color:var(--muted);font-style:italic}
+.phase-shopping tr.offphase-row .caption-note{font-style:normal}
+
 /* Phase panels */
 .box{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:12.5px;line-height:1.4;min-width:0;margin-bottom:9px}
 .box:last-child{margin-bottom:0}
@@ -111,6 +134,16 @@
   .box ul{columns:1}
   .roadmap-head{gap:10px}
   .cost-fig{flex:1 1 auto;min-width:96px}
+  /* Stack main content, image and shopping list vertically. */
+  .phase-layout{grid-template-columns:minmax(0,1fr)}
+  .phase-side{flex-direction:row;flex-wrap:wrap;align-items:flex-start}
+  .completion-card{flex:1 1 260px;max-width:340px}
+  .shopping-card{flex:1 1 300px}
+}
+
+@media(max-width:620px){
+  .phase-side{flex-direction:column}
+  .completion-card,.shopping-card{max-width:none;flex:1 1 auto}
 }
 
 @media(max-width:620px){
