@@ -6,11 +6,11 @@
       "name": "Zen Lotus Pond",
       "subtitle": "Backyard lotus water garden",
       "status": "underway",
-      "currentPhase": 2,
+      "currentPhase": 3,
       "totalPhases": 8,
-      "spentToDate": 137.13,
+      "spentToDate": 283.32,
       "currency": "USD",
-      "currentLabel": "Pond Decision",
+      "currentLabel": "Pump + Filter + Fountain",
       "dataFile": "data/zen-lotus-pond.json",
       "costPlanFile": "data/zen-lotus-pond-cost-plan.json"
     }
