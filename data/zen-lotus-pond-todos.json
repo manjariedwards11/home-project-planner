@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "projectId": "zen-lotus-pond",
+  "title": "Phase To-Dos",
+  "phases": [
+    {
+      "phase": 1,
+      "phaseId": "nursery",
+      "status": "complete",
+      "todos": [
+        {"task": "Set up temporary lotus nursery", "status": "complete"},
+        {"task": "Plant and establish 3 lotus seedlings", "status": "complete"},
+        {"task": "Add gentle water movement", "status": "complete"}
+      ]
+    },
+    {
+      "phase": 2,
+      "phaseId": "pond-decision",
+      "status": "complete",
+      "todos": [
+        {"task": "Choose permanent pond vessel", "status": "complete"},
+        {"task": "Purchase Brownstone Algreen Manhattan pond", "status": "complete"},
+        {"task": "Add delivery/placement photo when available", "status": "pending"}
+      ]
+    },
+    {
+      "phase": 3,
+      "phaseId": "pump-filter",
+      "status": "current",
+      "todos": [
+        {"task": "Choose Option A or Option B filtration setup", "status": "pending"},
+        {"task": "Purchase selected pump/filter equipment", "status": "pending"},
+        {"task": "Install circulation, filtration and fountain return", "status": "pending"},
+        {"task": "Run and verify stable water flow", "status": "pending"}
+      ]
+    },
+    {
+      "phase": 4,
+      "phaseId": "pond-placement",
+      "status": "planned",
+      "todos": [
+        {"task": "Choose final pond placement option", "status": "pending"},
+        {"task": "Confirm sun, power and maintenance access", "status": "pending"},
+        {"task": "Level and position the Manhattan pond", "status": "pending"},
+        {"task": "Fill and leak-test before planting", "status": "pending"}
+      ]
+    },
+    {
+      "phase": 5,
+      "phaseId": "jasmine",
+      "status": "planned",
+      "todos": [
+        {"task": "Move existing jasmine plants from the large SIP system into the two large white pots", "status": "pending"},
+        {"task": "Install one black trellis for each jasmine planter", "status": "pending"},
+        {"task": "Position jasmine planters on both sides of the pond", "status": "pending"},
+        {"task": "Train jasmine onto trellises while keeping growth airy", "status": "pending"}
+      ]
+    },
+    {
+      "phase": 6,
+      "phaseId": "lotus-buddha",
+      "status": "planned",
+      "todos": [
+        {"task": "Transfer established lotus into the permanent pond", "status": "pending"},
+        {"task": "Position Buddha beside the lotus", "status": "pending"},
+        {"task": "Position gentle fountain opposite the lotus", "status": "pending"},
+        {"task": "Preserve open reflective water", "status": "pending"}
+      ]
+    },
+    {
+      "phase": 7,
+      "phaseId": "lighting",
+      "status": "planned",
+      "todos": [
+        {"task": "Add warm jasmine accent lighting", "status": "pending"},
+        {"task": "Add subtle Buddha accent lighting", "status": "pending"},
+        {"task": "Hide and secure visible wiring and hardware", "status": "pending"}
+      ]
+    },
+    {
+      "phase": 8,
+      "phaseId": "future-fish-ready",
+      "status": "future-idea",
+      "todos": [
+        {"task": "Revisit fish decision after about one year", "status": "future"},
+        {"task": "Review summer water temperature and oxygen", "status": "future"},
+        {"task": "Confirm mature biological filtration capacity", "status": "future"},
+        {"task": "Decide whether a conservative small-fish population is appropriate", "status": "future"}
+      ]
+    }
+  ]
+}
