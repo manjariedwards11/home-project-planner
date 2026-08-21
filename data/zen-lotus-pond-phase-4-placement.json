@@ -20,20 +20,12 @@
     "decisionGate": "Do not lock Option 2 until direct-sun exposure is verified."
   },
   "shoppingList": {
-    "status": "planning",
-    "estimatedTotalMin": null,
-    "estimatedTotalMax": null,
-    "actualTotal": null,
-    "items": [
-      {
-        "item": "Leveling/base materials, only if needed",
-        "status": "conditional",
-        "estimatedCost": null,
-        "actualCost": null,
-        "note": "Buy only if the chosen location is not already flat, level and stable."
-      }
-    ],
-    "note": "No liner is needed; the Manhattan is the waterproof pond vessel."
+    "status": "none-needed-currently",
+    "estimatedTotalMin": 0,
+    "estimatedTotalMax": 0,
+    "actualTotal": 0,
+    "items": [],
+    "note": "All five placement options are already flat, level and stable, so no leveling/base materials are needed."
   },
   "completionMemory": {
     "title": "End of Phase 4",
