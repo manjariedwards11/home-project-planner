@@ -964,20 +964,113 @@
     return (entry && entry.todos) || [];
   }
 
-  function renderTodos(todos) {
+  // Ticking a box cannot write to /data on a static site, so a change is kept
+  // for this browser and labelled as such. The JSON stays the source of truth;
+  // a phase carrying local ticks offers a reset back to it.
+  const TODO_PREFIX = 'hpp:todo:';
+
+  function todoKey(phase, task) {
+    const slug = String(task).toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 60);
+    return `${TODO_PREFIX}${currentProjectId}:${phase.number}:${slug}`;
+  }
+
+  function todoState(phase, t) {
+    try {
+      const v = localStorage.getItem(todoKey(phase, t.task));
+      if (v === 'complete' || v === 'pending') return { status: v, local: v !== (t.status || 'pending') };
+    } catch (err) { /* storage unavailable */ }
+    return { status: t.status || 'pending', local: false };
+  }
+
+  function renderTodos(todos, phase) {
     if (!todos.length) return '';
-    const mark = (st) => (st === 'complete' ? '&#9745;' : '&#9744;');
-    const rows = todos.map((t) => `
-      <li class="todo is-${esc(t.status || 'pending')}">
-        <span class="todo-box" aria-hidden="true">${mark(t.status)}</span>
-        <span class="todo-task">${esc(t.task)}</span>
-      </li>`).join('');
-    const done = todos.filter((t) => t.status === 'complete').length;
+    const states = todos.map((t) => todoState(phase, t));
+    const rows = todos.map((t, i) => {
+      const st = states[i];
+      const checked = st.status === 'complete';
+      return `
+        <li class="todo is-${esc(t.status || 'pending')}${st.local ? ' is-local' : ''}">
+          <label class="todo-line">
+            <input type="checkbox" class="todo-check" ${checked ? 'checked' : ''}
+                   data-todo-key="${esc(todoKey(phase, t.task))}"
+                   data-todo-json="${esc(t.status || 'pending')}">
+            <span class="todo-task">${esc(t.task)}</span>
+          </label>
+        </li>`;
+    }).join('');
+    const done = states.filter((s) => s.status === 'complete').length;
+    const anyLocal = states.some((s) => s.local);
     return `
-      <div class="box todo-box-wrap">
-        <h3>To-do <span class="todo-count">${done}/${todos.length}</span></h3>
+      <div class="box todo-box-wrap" data-todo-phase="${phase.number}">
+        <h3>To-do <span class="todo-count">${done}/${todos.length}</span>
+          ${anyLocal ? '<button type="button" class="todo-reset" data-todo-reset>Reset to plan</button>' : ''}
+        </h3>
         <ul class="todo-list">${rows}</ul>
+        ${anyLocal ? '<p class="caption-note">Ticked on this device — the plan still says otherwise.</p>' : ''}
       </div>`;
+  }
+
+  // Toggling stores the change only when it differs from the JSON; matching the
+  // plan again clears the override so the file remains authoritative.
+  function initTodoToggles() {
+    document.addEventListener('change', (e) => {
+      const box = e.target.closest('.todo-check');
+      if (!box) return;
+      const key = box.dataset.todoKey;
+      const fromJson = box.dataset.todoJson;
+      const now = box.checked ? 'complete' : 'pending';
+      try {
+        if (now === fromJson) localStorage.removeItem(key);
+        else localStorage.setItem(key, now);
+      } catch (err) { /* storage unavailable — the tick still shows this session */ }
+      refreshTodoCard(box.closest('.todo-box-wrap'));
+    });
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-todo-reset]');
+      if (!btn) return;
+      const card = btn.closest('.todo-box-wrap');
+      card.querySelectorAll('.todo-check').forEach((b) => {
+        try { localStorage.removeItem(b.dataset.todoKey); } catch (err) { /* ignore */ }
+        b.checked = b.dataset.todoJson === 'complete';
+      });
+      refreshTodoCard(card);
+    });
+  }
+
+  function refreshTodoCard(card) {
+    if (!card) return;
+    const boxes = [...card.querySelectorAll('.todo-check')];
+    const done = boxes.filter((b) => b.checked).length;
+    const count = card.querySelector('.todo-count');
+    if (count) count.textContent = `${done}/${boxes.length}`;
+    let anyLocal = false;
+    boxes.forEach((b) => {
+      const local = (b.checked ? 'complete' : 'pending') !== b.dataset.todoJson;
+      b.closest('.todo').classList.toggle('is-local', local);
+      if (local) anyLocal = true;
+    });
+    const h3 = card.querySelector('h3');
+    let reset = card.querySelector('[data-todo-reset]');
+    if (anyLocal && !reset) {
+      reset = document.createElement('button');
+      reset.type = 'button';
+      reset.className = 'todo-reset';
+      reset.setAttribute('data-todo-reset', '');
+      reset.textContent = 'Reset to plan';
+      h3.appendChild(reset);
+    } else if (!anyLocal && reset) {
+      reset.remove();
+    }
+    let note = card.querySelector('.caption-note');
+    if (anyLocal && !note) {
+      note = document.createElement('p');
+      note.className = 'caption-note';
+      note.textContent = 'Ticked on this device — the plan still says otherwise.';
+      card.appendChild(note);
+    } else if (!anyLocal && note) {
+      note.remove();
+    }
   }
 
   // Purchases recorded against a phase, including anything going back. A
@@ -1087,7 +1180,7 @@
     (phase.items || []).forEach((i) => { if (!actions.includes(i)) actions.push(i); });
 
     if (todos.length) {
-      parts.todos = renderTodos(todos);
+      parts.todos = renderTodos(todos, phase);
       if (actions.length) {
         extra.push(`<h4>Phase requirements</h4><ul>${actions.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>`);
       }
@@ -1321,7 +1414,7 @@
           goal: decision.goal
             ? `<div class="box goal-box"><p><strong>Goal:</strong> ${esc(decision.goal)}</p></div>`
             : '',
-          todos: renderTodos(todosFor(phase, decision, projectTodos)),
+          todos: renderTodos(todosFor(phase, decision, projectTodos), phase),
           content: `
             ${renderDecisionPanel(decision, phase, project)}
             ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
@@ -1597,6 +1690,7 @@
     }
 
     initTabs();
+    initTodoToggles();
     attachMemoryImages();
     initLightbox();
   }
