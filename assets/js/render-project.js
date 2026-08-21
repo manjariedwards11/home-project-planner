@@ -12,6 +12,7 @@
   'use strict';
 
   let currentProjectId = '';
+  let projectTodos = null;
 
   // Short nav-tab labels are a display/navigation concern (owned by Claude per
   // PROJECT_RULES.md), not a duplicated fact — the full phase name (the fact)
@@ -639,8 +640,15 @@
     return (project.shopping || []).filter((i) => i.phase === phase.number);
   }
 
-  function renderPhaseShoppingRecords(phase, project, collapsed) {
-    const items = phaseShoppingItems(phase, project);
+  function renderPhaseShoppingRecords(phase, project, collapsed, alreadyListed) {
+    let items = phaseShoppingItems(phase, project);
+    // Drop anything the phase's own shopping list already shows; a records
+    // block that repeats it adds a second, redundant list.
+    if (alreadyListed && alreadyListed.length) {
+      const seen = alreadyListed.map((n) => String(n).toLowerCase());
+      items = items.filter((i) => !seen.some((n) => n.includes(String(i.item).toLowerCase())
+        || String(i.item).toLowerCase().includes(n)));
+    }
     if (!items.length) return '';
     const currency = project.currency;
     const rows = items.map((i) => `
@@ -720,16 +728,20 @@
     // purchased) or, before a purchase, as pendingShoppingList. Route either
     // through the same renderer rather than tying the shape to the file kind.
     const detail = opts.completion || opts.decision;
+    const listed = ((detail && detail.shoppingList && detail.shoppingList.items) || [])
+      .map((i) => i.item)
+      .concat(((detail && detail.pendingShoppingList && detail.pendingShoppingList.items) || []).map((i) => i.item));
     // When a phase presents its purchases inside per-option cards, the generic
     // records list would repeat them and make one option look committed.
     const optionsOwnTheItems = !!(detail && detail.systemOptions && detail.systemOptions.length);
     let card;
     if (detail && detail.shoppingList) {
-      card = renderCompletionShopping(phase, project, detail, opts.costRow)
-        + (optionsOwnTheItems ? '' : renderPhaseShoppingRecords(phase, project, true));
+      // A phase detail file is the authority for that phase's list. The
+      // project-level shopping array is a rollup that can lag behind it, so
+      // showing both risks contradicting the newer file.
+      card = renderCompletionShopping(phase, project, detail, opts.costRow);
     } else if (opts.decision && opts.decision.pendingShoppingList) {
-      card = renderPendingShoppingCard(phase, project, opts.decision)
-        + renderPhaseShoppingRecords(phase, project, true);
+      card = renderPendingShoppingCard(phase, project, opts.decision);
     } else if (detail) {
       card = renderPhaseShoppingRecords(phase, project, false);
     } else {
@@ -941,6 +953,32 @@
       </div>`;
   }
 
+  // A phase's checklist. Tasks come either from the phase's own detail file or
+  // from the project-wide todos file, matched by phaseId then phase number.
+  function todosFor(phase, detail, todoFile) {
+    if (detail && detail.todos && detail.todos.length) return detail.todos;
+    if (!todoFile || !todoFile.phases) return [];
+    const entry = todoFile.phases.find((t) => t.phaseId === phase.id)
+      || todoFile.phases.find((t) => t.phase === phase.number);
+    return (entry && entry.todos) || [];
+  }
+
+  function renderTodos(todos) {
+    if (!todos.length) return '';
+    const mark = (st) => (st === 'complete' ? '&#9745;' : '&#9744;');
+    const rows = todos.map((t) => `
+      <li class="todo is-${esc(t.status || 'pending')}">
+        <span class="todo-box" aria-hidden="true">${mark(t.status)}</span>
+        <span class="todo-task">${esc(t.task)}</span>
+      </li>`).join('');
+    const done = todos.filter((t) => t.status === 'complete').length;
+    return `
+      <div class="box todo-box-wrap">
+        <h3>To-do <span class="todo-count">${done}/${todos.length}</span></h3>
+        <ul class="todo-list">${rows}</ul>
+      </div>`;
+  }
+
   // A phase page is a concise operational view: goal, the few things to do,
   // and the money. Anything discursive — restated summaries, design rationale,
   // extra notes — goes into a collapsed Details block so it is preserved
@@ -984,11 +1022,24 @@
     primary.push(renderOwnedEquipment(comp, currency));
     primary.push(renderSystemOptions(comp, currency));
 
-    // The essential actions for this phase — the heart of the page.
+    if (comp.currentState) {
+      primary.push(`<div class="box"><p>${esc(comp.currentState)}</p></div>`);
+    }
+
+    // The checklist is the actionable view of this phase. Where it exists the
+    // requirements list says the same thing in flatter words, so that drops to
+    // Details rather than sitting alongside as a second copy.
+    const todos = todosFor(phase, comp, projectTodos);
     const actions = (phase.requirements || []).slice();
     (comp.completedWork || []).forEach((w) => { if (!actions.includes(w)) actions.push(w); });
     (phase.items || []).forEach((i) => { if (!actions.includes(i)) actions.push(i); });
-    if (actions.length) {
+
+    if (todos.length) {
+      primary.push(renderTodos(todos));
+      if (actions.length) {
+        extra.push(`<h4>Phase requirements</h4><ul>${actions.map((a) => `<li>${esc(a)}</li>`).join('')}</ul>`);
+      }
+    } else if (actions.length) {
       primary.push(`<div class="box"><ul>${actions.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></div>`);
     }
 
@@ -1209,6 +1260,7 @@
         main = `
           ${renderPhaseCostLine(costRow, currencyOf(project))}
           ${renderDecisionPanel(decision, phase, project)}
+          ${renderTodos(todosFor(phase, decision, projectTodos))}
           ${renderDecisionHistory(phase, decision)}
           ${(phase.notes || []).map((n) => `<div class="notice">${esc(n)}</div>`).join('')}
           ${phase.decisionGate ? `<div class="notice">${esc(phase.decisionGate)}</div>` : ''}`;
@@ -1222,7 +1274,10 @@
       // scrolling sidebar. Those lay the memory and shopping cards out across
       // the full width instead.
       const mainWeight = (main.match(/<(?:div class="box|table|article|section|figure)/g) || []).length;
-      const sparse = mainWeight <= 1;
+      // A placement gallery is wide content: squeezed into the narrow column it
+      // shows three cramped thumbnails, so it takes the full-width form too.
+      const hasGallery = main.includes('placement-grid');
+      const sparse = mainWeight <= 1 || hasGallery;
 
       const inner = hasSidebar
         ? `<div class="phase-layout${sparse ? ' is-sparse' : ''}">
@@ -1468,6 +1523,12 @@
     // status implies one, so this stays at a couple of requests rather than
     // probing every phase: current -> decision, complete -> completion.
     const phaseDetails = await loadPhaseDetails(project);
+
+    // Optional project-wide checklist file.
+    try {
+      const tRes = await fetch(`data/${project.projectId}-todos.json`);
+      if (tRes.ok) projectTodos = await tRes.json();
+    } catch (err) { /* optional */ }
 
     const titleMount = document.querySelector('[data-project-title]');
     if (titleMount) titleMount.textContent = project.displayTitle || project.name;
