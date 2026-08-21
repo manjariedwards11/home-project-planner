@@ -1273,14 +1273,13 @@
       // otherwise leave most of the page empty beside a tall, internally
       // scrolling sidebar. Those lay the memory and shopping cards out across
       // the full width instead.
-      const mainWeight = (main.match(/<(?:div class="box|table|article|section|figure)/g) || []).length;
-      // A placement gallery is wide content: squeezed into the narrow column it
-      // shows three cramped thumbnails, so it takes the full-width form too.
+      // Wide content always takes the full-width form; everything else is
+      // decided by measuring the rendered columns in balancePhaseLayout, since
+      // counting markup blocks broke as soon as a phase gained a to-do list.
       const hasGallery = main.includes('placement-grid');
-      const sparse = mainWeight <= 1 || hasGallery;
 
       const inner = hasSidebar
-        ? `<div class="phase-layout${sparse ? ' is-sparse' : ''}">
+        ? `<div class="phase-layout${hasGallery ? ' is-sparse' : ''}">
              <div class="phase-main">${main}</div>
              ${renderPhaseSidebar(phase, project, { completion, decision, costRow, memory })}
            </div>`
@@ -1413,12 +1412,33 @@
       <button class="tab" data-tab="decisions"><span class="dot"></span>Decisions</button>`;
   }
 
+  // Choose the layout by what actually rendered: if the main column ends up far
+  // shorter than the sidebar, the two-column form leaves a tall empty gap, so
+  // the memory and shopping cards spread across the full width instead.
+  // Hidden panels measure as zero, so this runs when a panel is first shown.
+  function balancePhaseLayout(panel) {
+    if (!panel || panel.dataset.balanced === '1') return;
+    const layout = panel.querySelector('.phase-layout');
+    if (!layout) return;
+    const main = layout.querySelector('.phase-main');
+    const side = layout.querySelector('.phase-side');
+    if (!main || !side) return;
+    if (!main.getBoundingClientRect().height) return;   // still hidden
+    if (!layout.classList.contains('is-sparse')) {
+      const mainH = main.getBoundingClientRect().height;
+      const sideH = side.getBoundingClientRect().height;
+      if (sideH > 0 && mainH < sideH * 0.72) layout.classList.add('is-sparse');
+    }
+    panel.dataset.balanced = '1';
+  }
+
   function initTabs() {
     const tabs = [...document.querySelectorAll('.tab')];
     const panels = [...document.querySelectorAll('.panel')];
     function show(id) {
       tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === id));
       panels.forEach((p) => p.classList.toggle('active', p.id === id));
+      balancePhaseLayout(document.getElementById(id));
       history.replaceState(null, '', '#' + id);
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
@@ -1553,6 +1573,7 @@
     }
 
     initTabs();
+    document.querySelectorAll('.panel.active').forEach(balancePhaseLayout);
     attachMemoryImages();
     initLightbox();
   }
