@@ -5,6 +5,7 @@
   "phaseId": "pond-decision",
   "title": "Permanent Pond Decision",
   "status": "current",
+  "goal": "Choose and purchase the permanent pond vessel that best fits the rectangular Zen design, gives the lotus a stable long-term home, and leaves permanent pump and filtration selection to Phase 3.",
   "decisionState": "preferred-choice-purchase-pending",
   "preferredChoice": "Algreen Manhattan 40-inch Balcony Planter & Pond from Wayfair",
   "decisionSummary": "The final comparison is between the Algreen Manhattan rectangular planter pond from Wayfair and the Blagdon/Pennington Aquagarden 50-gallon pond kit from Walmart. The Algreen Manhattan is the preferred choice, but Phase 2 remains open until it is purchased.",
@@ -81,6 +82,12 @@
       }
     ],
     "note": "Only the preferred vessel belongs in the Phase 2 pending shopping list. Pump, filtration, tubing and fountain equipment remain Phase 3 purchases."
+  },
+  "completionMemory": {
+    "title": "End of Phase 2",
+    "status": "awaiting-completion",
+    "image": null,
+    "caption": "Permanent pond vessel purchased and ready for the permanent pond build."
   },
   "excludedReference": {
     "item": "Official Algreen Manhattan Balcony Pond Kit",
