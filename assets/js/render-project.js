@@ -19,6 +19,7 @@
     'pond-decision': 'Pond',
     'pump-filter': 'Pump/Filter',
     'lotus-buddha': 'Lotus/Buddha',
+    'future-fish-ready': 'Future / Fish',
   };
 
   function tabLabel(phase) {
@@ -53,8 +54,10 @@
   }
 
   // Ranges carry the currency symbol once, on the low end: "$660–1,275".
+  // A range whose ends match is a single figure, not "$30–30".
   function moneyRange(min, max, currency) {
     if (min == null || max == null) return '—';
+    if (Number(min) === Number(max)) return money(min, currency);
     const symbol = { USD: '$' }[currency] || (currency ? currency + ' ' : '$');
     return `${symbol}${wholeAmount(min)}–${wholeAmount(max)}`;
   }
@@ -114,8 +117,11 @@
           ${sc.designIntent ? `<li>${esc(sc.designIntent)}</li>` : ''}
         </ul>`
       : '';
-    const accounting = costPlan && costPlan.accountingNote
-      ? `<p><strong>Cost accounting</strong></p><p>${esc(costPlan.accountingNote)}</p>`
+    const cp = costPlan || {};
+    const accounting = (cp.accountingNote || cp.title || cp.subtitle)
+      ? `<p><strong>Cost accounting</strong></p>
+         ${cp.title ? `<p>${esc(cp.title)}${cp.subtitle ? ` — ${esc(cp.subtitle)}` : ''}</p>` : ''}
+         ${cp.accountingNote ? `<p>${esc(cp.accountingNote)}</p>` : ''}`
       : '';
     if (!goals && !constraints && !accounting) return '';
     return `
@@ -186,9 +192,13 @@
       return `
         <tr class="${rowCls}">
           <td class="col-num">${phase.number}</td>
-          <td class="phase-name">${esc(phase.name)}</td>
+          <td class="phase-name">${esc(phase.name)}
+            ${costRow && costRow.budgetStatus ? `<span class="caption-note">${esc(humanizeSlug(costRow.budgetStatus))}</span>` : ''}
+          </td>
           <td class="col-status"><span class="pill ${statusPillClass(phase.status)}">${esc(statusLabel)}</span></td>
-          <td class="phase-summary">${esc(phase.summary || '')}</td>
+          <td class="phase-summary">${esc(phase.summary || '')}
+            ${costRow && costRow.note ? `<span class="caption-note">${esc(costRow.note)}</span>` : ''}
+          </td>
           <td class="col-est">${esc(estimated)}</td>
           <td class="col-actual">${actualCell(costRow, currency)}</td>
         </tr>`;
@@ -334,6 +344,17 @@
     const list = completion.shoppingList || {};
     const items = list.items || completion.items || [];
 
+    // A phase with nothing committed gets its note only — an empty table with
+    // dashes would imply a shopping process that has not started.
+    if (!items.length) {
+      if (!list.note) return '';
+      return `
+        <div class="shopping-card">
+          <h3>Shopping list${list.status ? ` <span class="pill ${statusPillClass(list.status)}">${esc(humanizeSlug(list.status))}</span>` : ''}</h3>
+          <p class="caption-note">${esc(list.note)}</p>
+        </div>`;
+    }
+
     const rows = items.map((i) => {
       const actual = i.actualCost != null ? i.actualCost : i.actual;
       const done = (i.status === 'complete' || i.status === 'bought');
@@ -345,6 +366,7 @@
         <tr>
           <td class="col-check">${done ? '<span class="check" title="Complete">&#10003;</span>' : ''}</td>
           <td>${esc(i.item)}
+            ${i.status ? `<span class="caption-note"><span class="pill ${statusPillClass(i.status)}">${esc(shoppingStatusLabel(i.status))}</span></span>` : ''}
             ${i.role ? `<span class="caption-note">${esc(i.role)}</span>` : ''}
             ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
           </td>
@@ -357,9 +379,13 @@
 
     // The spendBreakdown row equal to this phase's total is itemized above, so
     // its original label rides on the total row rather than disappearing.
+    // ...unless that label is already one of the itemized rows, which would
+    // just repeat the item name under the total.
+    const itemNames = items.map((i) => i.item);
     const totalLabels = (phase.spendBreakdown || [])
       .filter((s) => Number(s.amount) === Number(actualTotal))
-      .map((s) => s.label);
+      .map((s) => s.label)
+      .filter((l) => !itemNames.includes(l));
 
     // Amounts recorded here but booked to another phase stay visible and
     // labelled, and are excluded from the total.
@@ -389,7 +415,7 @@
                 ${totalLabels.map((l) => `<span class="caption-note">${esc(l)}</span>`).join('')}
               </td>
               <td class="col-est">${esc(moneyRange(estMin, estMax, currency))}</td>
-              <td class="col-actual"><span class="actual-amount">${esc(money(actualTotal, currency))}</span></td>
+              <td class="col-actual">${actualTotal == null ? '&mdash;' : `<span class="actual-amount">${esc(money(actualTotal, currency))}</span>`}</td>
             </tr>
             ${elsewhereRows}`)}
         </div>
