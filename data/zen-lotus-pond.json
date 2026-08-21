@@ -24,6 +24,224 @@
     "maintenanceTarget": "A few minutes weekly in hot weather plus roughly 10–15 minutes monthly for filter cleaning as needed",
     "designIntent": "Architectural rectangular pond with open reflective water, lotus and Buddha, framed by jasmine rather than a stock-tank look"
   },
+  "budget": {
+    "planned": null,
+    "spentToDate": 137.13,
+    "remaining": null,
+    "status": "not-set",
+    "note": "A total project budget has not been locked yet. Actual spend is tracked as purchases are confirmed."
+  },
+  "shopping": [
+    {
+      "phase": 1,
+      "item": "Aquascape Pond Plant Potting Media",
+      "status": "bought",
+      "price": null,
+      "store": "Amazon",
+      "link": "https://a.co/d/084akjXk",
+      "actualCost": null,
+      "budget": null,
+      "note": "Included within the previously recorded nursery-supplies total; individual cost was not separated."
+    },
+    {
+      "phase": 1,
+      "item": "8-inch solid plastic lotus planting pot",
+      "status": "bought",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Included within the previously recorded nursery-supplies total."
+    },
+    {
+      "phase": 1,
+      "item": "White pea gravel",
+      "status": "bought",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Used as the gravel cap for the nursery lotus pot."
+    },
+    {
+      "phase": 1,
+      "item": "API Stress Coat dechlorinator",
+      "status": "bought",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Used to condition nursery water."
+    },
+    {
+      "phase": 1,
+      "item": "Solar floating fountain",
+      "status": "bought",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Provides light surface movement in the nursery; it is not permanent-pond filtration."
+    },
+    {
+      "phase": 1,
+      "item": "Smartpond Filter Kit with Pump",
+      "status": "bought",
+      "price": 30.0,
+      "store": "Lowe's",
+      "link": null,
+      "actualCost": 30.0,
+      "budget": null,
+      "note": "Keep for the small nursery; do not size the permanent pond around this kit."
+    },
+    {
+      "phase": 2,
+      "item": "Existing raised planter conversion",
+      "status": "considering",
+      "price": null,
+      "store": "Existing structure",
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Leading option only if framing, bracing, bottom support, liner and slab suitability are verified for continuous water load."
+    },
+    {
+      "phase": 2,
+      "item": "Algreen Manhattan rectangular planter pond",
+      "status": "considering",
+      "price": null,
+      "store": "Algreen / Wayfair",
+      "link": "https://algreenproducts.com/products/manhattan-balcony-pond-kit",
+      "actualCost": null,
+      "budget": null,
+      "note": "Preferred purpose-built candidate for the architectural rectangular look; not purchased yet."
+    },
+    {
+      "phase": 2,
+      "item": "Pennington 50-gallon Aquagarden",
+      "status": "considering",
+      "price": null,
+      "store": "Walmart",
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Alternate all-in-one option; less preferred aesthetically than the Algreen Manhattan."
+    },
+    {
+      "phase": 2,
+      "item": "Rounded poly stock tank",
+      "status": "rejected",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Rejected because the stock-tank appearance does not match the intended architectural design."
+    },
+    {
+      "phase": 2,
+      "item": "General-purpose large storage tote as permanent pond",
+      "status": "rejected",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Rejected as a freestanding permanent vessel because general-purpose totes are not designed for years of continuous hydrostatic pressure."
+    },
+    {
+      "phase": 3,
+      "item": "Adjustable permanent pond pump",
+      "status": "need-to-buy",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Buy only after final pond volume and plumbing head are known."
+    },
+    {
+      "phase": 3,
+      "item": "Mechanical + biological filtration",
+      "status": "need-to-buy",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Permanent system needs both solids capture and biological filtration."
+    },
+    {
+      "phase": 3,
+      "item": "Tubing and flow control",
+      "status": "need-to-buy",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Size after pump, filter and return layout are selected."
+    },
+    {
+      "phase": 3,
+      "item": "Simple low fountain / bubbler return",
+      "status": "need-to-buy",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Prefer gentle surface movement rather than a tall spray to reduce evaporation."
+    },
+    {
+      "phase": 4,
+      "item": "Structural reinforcement and/or pond-grade liner",
+      "status": "considering",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Conditional purchase only if the selected permanent pond solution requires it."
+    },
+    {
+      "phase": 5,
+      "item": "Two white jasmine planters",
+      "status": "need-to-buy",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Use large enough soil volume for extreme summer heat."
+    },
+    {
+      "phase": 5,
+      "item": "Two black jasmine trellises",
+      "status": "need-to-buy",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Keep foliage light and airy rather than forming a dense wall."
+    },
+    {
+      "phase": 8,
+      "item": "Warm solar accent lighting",
+      "status": "need-to-buy",
+      "price": null,
+      "store": null,
+      "link": null,
+      "actualCost": null,
+      "budget": null,
+      "note": "Final finishing purchase after the pond and planting system are stable."
+    }
+  ],
   "phases": [
     {
       "number": 1,
