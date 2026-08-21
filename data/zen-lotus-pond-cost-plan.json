@@ -9,8 +9,10 @@
     "label": "Target to actually work toward"
   },
   "estimatedTotal": {
-    "min": 635,
-    "max": 1200
+    "min": 485,
+    "max": 875,
+    "label": "Known phase estimates",
+    "isPartial": true
   },
   "actualSpentToDate": 283.32,
   "currency": "USD",
@@ -18,7 +20,7 @@
     "status": "complete",
     "label": "Lotus Nursery",
     "actualTotal": 107.13,
-    "goal": "Keep the babies growing while the permanent pond is built.",
+    "goal": "Keep the lotus seedlings healthy while the permanent pond is built.",
     "items": [
       {"item": "22-inch temporary nursery pond", "actual": 15.0, "status": "complete"},
       {"item": "3 germinated lotus seedlings", "actual": 10.0, "status": "complete"},
@@ -28,14 +30,14 @@
     ]
   },
   "phases": [
-    {"phase": 1, "phaseId": "nursery", "label": "Nursery", "estimatedMin": 60, "estimatedMax": 100, "actual": 107.13, "actualStatus": "complete"},
-    {"phase": 2, "phaseId": "pond-decision", "label": "Pond", "estimatedMin": 125, "estimatedMax": 200, "actual": 146.19, "actualStatus": "complete", "note": "Brownstone Algreen Manhattan purchased from Wayfair."},
-    {"phase": 3, "phaseId": "pump-filter", "label": "Pump/filter/fountain", "estimatedMin": 150, "estimatedMax": 250, "actual": 30, "actualStatus": "so-far"},
-    {"phase": 4, "phaseId": "structure-liner", "label": "Pond exterior", "estimatedMin": 100, "estimatedMax": 200, "actual": null},
-    {"phase": 5, "phaseId": "jasmine", "label": "Jasmine + pots/trellis", "estimatedMin": 100, "estimatedMax": 200, "actual": null},
-    {"phase": 6, "phaseId": "lotus-buddha", "label": "Lotus/Buddha", "estimatedMin": 50, "estimatedMax": 125, "actual": null},
-    {"phase": 7, "phaseId": "lighting", "label": "Lighting/finishing", "estimatedMin": 50, "estimatedMax": 125, "actual": null},
-    {"phase": 8, "phaseId": "future-fish-ready", "label": "Future State — Fish Ready Prep", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "not-in-current-budget", "note": "Revisit in about one year. No current purchase or budget commitment."}
+    {"phase": 1, "phaseId": "nursery", "label": "Lotus Nursery", "estimatedMin": 60, "estimatedMax": 100, "actual": 107.13, "actualStatus": "complete"},
+    {"phase": 2, "phaseId": "pond-decision", "label": "Pond Selection", "estimatedMin": 125, "estimatedMax": 200, "actual": 146.19, "actualStatus": "complete"},
+    {"phase": 3, "phaseId": "pump-filter", "label": "Pump + Filter + Fountain", "estimatedMin": 150, "estimatedMax": 250, "actual": 30.0, "actualStatus": "so-far"},
+    {"phase": 4, "phaseId": "pond-placement", "label": "Pond Placement + Setup", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "TBD"},
+    {"phase": 5, "phaseId": "jasmine", "label": "Jasmine Frame", "estimatedMin": 100, "estimatedMax": 200, "actual": null},
+    {"phase": 6, "phaseId": "lotus-buddha", "label": "Lotus + Buddha", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "TBD"},
+    {"phase": 7, "phaseId": "lighting", "label": "Lighting + Finishing", "estimatedMin": 50, "estimatedMax": 125, "actual": null},
+    {"phase": 8, "phaseId": "future-fish-ready", "label": "Future Fish Decision", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "not-in-current-budget"}
   ],
-  "accountingNote": "Phase 1 actual is $107.13, Phase 2 actual is $146.19, and the $30 Smartpond kit is counted under Phase 3. Total project spend is $283.32. Future fish prep is excluded from the current build budget until activated."
+  "accountingNote": "Known phase estimates total $485–875. Phase 4 and Phase 6 remain TBD; Phase 8 is a future idea outside the current build budget. Actual spend is $283.32."
 }
