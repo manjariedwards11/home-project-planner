@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "projectId": "living-room-glass-door-treatments",
+  "name": "Living Room Glass Door Treatments",
+  "subtitle": "Farmhouse window treatment redesign",
+  "displayTitle": "LIVING ROOM — GLASS DOOR WINDOW TREATMENTS",
+  "lede": "Replace the existing roller shades with a higher-end farmhouse treatment that works with the four-panel glass door system and the entertainment center obstruction.",
+  "status": "underway",
+  "currentPhase": 2,
+  "spentToDate": 0,
+  "currency": "USD",
+  "lastContentUpdate": "2026-08-21",
+  "nextAction": "Choose the final treatment direction, with ceiling-track linen drapery currently the strongest candidate, then confirm measurements and stacking clearance.",
+  "goals": [
+    "Create a polished, high-end farmhouse look appropriate for a luxury home",
+    "Preserve easy access through the operating glass doors",
+    "Avoid interference with the entertainment center",
+    "Keep the room bright while providing useful privacy and sun control"
+  ],
+  "siteConstraints": {
+    "opening": "Four glass panels total: two fixed panels and two operating door panels.",
+    "existingTreatment": "Roller shades came with the house.",
+    "obstruction": "The entertainment center now prevents the existing roller shades from coming all the way down.",
+    "designStyle": "Warm, elevated farmhouse / organic farmhouse rather than rustic farmhouse.",
+    "accessRequirement": "Any new treatment must stack or move clear of the two operating door panels."
+  },
+  "budget": {
+    "planned": null,
+    "spentToDate": 0,
+    "remaining": null,
+    "status": "not-set",
+    "note": "Budget will be set after the final treatment type and measurements are chosen."
+  },
+  "shopping": [],
+  "phases": [
+    {
+      "number": 1,
+      "id": "existing-condition",
+      "name": "Existing Condition + Constraints",
+      "status": "complete",
+      "spent": 0,
+      "summary": "Document the existing roller shades, entertainment-center interference and four-panel door configuration.",
+      "requirements": [
+        "Four glass panels total",
+        "Two panels remain fixed",
+        "Two panels open",
+        "Existing roller shades cannot fully lower because of the entertainment center"
+      ]
+    },
+    {
+      "number": 2,
+      "id": "treatment-selection",
+      "name": "Choose Window Treatment",
+      "status": "current",
+      "spent": 0,
+      "summary": "Select a luxury farmhouse treatment that clears the entertainment center and keeps the operating doors functional.",
+      "requirements": [
+        "Prioritize a custom, architectural appearance",
+        "Do not block access through the two operating door panels",
+        "Allow the treatment to stack outside the active doorway when open",
+        "Coordinate with the room's neutral palette, plants, light flooring and warm wood accents"
+      ]
+    },
+    {
+      "number": 3,
+      "id": "measure-spec",
+      "name": "Measure + Final Specification",
+      "status": "planned",
+      "spent": 0,
+      "summary": "Measure the full opening, ceiling height, entertainment-center projection and available stack-back space before ordering.",
+      "requirements": [
+        "Measure full wall/opening width and finished height",
+        "Measure each of the four glass panels",
+        "Confirm which two panels operate and their travel direction",
+        "Measure entertainment-center depth/projection into the shade path",
+        "Confirm left and right stack-back space",
+        "Choose fabric, lining, header/track and privacy level"
+      ]
+    },
+    {
+      "number": 4,
+      "id": "purchase-install",
+      "name": "Purchase + Installation",
+      "status": "planned",
+      "spent": 0,
+      "summary": "Order the selected treatment and install it so all door functions remain unobstructed.",
+      "requirements": [
+        "Verify final measurements before ordering",
+        "Install track/hardware level and high on the wall or ceiling as specified",
+        "Test full opening and closing of both operating doors",
+        "Confirm fabric/panels clear the entertainment center",
+        "Photograph the completed wall"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "item": "Plantation shutters",
+      "status": "rejected",
+      "decision": "Rejected."
+    },
+    {
+      "item": "Vertical wood blinds",
+      "status": "rejected",
+      "decision": "Rejected."
+    },
+    {
+      "item": "Barn-door style panels",
+      "status": "unlikely",
+      "decision": "Likely not workable for this opening."
+    },
+    {
+      "item": "Existing roller-shade approach",
+      "status": "rejected-as-is",
+      "decision": "The current roller shades no longer work because the entertainment center prevents them from lowering fully."
+    },
+    {
+      "item": "Ceiling-track linen drapery",
+      "status": "leading-candidate",
+      "decision": "Viable and currently the strongest candidate. Use a custom-looking warm ivory/oatmeal fabric with a tailored header and enough stack-back to fully clear the operating doors."
+    },
+    {
+      "item": "Linen panel track",
+      "status": "considering",
+      "decision": "Still a viable alternative if the panels can stack fully clear of the operating door area."
+    },
+    {
+      "item": "Solar shades + linen side panels",
+      "status": "considering-with-change",
+      "decision": "Potential option only if the shades are reconfigured so they do not repeat the current entertainment-center interference problem."
+    }
+  ],
+  "maintenance": [
+    {
+      "frequency": "As needed",
+      "task": "Vacuum or lightly dust fabric/panels and track hardware",
+      "time": "5–10 minutes"
+    },
+    {
+      "frequency": "Seasonally",
+      "task": "Check track alignment, carriers and door clearance",
+      "time": "5 minutes"
+    }
+  ]
+}
