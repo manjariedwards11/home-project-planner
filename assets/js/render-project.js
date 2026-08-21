@@ -247,6 +247,37 @@
     </table>`;
   }
 
+  // Cost plans may carry a per-phase completion breakdown keyed by phase
+  // number (phase1Completion, phase2Completion, ...), so a phase gaining one
+  // later needs no renderer change.
+  function completionFor(costPlan, phase) {
+    if (!costPlan) return null;
+    return costPlan[`phase${phase.number}Completion`] || null;
+  }
+
+  function renderCompletion(completion, currency) {
+    if (!completion || !completion.items || !completion.items.length) return '';
+    return `
+      <details class="accordion" open>
+        <summary>Itemized actual cost <span class="pill green">${esc(money(completion.actualTotal, currency))}</span></summary>
+        <div class="accordion-body">
+          ${completion.goal ? `<p>${esc(completion.goal)}</p>` : ''}
+          <table>
+            <tr><th>Item</th><th class="col-actual">Actual</th></tr>
+            ${completion.items.map((i) => `
+              <tr>
+                <td>${esc(i.item)}</td>
+                <td class="col-actual"><span class="actual-amount">${esc(money(i.actual, currency))}</span></td>
+              </tr>`).join('')}
+            <tr class="total-row">
+              <td>Total</td>
+              <td class="col-actual"><span class="actual-amount">${esc(money(completion.actualTotal, currency))}</span></td>
+            </tr>
+          </table>
+        </div>
+      </details>`;
+  }
+
   // One field type -> one rendering treatment, applied uniformly across every
   // phase regardless of phase number.
   function renderPhaseBody(phase, currency, costPlan) {
@@ -294,6 +325,8 @@
         ${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td>${esc(money(s.amount, currency))}</td></tr>`).join('')}
       </table></div>`;
     }
+
+    html += renderCompletion(completionFor(costPlan, phase), currency);
 
     if (phase.notes && phase.notes.length) {
       html += phase.notes.map((n) => `<div class="notice">${esc(n)}</div>`).join('');
