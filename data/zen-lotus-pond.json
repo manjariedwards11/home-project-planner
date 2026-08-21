@@ -9,7 +9,8 @@
   "currentPhase": 2,
   "spentToDate": 137.13,
   "currency": "USD",
-  "nextAction": "Choose and verify the permanent pond solution before sizing the permanent pump and filter.",
+  "lastContentUpdate": "2026-08-21",
+  "nextAction": "Choose between the leading permanent pond options: verify whether the existing raised planter can safely hold water long-term, or select a purpose-built rectangular pond such as the Algreen Manhattan.",
   "goals": [
     "Low-maintenance serene lotus water feature",
     "Clean moving water with minimal visible algae and larvae",
@@ -20,7 +21,8 @@
   "siteConstraints": {
     "climate": "Very hot summer climate; temperatures can reach about 110°F",
     "preferredWaterMovement": "Gentle bubbler or low fountain to limit evaporation",
-    "maintenanceTarget": "A few minutes weekly in hot weather plus roughly 10–15 minutes monthly for filter cleaning as needed"
+    "maintenanceTarget": "A few minutes weekly in hot weather plus roughly 10–15 minutes monthly for filter cleaning as needed",
+    "designIntent": "Architectural rectangular pond with open reflective water, lotus and Buddha, framed by jasmine rather than a stock-tank look"
   },
   "phases": [
     {
@@ -28,15 +30,31 @@
       "id": "nursery",
       "name": "Lotus Nursery",
       "status": "complete",
-      "spent": 107.13,
-      "summary": "Establish three seed-grown lotus seedlings in the temporary nursery.",
+      "spent": 137.13,
+      "summary": "Establish three seed-grown lotus seedlings in the temporary nursery and keep the water gently moving while they mature.",
       "items": [
         "Temporary nursery container",
-        "Solid lotus planting pot",
+        "8-inch solid plastic lotus planting pot",
         "Aquatic planting media",
         "White pea gravel cap",
-        "Conditioned water",
-        "Small circulation/fountain"
+        "API Stress Coat dechlorinator",
+        "Solar floating fountain",
+        "Smartpond Filter Kit with Pump"
+      ],
+      "spendBreakdown": [
+        {
+          "label": "Previously recorded nursery supplies",
+          "amount": 107.13
+        },
+        {
+          "label": "Smartpond Filter Kit with Pump from Lowe's",
+          "amount": 30.0
+        }
+      ],
+      "notes": [
+        "The $30 Smartpond kit is appropriately sized for the small nursery, not the permanent pond.",
+        "Some algae in a small sunny nursery is normal; remove visible debris or string algae instead of repeatedly draining and restarting the container.",
+        "Keep only a few inches of water above the gravel while the seedlings are young so the leaves can readily reach the surface."
       ]
     },
     {
@@ -44,28 +62,49 @@
       "id": "pond-decision",
       "name": "Pond Decision",
       "status": "current",
-      "summary": "Select the permanent pond solution and verify that it is suitable for long-term water use.",
+      "summary": "Select the permanent pond solution and verify that it is suitable for years of continuous water use.",
+      "decisionCriteria": [
+        "Purpose-built or structurally verified for continuous water load",
+        "Rectangular architectural appearance",
+        "Enough depth and water volume for lotus stability in extreme summer heat",
+        "Straightforward path for pump, mechanical filtration and biological filtration",
+        "Low routine maintenance",
+        "Reasonable total cost after structure, liner, pump and filter are included"
+      ],
       "candidates": [
         {
           "name": "Existing raised planter conversion",
           "status": "under-evaluation",
+          "priority": "leading-option-if-structurally-safe",
           "dimensions": "Approximately 11 ft × 3 ft × 22 in",
-          "notes": "Already lined, but framing, bracing, liner type, bottom support and continuous hydrostatic load must be verified before conversion."
+          "estimatedVolume": "Roughly 350–400 gallons operating volume if converted substantially to water",
+          "notes": "Already lined and visually integrated with the wall, but framing, cross-bracing, bottom support, liner type/condition, seams, penetrations and patio/slab support must be verified before soil is removed and the planter is filled with water. Soil load does not prove the walls are safe for continuous hydrostatic pressure."
         },
         {
           "name": "Algreen Manhattan rectangular planter pond",
           "status": "candidate",
-          "notes": "Preferred over the Pennington 50-gallon option for appearance and depth; not yet recorded as purchased."
+          "priority": "preferred-purpose-built-candidate",
+          "notes": "Strong purpose-built candidate because its rectangular form fits the architectural design better than a rounded stock tank. Not recorded as purchased.",
+          "links": [
+            {
+              "label": "Algreen Manhattan Balcony Pond Kit",
+              "url": "https://algreenproducts.com/products/manhattan-balcony-pond-kit"
+            },
+            {
+              "label": "Wayfair Manhattan 40 Balcony Planter Pond",
+              "url": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036"
+            }
+          ]
         },
         {
           "name": "Pennington 50-gallon Aquagarden",
           "status": "alternate",
-          "notes": "All-in-one option considered, but less preferred aesthetically than the Algreen Manhattan."
+          "notes": "All-in-one option considered, but less preferred aesthetically and shallower-looking than the Algreen Manhattan option."
         },
         {
           "name": "Separate 4 ft × 2 ft × 2 ft raised pond",
           "status": "paused",
-          "notes": "Do not purchase/build until the other permanent pond options are resolved."
+          "notes": "Do not purchase or build until the existing planter and purpose-built rectangular options are resolved. If this route returns, use a properly framed/braced structural shell with pond-grade underlayment and liner rather than a general-purpose storage tote."
         }
       ]
     },
@@ -74,17 +113,20 @@
       "id": "pump-filter",
       "name": "Pump + Filter + Fountain",
       "status": "planned",
-      "summary": "Size the circulation and filtration system after final pond volume is known.",
+      "summary": "Size the circulation and filtration system only after the final pond volume and plumbing head are known.",
+      "decisionGate": "Do not buy the permanent pump/filter until Phase 2 establishes the final vessel and operating water volume.",
       "requirements": [
         "Adjustable pond pump",
-        "Mechanical filtration",
-        "Biological filtration",
+        "Mechanical filtration to catch leaves, dirt and dead algae",
+        "Biological filtration to support beneficial bacteria",
         "Tubing and flow control",
-        "Simple low fountain or bubbler return"
+        "Simple low fountain, bubbler or return that moves the surface without creating a tall evaporative spray"
       ],
       "notes": [
-        "UV clarifier is optional and should be added only if persistent green-water algae becomes a problem.",
-        "The existing low-cost smartpond kit is for the small nursery, not the permanent pond."
+        "UV clarifier is optional and should be added only if persistent free-floating green-water algae becomes a problem.",
+        "UV does not solve string algae, wall algae, debris, mosquitoes, worms or odor.",
+        "The existing $30 Smartpond kit belongs with the small nursery and should not determine the permanent pond size.",
+        "Fish are not required for this system and starting fishless keeps waste load and maintenance lower."
       ]
     },
     {
@@ -92,35 +134,57 @@
       "id": "structure-liner",
       "name": "Structure / Liner",
       "status": "conditional",
-      "summary": "Reinforce the pond shell or replace/add pond-grade liner only if the selected permanent pond solution requires it."
+      "summary": "Reinforce the pond shell or replace/add pond-grade liner only if the selected permanent pond solution requires it.",
+      "notes": [
+        "This phase could become very small or disappear if a purpose-built pond vessel is selected.",
+        "If the existing planter is selected, structural suitability must be confirmed before filling."
+      ]
     },
     {
       "number": 5,
       "id": "jasmine",
       "name": "Jasmine",
       "status": "planned",
-      "summary": "Frame the pond with two jasmine planters and black trellises using intentionally light foliage density."
+      "summary": "Frame the pond with two jasmine planters and black trellises using intentionally light foliage density.",
+      "layout": "Jasmine — Pond — Jasmine, all in the same row",
+      "notes": [
+        "Use two white planters and two black trellises.",
+        "Keep jasmine airy rather than creating a dense solid foliage wall.",
+        "Provide adequate soil volume and reliable watering for extreme summer heat."
+      ]
     },
     {
       "number": 6,
       "id": "lotus-buddha",
       "name": "Lotus + Buddha",
       "status": "planned",
-      "summary": "Place lotus on one side, Buddha beside the lotus, fountain toward the opposite side, and preserve open reflective water."
+      "summary": "Place lotus on one side, Buddha beside the lotus, fountain toward the opposite side, and preserve open reflective water.",
+      "notes": [
+        "Avoid overfilling the pond visually; open water is part of the serenity goal.",
+        "A tiny partially submerged flat stone can be added later for occasional bird drinking if desired, without creating a broad bird-bathing platform."
+      ]
     },
     {
       "number": 7,
       "id": "pothos",
       "name": "Pothos",
       "status": "planned",
-      "summary": "Use trailing pothos only in locations protected from intense direct summer sun."
+      "summary": "Use trailing pothos only in locations protected from intense direct summer sun.",
+      "notes": [
+        "Do not expose pothos to full 110°F summer sun.",
+        "Use fewer plants and allow natural trailing growth instead of densely filling every wall pot."
+      ]
     },
     {
       "number": 8,
       "id": "lighting",
       "name": "Lighting",
       "status": "planned",
-      "summary": "Add restrained warm accent lighting after the pond system is stable."
+      "summary": "Add restrained warm accent lighting after the pond system is stable.",
+      "notes": [
+        "Prioritize subtle Buddha and jasmine accent lighting over bright pond-edge lighting.",
+        "Primary filtration should use reliable continuous power; decorative lighting can be solar."
+      ]
     }
   ],
   "decisions": [
@@ -137,7 +201,12 @@
     {
       "item": "UV clarifier",
       "status": "open",
-      "decision": "Optional later if persistent green-water algae warrants it."
+      "decision": "Optional later if persistent green-water algae warrants it; do not treat UV as mandatory equipment."
+    },
+    {
+      "item": "Permanent pond vessel",
+      "status": "open",
+      "decision": "Evaluate the existing 11 ft raised planter for safe conversion and compare it with the Algreen Manhattan as the preferred purpose-built candidate. Pennington remains an alternate; the separate 4 ft × 2 ft × 2 ft build is paused."
     },
     {
       "item": "Jasmine layout",
