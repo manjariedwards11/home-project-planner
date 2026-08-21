@@ -12,7 +12,7 @@
     "min": 635,
     "max": 1200
   },
-  "actualSpentToDate": 137.13,
+  "actualSpentToDate": 283.32,
   "currency": "USD",
   "phase1Completion": {
     "status": "complete",
@@ -63,7 +63,9 @@
       "label": "Pond",
       "estimatedMin": 125,
       "estimatedMax": 200,
-      "actual": null
+      "actual": 146.19,
+      "actualStatus": "complete",
+      "note": "Brownstone Algreen Manhattan purchased from Wayfair. Actual includes $11.20 tax; shipping was $0."
     },
     {
       "phase": 3,
@@ -117,5 +119,5 @@
       "actual": null
     }
   ],
-  "accountingNote": "The $30 Smartpond Filter Kit with Pump is counted under Phase 3 pump/filter/fountain equipment. Phase 1 actual remains $107.13; total project spend remains $137.13. Phase 7 is now a future fish-readiness brainstorming item and is excluded from the current estimated build total until activated."
+  "accountingNote": "Phase 1 actual is $107.13. Phase 2 actual is $146.19 all-in for the Brownstone Wayfair Manhattan, including $11.20 tax and $0 shipping. The $30 Smartpond Filter Kit with Pump is counted under Phase 3. Total project spend is $283.32. Phase 7 remains excluded from the current estimated build total until activated."
 }
