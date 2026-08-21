@@ -368,6 +368,9 @@
           <td>${esc(i.item)}
             ${i.status ? `<span class="caption-note"><span class="pill ${statusPillClass(i.status)}">${esc(shoppingStatusLabel(i.status))}</span></span>` : ''}
             ${i.role ? `<span class="caption-note">${esc(i.role)}</span>` : ''}
+            ${i.estimatedDeliveryStart || i.estimatedDeliveryEnd
+              ? `<span class="caption-note">Delivery ${esc(i.estimatedDeliveryStart || '')}${i.estimatedDeliveryEnd ? ` – ${esc(i.estimatedDeliveryEnd)}` : ''}</span>`
+              : ''}
             ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
           </td>
           <td class="col-est">${estCell}</td>
@@ -616,6 +619,9 @@
             <span class="pill ${statusPillClass(i.status)}">${esc(shoppingStatusLabel(i.status))}</span>
             ${i.store ? ' ' + esc(i.store) : ''}${i.link ? ` &middot; <a href="${esc(i.link)}" target="_blank" rel="noopener">link</a>` : ''}
           </span>
+          ${i.estimatedDeliveryStart || i.estimatedDeliveryEnd
+            ? `<span class="caption-note">Delivery ${esc(i.estimatedDeliveryStart || '')}${i.estimatedDeliveryEnd ? ` – ${esc(i.estimatedDeliveryEnd)}` : ''}</span>`
+            : ''}
           ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
         </td>
         <td class="col-est">${esc(optionalMoney(i.price, currency))}</td>
@@ -655,13 +661,19 @@
   }
 
   function renderPhaseSidebar(phase, project, opts) {
+    // A detail file may carry its list as shoppingList (planned, in progress or
+    // purchased) or, before a purchase, as pendingShoppingList. Route either
+    // through the same renderer rather than tying the shape to the file kind.
+    const detail = opts.completion || opts.decision;
     let card;
-    if (opts.completion) {
-      card = renderCompletionShopping(phase, project, opts.completion, opts.costRow)
+    if (detail && detail.shoppingList) {
+      card = renderCompletionShopping(phase, project, detail, opts.costRow)
         + renderPhaseShoppingRecords(phase, project, true);
-    } else if (opts.decision) {
+    } else if (opts.decision && opts.decision.pendingShoppingList) {
       card = renderPendingShoppingCard(phase, project, opts.decision)
         + renderPhaseShoppingRecords(phase, project, true);
+    } else if (detail) {
+      card = renderPhaseShoppingRecords(phase, project, false);
     } else {
       card = renderPlainShoppingCard(phase, project, opts.costRow);
     }
@@ -700,6 +712,10 @@
 
     if (phase.timeHorizon || comp.timeHorizon) {
       html += `<div class="notice"><strong>Time horizon:</strong> ${esc(phase.timeHorizon || comp.timeHorizon)}</div>`;
+    }
+
+    if (phase.purchase) {
+      html += renderPurchase(phase.purchase, currency);
     }
 
     if (comp.currentDecision) {
@@ -849,6 +865,33 @@
   }
 
 
+  // The purchase record for a settled decision: what was bought, from whom,
+  // and how the total breaks down.
+  function renderPurchase(purchase, currency) {
+    if (!purchase) return '';
+    const spec = (label, value) => value != null && value !== ''
+      ? `<div class="spec"><span class="spec-label">${esc(label)}</span><span>${esc(value)}</span></div>`
+      : '';
+    const cash = (label, value) => value != null
+      ? `<div class="spec"><span class="spec-label">${esc(label)}</span><span>${esc(money(value, currency))}</span></div>`
+      : '';
+    return `
+      <div class="box purchase-box">
+        <h3>Purchased${purchase.date ? ` &middot; ${esc(purchase.date)}` : ''}</h3>
+        <div class="fin-specs">
+          ${spec('Item', purchase.item)}
+          ${spec('Colour', purchase.color)}
+          ${spec('Retailer', purchase.retailer)}
+          ${purchase.quantity != null ? spec('Quantity', String(purchase.quantity)) : ''}
+          ${cash('Subtotal', purchase.subtotal)}
+          ${cash('Shipping', purchase.shipping)}
+          ${cash('Tax', purchase.tax)}
+          ${cash('Total paid', purchase.totalPaid)}
+          ${spec('Delivery', purchase.estimatedDelivery)}
+        </div>
+      </div>`;
+  }
+
   function renderDecisionPanel(decision, phase, project) {
     const currency = project.currency;
     // A compact strip here; the full spec cards live in the Decisions log.
@@ -892,6 +935,7 @@
           — <em>${esc(humanizeSlug(decision.decisionState || ''))}</em>
         </div>` : ''}
       ${intro ? `<div class="box intro-box">${intro}</div>` : ''}
+      ${renderPurchase(decision.purchase, currency)}
       <div class="fin-briefs">${finalists}</div>
       ${rationaleLink}
       ${decision.completionRule ? `<div class="notice">${esc(decision.completionRule)}</div>` : ''}`;
