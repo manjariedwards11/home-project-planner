@@ -5,13 +5,11 @@
   "phaseId": "nursery",
   "title": "Lotus Nursery",
   "status": "complete",
-  "goal": "Keep the babies growing while the permanent pond is built.",
-  "summary": "Establish three seed-grown lotus seedlings in the temporary nursery and keep the water gently moving while they mature.",
+  "goal": "Keep the lotus seedlings healthy while the permanent pond is built.",
   "phaseEstimate": {
     "min": 60,
     "max": 100,
-    "currency": "USD",
-    "label": "Original Phase 1 estimate"
+    "currency": "USD"
   },
   "actualTotal": 107.13,
   "shoppingList": {
@@ -19,7 +17,6 @@
     "estimatedTotalMin": 60,
     "estimatedTotalMax": 100,
     "actualTotal": 107.13,
-    "estimateNote": "The original Phase 1 estimate was recorded only as a total range of $60–100. Item-level estimates were not recorded before purchase, so they are intentionally left blank rather than reconstructed after the fact.",
     "items": [
       {
         "item": "22-inch temporary nursery pond",
@@ -51,28 +48,13 @@
         "actualCost": 60.39,
         "status": "bought"
       }
-    ]
+    ],
+    "estimateNote": "Item-level estimates were not recorded before purchase."
   },
-  "completedWork": [
-    "Temporary nursery container",
-    "8-inch solid plastic lotus planting pot",
-    "Aquatic planting media",
-    "White pea gravel cap",
-    "API Stress Coat dechlorinator",
-    "Solar floating fountain",
-    "Smartpond Filter Kit with Pump"
-  ],
-  "notes": [
-    "The $30 Smartpond kit is appropriately sized for the small nursery, not the permanent pond.",
-    "Some algae in a small sunny nursery is normal; remove visible debris or string algae instead of repeatedly draining and restarting the container.",
-    "Keep only a few inches of water above the gravel while the seedlings are young so the leaves can readily reach the surface."
-  ],
-  "crossPhaseAccountingNote": "The $30 Smartpond Filter Kit with Pump is physically used with the nursery but is accounted for under Phase 3 pump/filter equipment. It is not included in the $107.13 Phase 1 shopping total.",
   "completionMemory": {
     "title": "End of Phase 1",
     "status": "awaiting-image",
     "image": null,
-    "caption": "Lotus nursery established and the seedlings are growing while the permanent pond is built."
-  },
-  "contentNote": "This file is additive. Preserve all existing Phase 1 user-facing content when rendering it; reorganize rather than delete."
+    "caption": "Lotus nursery established and seedlings growing."
+  }
 }
