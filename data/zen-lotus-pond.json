@@ -10,239 +10,85 @@
   "spentToDate": 283.32,
   "currency": "USD",
   "lastContentUpdate": "2026-08-21",
-  "nextAction": "Finalize the fish-ready Phase 3 main pump, mechanical/biological filtration and quiet return for the purchased Brownstone Algreen Manhattan while keeping the existing Smartpond kit as the visible gentle fountain.",
+  "nextAction": "Choose the permanent main pump and mechanical/biological filter for the Brownstone Manhattan pond.",
   "goals": [
-    "Low-maintenance serene lotus water feature",
-    "Clean moving water with minimal visible algae and larvae",
-    "Start fishless while building circulation and filtration with possible future small fish in mind",
-    "Professional compact design framed by jasmine and Buddha",
-    "Keep routine maintenance small and predictable"
+    "Serene, low-maintenance lotus water garden",
+    "Clean moving water with predictable upkeep",
+    "Start fishless while making the filtration fish-ready for a possible future addition"
   ],
   "siteConstraints": {
-    "climate": "Very hot summer climate; temperatures can reach about 110°F",
-    "preferredWaterMovement": "Gentle bubbler or low fountain to limit evaporation",
-    "maintenanceTarget": "A few minutes weekly in hot weather plus roughly 10–15 minutes monthly for filter cleaning as needed",
-    "designIntent": "Architectural rectangular pond with open reflective water, lotus and Buddha, framed by jasmine rather than a stock-tank look"
+    "climate": "Very hot Arizona summers; temperatures can reach about 110°F",
+    "maintenanceTarget": "A few minutes weekly plus periodic filter cleaning",
+    "designIntent": "Brownstone rectangular pond with lotus, Buddha, gentle fountain and jasmine"
   },
   "budget": {
     "planned": null,
     "spentToDate": 283.32,
     "remaining": null,
-    "status": "not-set",
-    "note": "A total project budget has not been locked yet. Actual spend is tracked as purchases are confirmed."
+    "status": "tracked-in-cost-plan",
+    "note": "Target budget and phase estimates are maintained in the cost plan."
   },
   "shopping": [
     {
-      "phase": 1,
-      "item": "Aquascape Pond Plant Potting Media",
+      "phase": 2,
+      "item": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
       "status": "bought",
-      "price": null,
-      "store": "Amazon",
-      "link": "https://a.co/d/084akjXk",
-      "actualCost": null,
-      "budget": null,
-      "note": "Included within the previously recorded nursery-supplies total; individual cost was not separated."
-    },
-    {
-      "phase": 1,
-      "item": "8-inch solid plastic lotus planting pot",
-      "status": "bought",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Included within the previously recorded nursery-supplies total."
-    },
-    {
-      "phase": 1,
-      "item": "White pea gravel",
-      "status": "bought",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Used as the gravel cap for the nursery lotus pot."
-    },
-    {
-      "phase": 1,
-      "item": "API Stress Coat dechlorinator",
-      "status": "bought",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Used to condition nursery water."
-    },
-    {
-      "phase": 1,
-      "item": "Solar floating fountain",
-      "status": "bought",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Provides light surface movement in the nursery; it is not permanent-pond filtration."
+      "store": "Wayfair",
+      "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036",
+      "actualCost": 146.19,
+      "note": "Purchased August 21, 2026; $134.99 subtotal + $11.20 tax."
     },
     {
       "phase": 3,
       "item": "Smartpond Filter Kit with Pump",
       "status": "bought",
-      "price": 30.0,
       "store": "Lowe's",
-      "link": null,
       "actualCost": 30.0,
       "estimatedMin": 30.0,
       "estimatedMax": 30.0,
-      "budget": null,
-      "note": "Already purchased. Keep it as the gentle visible fountain/surface-movement component; do not rely on it as the permanent mechanical and biological filtration system."
-    },
-    {
-      "phase": 2,
-      "item": "Existing raised planter conversion",
-      "status": "not-selected",
-      "price": null,
-      "store": "Existing structure",
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Earlier leading option if structurally safe; retained as decision history but no longer the preferred direction."
-    },
-    {
-      "phase": 2,
-      "item": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
-      "status": "bought",
-      "price": 134.99,
-      "store": "Wayfair",
-      "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036",
-      "actualCost": 146.19,
-      "itemSubtotal": 134.99,
-      "tax": 11.20,
-      "shipping": 0.0,
-      "purchaseDate": "2026-08-21",
-      "estimatedDeliveryStart": "2026-08-26",
-      "estimatedDeliveryEnd": "2026-08-29",
-      "budget": null,
-      "note": "Purchased in Brownstone. Actual Phase 2 spend is $146.19 all-in, including $11.20 tax and $0 shipping."
-    },
-    {
-      "phase": 2,
-      "item": "Pennington 50-gallon Aquagarden",
-      "status": "not-selected-final-alternate",
-      "price": null,
-      "store": "Walmart",
-      "link": "https://www.walmart.com/ip/Pennington-50-gal-Aquagarden-Resin-Pond-Kit-Multi-Color/13240014659",
-      "actualCost": null,
-      "budget": null,
-      "note": "Final alternate retained as decision history; less preferred aesthetically than the Algreen Manhattan."
-    },
-    {
-      "phase": 2,
-      "item": "Rounded poly stock tank",
-      "status": "rejected",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Rejected because the stock-tank appearance does not match the intended architectural design."
-    },
-    {
-      "phase": 2,
-      "item": "General-purpose large storage tote as permanent pond",
-      "status": "rejected",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Rejected as a freestanding permanent vessel because general-purpose totes are not designed for years of continuous hydrostatic pressure."
+      "note": "Use as the visible gentle fountain, not the main filter."
     },
     {
       "phase": 3,
       "item": "Adjustable main pond pump, approximately 300–500 GPH rated",
       "status": "need-to-buy",
-      "price": null,
-      "store": null,
-      "link": null,
       "actualCost": null,
       "estimatedMin": 35.0,
-      "estimatedMax": 60.0,
-      "budget": null,
-      "note": "Target roughly 200–300 GPH actual flow through filtration after normal plumbing/head losses. Final model selection can now be made around the purchased Manhattan vessel."
+      "estimatedMax": 60.0
     },
     {
       "phase": 3,
-      "item": "Mechanical + biological filter with generous bio-media capacity",
+      "item": "Mechanical + biological filter with bio-media",
       "status": "need-to-buy",
-      "price": null,
-      "store": null,
-      "link": null,
       "actualCost": null,
       "estimatedMin": 65.0,
-      "estimatedMax": 110.0,
-      "budget": null,
-      "note": "Size comfortably above current fishless needs so a small future fish population can be considered without rebuilding the filtration system."
+      "estimatedMax": 110.0
     },
     {
       "phase": 3,
-      "item": "Tubing, valves/flow control and quiet return fittings",
+      "item": "Tubing, flow control and quiet return fittings",
       "status": "need-to-buy",
-      "price": null,
-      "store": null,
-      "link": null,
       "actualCost": null,
       "estimatedMin": 20.0,
-      "estimatedMax": 35.0,
-      "budget": null,
-      "note": "Exact fittings depend on the final pump/filter location. Use a quiet return so the Smartpond kit remains the primary visible fountain."
-    },
-    {
-      "phase": 4,
-      "item": "Structural reinforcement and/or pond-grade liner",
-      "status": "considering",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Conditional purchase only if the selected permanent pond solution requires it."
+      "estimatedMax": 35.0
     },
     {
       "phase": 5,
       "item": "Two white jasmine planters",
       "status": "need-to-buy",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Use large enough soil volume for extreme summer heat."
+      "actualCost": null
     },
     {
       "phase": 5,
       "item": "Two black jasmine trellises",
       "status": "need-to-buy",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Keep foliage light and airy rather than forming a dense wall."
+      "actualCost": null
     },
     {
-      "phase": 8,
-      "item": "Warm solar accent lighting",
+      "phase": 7,
+      "item": "Warm accent lighting",
       "status": "need-to-buy",
-      "price": null,
-      "store": null,
-      "link": null,
-      "actualCost": null,
-      "budget": null,
-      "note": "Final finishing purchase after the pond and planting system are stable."
+      "actualCost": null
     }
   ],
   "phases": [
@@ -252,27 +98,8 @@
       "name": "Lotus Nursery",
       "status": "complete",
       "spent": 107.13,
-      "summary": "Establish three seed-grown lotus seedlings in the temporary nursery and keep the water gently moving while they mature.",
-      "items": [
-        "Temporary nursery container",
-        "8-inch solid plastic lotus planting pot",
-        "Aquatic planting media",
-        "White pea gravel cap",
-        "API Stress Coat dechlorinator",
-        "Solar floating fountain",
-        "Smartpond Filter Kit with Pump"
-      ],
-      "spendBreakdown": [
-        {
-          "label": "Phase 1 nursery purchases",
-          "amount": 107.13
-        }
-      ],
-      "notes": [
-        "The $30 Smartpond kit is physically useful with the nursery but is accounted for under Phase 3 equipment and is not included in the $107.13 Phase 1 total.",
-        "Some algae in a small sunny nursery is normal; remove visible debris or string algae instead of repeatedly draining and restarting the container.",
-        "Keep only a few inches of water above the gravel while the seedlings are young so the leaves can readily reach the surface."
-      ]
+      "summary": "Keep the lotus seedlings healthy while the permanent pond is built.",
+      "detailFile": "data/zen-lotus-pond-phase-1-completion.json"
     },
     {
       "number": 2,
@@ -280,59 +107,8 @@
       "name": "Pond Decision",
       "status": "complete",
       "spent": 146.19,
-      "summary": "Permanent pond decision complete. The Algreen Manhattan 40-inch Balcony Planter & Pond in Brownstone was purchased from Wayfair on August 21, 2026 for $146.19 all-in.",
-      "purchase": {
-        "item": "Algreen Manhattan 40-inch Balcony Planter & Pond",
-        "color": "Brownstone",
-        "retailer": "Wayfair",
-        "purchaseDate": "2026-08-21",
-        "subtotal": 134.99,
-        "shipping": 0.0,
-        "tax": 11.20,
-        "totalPaid": 146.19,
-        "estimatedDelivery": "August 26–29, 2026"
-      },
-      "decisionCriteria": [
-        "Purpose-built or structurally verified for continuous water load",
-        "Rectangular architectural appearance",
-        "Enough depth and water volume for lotus stability in extreme summer heat",
-        "Straightforward path for pump, mechanical filtration and biological filtration",
-        "Low routine maintenance",
-        "Reasonable total cost after structure, liner, pump and filter are included"
-      ],
-      "candidates": [
-        {
-          "name": "Existing raised planter conversion",
-          "status": "not-selected",
-          "priority": "historical-option",
-          "dimensions": "Approximately 11 ft × 3 ft × 22 in",
-          "estimatedVolume": "Roughly 350–400 gallons operating volume if converted substantially to water",
-          "notes": "Earlier option retained for decision history. It would have required verification of framing, cross-bracing, bottom support, liner type/condition, seams, penetrations and patio/slab support before conversion."
-        },
-        {
-          "name": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
-          "status": "selected-purchased",
-          "priority": "selected-purpose-built-vessel",
-          "dimensions": "40 in W × 20 in D × 18 in H",
-          "notes": "Selected and purchased because the rectangular form fits the architectural design, Brownstone was the chosen color, and the vessel lets Phase 3 filtration be chosen separately.",
-          "links": [
-            {
-              "label": "Wayfair Manhattan 40 Balcony Planter Pond",
-              "url": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036"
-            }
-          ]
-        },
-        {
-          "name": "Pennington 50-gallon Aquagarden",
-          "status": "not-selected-final-alternate",
-          "notes": "All-in-one option considered, but less preferred aesthetically than the Algreen Manhattan."
-        },
-        {
-          "name": "Separate 4 ft × 2 ft × 2 ft raised pond",
-          "status": "paused",
-          "notes": "Earlier custom-build option retained as history. If this route ever returns, use a properly framed/braced structural shell with pond-grade underlayment and liner rather than a general-purpose storage tote."
-        }
-      ]
+      "summary": "Brownstone Algreen Manhattan pond purchased from Wayfair for $146.19 all-in.",
+      "detailFile": "data/zen-lotus-pond-phase-2-decision.json"
     },
     {
       "number": 3,
@@ -340,133 +116,73 @@
       "name": "Pump + Filter + Fountain",
       "status": "current",
       "spent": 30.0,
-      "summary": "Build the permanent circulation and filtration system so the pond runs fishless now but has enough mechanical and biological capacity for a possible small fish population later without rebuilding the system.",
-      "decisionGate": "The Manhattan vessel is now purchased. Finalize the main pump/filter around the approximately 40 × 20 × 18-inch vessel and the actual filter/return placement.",
-      "requirements": [
-        "Keep the existing Smartpond kit as the gentle visible fountain and surface-movement feature",
-        "Adjustable main pond pump in roughly the 300–500 GPH rated range",
-        "Target approximately 200–300 GPH actual flow through filtration after normal flow losses",
-        "Mechanical filtration to catch leaves, dirt and dead algae",
-        "Biological filtration with generous bio-media capacity sized with possible future fish in mind",
-        "Tubing, flow control and a quiet filtered-water return"
-      ],
-      "spendBreakdown": [
-        {
-          "label": "Smartpond Filter Kit with Pump from Lowe's",
-          "amount": 30.0
-        }
-      ],
-      "notes": [
-        "The pond will start fishless, but Phase 3 should be built with future fish-readiness in mind.",
-        "UV clarifier is optional and should be added only if persistent free-floating green-water algae becomes a problem.",
-        "UV does not solve string algae, wall algae, debris, mosquitoes, worms or odor.",
-        "The Smartpond kit is retained for the visible fountain/surface movement; separate mechanical and biological filtration is still required.",
-        "Future fish are a later decision and are not part of the initial build."
-      ]
+      "summary": "Install permanent circulation and filtration sized for the pond now and possible small fish later.",
+      "detailFile": "data/zen-lotus-pond-phase-3-system.json"
     },
     {
       "number": 4,
       "id": "structure-liner",
       "name": "Structure / Liner",
       "status": "conditional",
-      "summary": "Reinforce the pond shell or replace/add pond-grade liner only if the selected permanent pond solution requires it.",
-      "notes": [
-        "This phase could become very small or disappear if a purpose-built pond vessel is selected.",
-        "If the existing planter is selected, structural suitability must be confirmed before filling."
-      ]
+      "summary": "Only add structural or liner work if the final installation requires it."
     },
     {
       "number": 5,
       "id": "jasmine",
       "name": "Jasmine",
       "status": "planned",
-      "summary": "Frame the pond with two jasmine planters and black trellises using intentionally light foliage density.",
-      "layout": "Jasmine — Pond — Jasmine, all in the same row",
-      "notes": [
-        "Use two white planters and two black trellises.",
-        "Keep jasmine airy rather than creating a dense solid foliage wall.",
-        "Provide adequate soil volume and reliable watering for extreme summer heat."
-      ]
+      "summary": "Frame the pond with two white planters and black jasmine trellises."
     },
     {
       "number": 6,
       "id": "lotus-buddha",
       "name": "Lotus + Buddha",
       "status": "planned",
-      "summary": "Place lotus on one side, Buddha beside the lotus, fountain toward the opposite side, and preserve open reflective water.",
-      "notes": [
-        "Avoid overfilling the pond visually; open water is part of the serenity goal.",
-        "A tiny partially submerged flat stone can be added later for occasional bird drinking if desired, without creating a broad bird-bathing platform."
-      ]
+      "summary": "Place lotus, Buddha and gentle fountain while preserving open water."
     },
     {
       "number": 7,
-      "id": "future-fish-ready",
-      "name": "Future State — Fish Ready Prep",
-      "status": "future-idea",
-      "timeHorizon": "Revisit in about one year after the pond has been established and observed through the seasons.",
-      "summary": "Brainstorm whether adding a small fish population is appropriate only after the pond proves stable in Arizona conditions. No current purchases or design changes are committed.",
-      "notes": [
-        "Pothos has been removed from the final design; keep the established pond, lotus, Buddha, fountain and jasmine look as-is.",
-        "Review real summer water temperatures and oxygen needs before deciding whether fish are appropriate.",
-        "Verify the Phase 3 biological filtration has matured and has enough capacity for a small fish load.",
-        "If fish are pursued, choose only a conservative number of small fish appropriate for the actual water volume and Arizona heat; no koi.",
-        "Decide later whether dedicated aeration, water-testing supplies or other fish-specific equipment are needed before adding fish."
-      ]
-    },
-    {
-      "number": 8,
       "id": "lighting",
       "name": "Lighting",
       "status": "planned",
-      "summary": "Add restrained warm accent lighting after the pond system is stable.",
-      "notes": [
-        "Prioritize subtle Buddha and jasmine accent lighting over bright pond-edge lighting.",
-        "Primary filtration should use reliable continuous power; decorative lighting can be solar."
-      ]
+      "summary": "Add restrained warm accent lighting after the pond is stable."
+    },
+    {
+      "number": 8,
+      "id": "future-fish-ready",
+      "name": "Future State — Fish Ready Prep",
+      "status": "future-idea",
+      "timeHorizon": "Revisit in about one year.",
+      "summary": "Reassess whether a small fish population is appropriate after the pond has proven stable through Arizona seasons.",
+      "detailFile": "data/zen-lotus-pond-phase-8-future-fish.json"
     }
   ],
   "decisions": [
     {
+      "item": "Permanent pond",
+      "status": "locked",
+      "decision": "Brownstone Algreen Manhattan 40-inch pond purchased from Wayfair."
+    },
+    {
       "item": "Fish",
       "status": "future-state",
-      "decision": "Start fishless. Build Phase 3 fish-ready now, then revisit whether to add a small appropriate fish population in about one year after the pond has proven stable through Arizona conditions."
-    },
-    {
-      "item": "Bamboo fountain",
-      "status": "locked",
-      "decision": "Removed; use a simple fountain or bubbler return."
-    },
-    {
-      "item": "UV clarifier",
-      "status": "open",
-      "decision": "Optional later if persistent green-water algae warrants it; do not treat UV as mandatory equipment."
-    },
-    {
-      "item": "Permanent pond vessel",
-      "status": "locked-purchased",
-      "decision": "Brownstone Algreen Manhattan 40-inch Balcony Planter & Pond purchased from Wayfair on August 21, 2026 for $146.19 all-in. Pennington remains as decision history only."
-    },
-    {
-      "item": "Pond color",
-      "status": "locked",
-      "decision": "Brownstone selected for the Algreen Manhattan."
-    },
-    {
-      "item": "Jasmine layout",
-      "status": "locked",
-      "decision": "Jasmine — Pond — Jasmine in one row, with lighter foliage density."
+      "decision": "Start fishless; revisit a small fish population in about one year."
     },
     {
       "item": "Pothos",
       "status": "removed",
-      "decision": "Removed from the final design. Keep the established pond look as-is."
+      "decision": "Removed from the final design."
+    },
+    {
+      "item": "Jasmine layout",
+      "status": "locked",
+      "decision": "Jasmine — Pond — Jasmine."
     }
   ],
   "maintenance": [
     {
       "frequency": "Weekly in hot weather",
-      "task": "Remove visible debris/string algae and check water level",
+      "task": "Remove debris/string algae and check water level",
       "time": "2–5 minutes"
     },
     {
