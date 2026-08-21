@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "projectId": "zen-lotus-pond",
   "name": "Zen Lotus Pond",
-  "subtitle": "Backyard lotus water garden",
-  "displayTitle": "ZEN LOTUS POND — BACKYARD PLAN",
-  "lede": "Filtered, jasmine-flanked lotus water garden with Buddha and simple moving water.",
+  "subtitle": "Lotus water garden",
+  "displayTitle": "ZEN LOTUS POND — WATER GARDEN PLAN",
+  "lede": "Brownstone rectangular lotus pond with Buddha, jasmine, gentle moving water and low-maintenance filtration.",
   "status": "underway",
   "currentPhase": 3,
   "spentToDate": 283.32,
@@ -18,6 +18,7 @@
   ],
   "siteConstraints": {
     "climate": "Very hot Arizona summers; temperatures can reach about 110°F",
+    "location": "Final placement — front courtyard/patio or backyard patio — will be confirmed in Phase 4",
     "maintenanceTarget": "A few minutes weekly plus periodic filter cleaning",
     "designIntent": "Brownstone rectangular pond with lotus, Buddha, gentle fountain and jasmine"
   },
@@ -73,6 +74,13 @@
       "estimatedMax": 35.0
     },
     {
+      "phase": 4,
+      "item": "Leveling/base materials, only if needed",
+      "status": "conditional",
+      "actualCost": null,
+      "note": "Buy only if the chosen location is not already flat, level and stable."
+    },
+    {
       "phase": 5,
       "item": "Two white jasmine planters",
       "status": "need-to-buy",
@@ -85,10 +93,18 @@
       "actualCost": null
     },
     {
+      "phase": 5,
+      "item": "Jasmine plants — reuse existing if suitable, otherwise buy two",
+      "status": "considering",
+      "actualCost": null
+    },
+    {
       "phase": 7,
       "item": "Warm accent lighting",
       "status": "need-to-buy",
-      "actualCost": null
+      "actualCost": null,
+      "estimatedMin": 50.0,
+      "estimatedMax": 125.0
     }
   ],
   "phases": [
@@ -104,7 +120,7 @@
     {
       "number": 2,
       "id": "pond-decision",
-      "name": "Pond Decision",
+      "name": "Pond Selection",
       "status": "complete",
       "spent": 146.19,
       "summary": "Brownstone Algreen Manhattan pond purchased from Wayfair for $146.19 all-in.",
@@ -117,43 +133,83 @@
       "status": "current",
       "spent": 30.0,
       "summary": "Install permanent circulation and filtration sized for the pond now and possible small fish later.",
+      "requirements": [
+        "Keep the Smartpond kit as the gentle visible fountain",
+        "Add an adjustable 300–500 GPH main pump",
+        "Add mechanical + biological filtration with bio-media",
+        "Connect with tubing, flow control and a quiet return"
+      ],
       "detailFile": "data/zen-lotus-pond-phase-3-system.json"
     },
     {
       "number": 4,
-      "id": "structure-liner",
-      "name": "Structure / Liner",
-      "status": "conditional",
-      "summary": "Only add structural or liner work if the final installation requires it."
+      "id": "pond-placement",
+      "name": "Pond Placement + Setup",
+      "status": "planned",
+      "summary": "Choose the final location, level the Manhattan pond and test the setup before planting.",
+      "requirements": [
+        "Choose front courtyard/patio or backyard patio",
+        "Confirm sun exposure, heat, power access and maintenance access",
+        "Set the pond on a flat, level and stable surface",
+        "Plan pump/filter placement and cable routing",
+        "Fill and leak-test before moving the lotus"
+      ],
+      "detailFile": "data/zen-lotus-pond-phase-4-placement.json"
     },
     {
       "number": 5,
       "id": "jasmine",
-      "name": "Jasmine",
+      "name": "Jasmine Frame",
       "status": "planned",
-      "summary": "Frame the pond with two white planters and black jasmine trellises."
+      "summary": "Frame the pond with jasmine while keeping the composition light and uncluttered.",
+      "layout": "Jasmine — Pond — Jasmine",
+      "requirements": [
+        "Use two white planters",
+        "Use two black trellises",
+        "Keep jasmine growth airy rather than forming a dense wall"
+      ],
+      "detailFile": "data/zen-lotus-pond-phase-5-jasmine.json"
     },
     {
       "number": 6,
       "id": "lotus-buddha",
       "name": "Lotus + Buddha",
       "status": "planned",
-      "summary": "Place lotus, Buddha and gentle fountain while preserving open water."
+      "summary": "Move the lotus into the permanent pond and finish the central Zen composition.",
+      "requirements": [
+        "Transfer the established lotus into the Manhattan",
+        "Place Buddha beside the lotus",
+        "Keep the gentle fountain opposite the lotus",
+        "Preserve open reflective water"
+      ],
+      "detailFile": "data/zen-lotus-pond-phase-6-lotus-buddha.json"
     },
     {
       "number": 7,
       "id": "lighting",
-      "name": "Lighting",
+      "name": "Lighting + Finishing",
       "status": "planned",
-      "summary": "Add restrained warm accent lighting after the pond is stable."
+      "summary": "Add restrained warm lighting and finish the visible details after the pond is stable.",
+      "requirements": [
+        "Warm accent light on jasmine",
+        "Subtle Buddha accent",
+        "Hide and secure visible wiring/hardware"
+      ],
+      "detailFile": "data/zen-lotus-pond-phase-7-lighting.json"
     },
     {
       "number": 8,
       "id": "future-fish-ready",
-      "name": "Future State — Fish Ready Prep",
+      "name": "Future Fish Decision",
       "status": "future-idea",
       "timeHorizon": "Revisit in about one year.",
-      "summary": "Reassess whether a small fish population is appropriate after the pond has proven stable through Arizona seasons.",
+      "summary": "Decide whether a small fish population is appropriate after the pond has proven stable through Arizona seasons.",
+      "requirements": [
+        "Review summer water temperature and oxygen",
+        "Confirm the biological filter is mature and adequate",
+        "Choose only a conservative number of small fish if conditions support them",
+        "Add testing or aeration equipment only if the future review shows it is needed"
+      ],
       "detailFile": "data/zen-lotus-pond-phase-8-future-fish.json"
     }
   ],
@@ -162,6 +218,11 @@
       "item": "Permanent pond",
       "status": "locked",
       "decision": "Brownstone Algreen Manhattan 40-inch pond purchased from Wayfair."
+    },
+    {
+      "item": "Pond location",
+      "status": "open",
+      "decision": "Choose front courtyard/patio or backyard patio in Phase 4."
     },
     {
       "item": "Fish",
