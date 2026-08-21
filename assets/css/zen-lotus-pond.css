@@ -211,7 +211,10 @@
   background:var(--card);border:1px solid var(--line);border-radius:6px;
   padding:8px 10px;min-width:0;
 }
-.fin-brief.is-preferred{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.fin-brief.is-chosen{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+/* Once bought, the chosen option is settled news: green, not live-accent. */
+.fin-brief.is-chosen.is-settled{border-color:var(--green);box-shadow:inset 3px 0 0 var(--green)}
+.fin-brief.is-chosen.is-settled .fin-brief-price{color:var(--green)}
 .fin-brief-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px}
 .fin-brief-name{font-size:12px;font-weight:800;line-height:1.2}
 .fin-brief-meta{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -228,7 +231,9 @@
   background:var(--card);border:1px solid var(--line);border-radius:6px;
   padding:9px 11px;min-width:0;font-size:12px;line-height:1.3;
 }
-.finalist.is-preferred{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.finalist.is-chosen{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.finalist.is-chosen.is-settled{border-color:var(--green);box-shadow:inset 3px 0 0 var(--green)}
+.finalist.is-chosen.is-settled .fin-price{color:var(--green)}
 .fin-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px}
 .fin-head h3{font-size:12.5px;margin:0;line-height:1.2;font-weight:800}
 .fin-price{font-size:15px;font-weight:800;color:var(--accent);margin-bottom:5px;line-height:1.1}

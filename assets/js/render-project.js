@@ -62,11 +62,35 @@
     return `${symbol}${wholeAmount(min)}–${wholeAmount(max)}`;
   }
 
+  // Statuses arrive as compound slugs ("selected-purchased",
+  // "not-selected-final-alternate"), so match on meaning rather than exact
+  // strings — and test the negatives first, since "not-selected" contains
+  // "selected".
+  function isNegativeStatus(status) {
+    return /^(not-|rejected|paused|alternate|excluded)|not-selected|not-active|future-idea/.test(String(status));
+  }
+
+  function isSettledStatus(status) {
+    if (isNegativeStatus(status)) return false;
+    return /complete|purchased|bought|locked|selected|done/.test(String(status));
+  }
+
+  function isPendingStatus(status) {
+    if (isNegativeStatus(status) || isSettledStatus(status)) return false;
+    return /open|conditional|under-evaluation|candidate|considering|need-to-buy|pending|in-planning|preferred|current/.test(String(status));
+  }
+
+  // Green = settled, amber = still in play, neutral = not happening.
   function statusPillClass(status) {
-    if (status === 'locked' || status === 'complete' || status === 'bought') return 'green';
-    if (status === 'future-idea' || status === 'not-active' || status === 'paused') return '';
-    if (status === 'open' || status === 'conditional' || status === 'under-evaluation' || status === 'candidate' || status === 'considering' || status === 'need-to-buy') return 'amber';
+    if (isSettledStatus(status)) return 'green';
+    if (isPendingStatus(status)) return 'amber';
     return '';
+  }
+
+  // The option that was chosen, whether still preferred or already purchased.
+  function isChosen(status) {
+    if (isNegativeStatus(status)) return false;
+    return /preferred|selected/.test(String(status));
   }
 
   // Badges are computed, not stored: "done"/"now" reflect JSON status, and
@@ -813,13 +837,13 @@
       ? `<div class="fin-price">${esc(money(c.priceSnapshot, currency))}${c.priceSnapshotDate ? `<span class="caption-note">Price snapshot ${esc(c.priceSnapshotDate)}</span>` : ''}</div>`
       : '';
     return `
-      <article class="finalist ${c.status === 'preferred' ? 'is-preferred' : ''}">
+      <article class="finalist ${isChosen(c.status) ? 'is-chosen' : ''} ${isSettledStatus(c.status) ? 'is-settled' : ''}">
         <header class="fin-head">
           <div>
             <h3>${esc(c.name)}</h3>
             <span class="caption-note">${esc(c.retailer || '')}</span>
           </div>
-          <span class="pill ${c.status === 'preferred' ? 'accent' : ''}">${esc(humanizeSlug(c.status))}</span>
+          <span class="pill ${statusPillClass(c.status)}">${esc(humanizeSlug(c.status))}</span>
         </header>
         ${price}
         <div class="fin-specs">
@@ -894,12 +918,15 @@
 
   function renderDecisionPanel(decision, phase, project) {
     const currency = project.currency;
+    // Once the decision is settled it reads green; while it is still live it
+    // keeps the accent colour.
+    const settled = isSettledStatus(decision.decisionState) || isSettledStatus(decision.status) || phase.status === 'complete';
     // A compact strip here; the full spec cards live in the Decisions log.
     const finalists = (decision.comparison || []).map((c) => `
-      <div class="fin-brief ${c.status === 'preferred' ? 'is-preferred' : ''}">
+      <div class="fin-brief ${isChosen(c.status) ? 'is-chosen' : ''} ${isSettledStatus(c.status) ? 'is-settled' : ''}">
         <div class="fin-brief-top">
           <span class="fin-brief-name">${esc(c.name)}</span>
-          <span class="pill ${c.status === 'preferred' ? 'accent' : ''}">${esc(humanizeSlug(c.status))}</span>
+          <span class="pill ${statusPillClass(c.status)}">${esc(humanizeSlug(c.status))}</span>
         </div>
         <div class="fin-brief-meta">
           <span class="fin-brief-price">${c.priceSnapshot != null ? esc(money(c.priceSnapshot, currency)) : '—'}</span>
@@ -930,15 +957,15 @@
 
     return `
       ${decision.preferredChoice ? `
-        <div class="notice accent">
-          <strong>Preferred choice:</strong> ${esc(decision.preferredChoice)}
+        <div class="notice ${settled ? 'success' : 'accent'}">
+          <strong>${settled ? 'Chosen' : 'Preferred choice'}:</strong> ${esc(decision.preferredChoice)}
           — <em>${esc(humanizeSlug(decision.decisionState || ''))}</em>
         </div>` : ''}
       ${intro ? `<div class="box intro-box">${intro}</div>` : ''}
       ${renderPurchase(decision.purchase, currency)}
       <div class="fin-briefs">${finalists}</div>
       ${rationaleLink}
-      ${decision.completionRule ? `<div class="notice">${esc(decision.completionRule)}</div>` : ''}`;
+      ${decision.completionRule ? `<div class="notice ${settled ? 'success' : ''}">${esc(decision.completionRule)}</div>` : ''}`;
   }
 
   function renderPhasePanels(project, costPlan, phaseDetails) {
