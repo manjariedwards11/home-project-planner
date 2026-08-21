@@ -1,1 +1,125 @@
-:root{--red:#b32610;--ink:#252220;--muted:#68625e;--line:#d6d1cc;--bg:#f7f5f2;--green:#2f6f39;--amber:#b67412;--card:#fff;--soft:#f0ece8}html,body{margin:0;max-width:100%;overflow-x:hidden}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}header{height:54px;background:#111;color:#fff;display:flex;align-items:center;padding:0 22px;font-size:17px;font-weight:760;letter-spacing:-.01em}.logo{width:30px;height:30px;border:1px solid #555;border-radius:8px;display:grid;place-items:center;margin-right:10px;font-size:14px}main{width:min(1280px,100%);margin:auto;padding:16px 22px 24px}.back{display:inline-block;color:#66615d;text-decoration:none;font-size:12px;font-weight:700;margin-bottom:8px}.project-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:12px}.title{font-size:20px;line-height:1.15;font-weight:850;letter-spacing:.025em;margin:0 0 4px}.lede{font-size:13.5px;line-height:1.35;color:var(--muted);margin:0}.project-status{font-size:11px;font-weight:800;color:var(--red);background:#fff0ec;border:1px solid #efc7bd;border-radius:999px;padding:5px 9px;white-space:nowrap}.tabs{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));width:100%;border:1px solid var(--line);border-bottom:2px solid #aaa;background:#fff;overflow:hidden}.tab{min-width:0;border:0;border-right:1px solid #ece8e4;background:#fff;padding:9px 5px 8px;font-weight:780;font-size:11.5px;line-height:1.1;white-space:normal;cursor:pointer;color:#2c2927;border-bottom:3px solid transparent}.tab:last-child{border-right:0}.tab:hover{background:#f6f3f0}.tab.active{color:var(--red);background:#fff7f4;border-bottom-color:var(--red)}.panel{display:none;padding:14px 0 0}.panel.active{display:block}.panel h2{font-size:18px;line-height:1.2;margin:0 0 10px;font-weight:820}.notice{background:#fff4e2;border-left:4px solid var(--amber);padding:9px 11px;margin-bottom:10px;font-size:12.5px;line-height:1.35}.success{background:#edf7ee;border-left-color:var(--green)}.road{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.phase-card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:5px;padding:10px 11px;min-height:112px}.phase-card.done{border-color:#72a27a}.phase-card.now{border-color:var(--red);background:#fff9f6}.phase-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}.phase-num{font-size:10px;font-weight:850;color:#7b746f;text-transform:uppercase;letter-spacing:.06em}.badge{font-size:9px;font-weight:850;padding:3px 5px;border-radius:3px;background:#eee}.done .badge{background:#e0f3e3;color:#215a2b}.now .badge{background:var(--red);color:white}.phase-card h3{font-size:14px;line-height:1.15;margin:0 0 4px;font-weight:820}.phase-card p{font-size:11.5px;line-height:1.3;margin:0;color:#5b5652}.price{font-size:11.5px;color:var(--red);font-weight:800;margin-top:6px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.box{background:#fff;border:1px solid var(--line);border-radius:5px;padding:11px 12px;font-size:12.5px;line-height:1.38;min-width:0}.box h3{font-size:13.5px;margin:0 0 6px}.box p{margin:0 0 7px}.box p:last-child{margin-bottom:0}.box ul{margin:4px 0 0;padding-left:17px}.box li{margin:2px 0}.diagram{max-width:100%;background:#181818;color:#fff;padding:11px 12px;border-radius:5px;white-space:pre-wrap;overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.35}table{width:100%;border-collapse:collapse;background:#fff;font-size:11.75px;table-layout:fixed}th,td{padding:7px 8px;text-align:left;border-bottom:1px solid #e2ded9;overflow-wrap:anywhere}th{background:#eeeae6;font-weight:800}.decision{color:var(--red);font-weight:800}@media(max-width:980px){.tabs{grid-template-columns:repeat(5,minmax(0,1fr))}.road{grid-template-columns:repeat(2,minmax(0,1fr))}.project-head{align-items:flex-start}.project-status{display:none}}@media(max-width:620px){header{height:50px;padding:0 14px;font-size:15px}.logo{width:28px;height:28px}main{padding:13px 14px}.title{font-size:17px}.lede{font-size:12.5px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.tab{font-size:11px;padding:8px 4px}.road,.grid{grid-template-columns:1fr}.panel{padding-top:11px}.phase-card{min-height:auto}}
+.project-shell{width:min(1440px,100%);margin:auto;padding:16px 28px 32px}
+
+.project-header{border-bottom:1.5px solid var(--line);padding-bottom:12px;margin-bottom:12px}
+.project-header h1{font-size:19px;line-height:1.2;font-weight:850;letter-spacing:.015em;margin:0 0 4px}
+.project-header .lede{font-size:12.5px;line-height:1.4;color:var(--muted);margin:0 0 12px;max-width:760px}
+
+.stat-row{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.stat{
+  background:var(--card);border:1px solid var(--line);border-radius:6px;
+  padding:6px 12px;min-width:96px;
+}
+.stat .stat-label{display:block;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.stat .stat-value{display:block;font-size:13px;font-weight:750;color:var(--ink)}
+.stat.next-action{flex:1 1 260px;min-width:200px}
+.stat.next-action .stat-value{font-weight:600;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat .progress-track{width:100%;height:4px;background:var(--soft);border-radius:2px;margin-top:5px;overflow:hidden}
+.stat .progress-fill{height:100%;background:var(--accent);border-radius:2px}
+
+.workspace{display:flex;gap:18px;align-items:flex-start}
+
+.side-nav{
+  flex:0 0 176px;width:176px;
+  display:flex;flex-direction:column;gap:2px;
+  background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px;
+  position:sticky;top:12px;
+}
+.side-nav .tab{
+  text-align:left;border:0;background:transparent;color:var(--ink);
+  padding:7px 9px;font-size:12px;font-weight:650;border-radius:5px;cursor:pointer;
+  display:flex;align-items:center;gap:6px;line-height:1.25;
+}
+.side-nav .tab:hover{background:var(--soft)}
+.side-nav .tab.active{background:var(--accent-soft);color:var(--accent);font-weight:800}
+.side-nav .tab .dot{width:6px;height:6px;border-radius:50%;background:var(--line);flex:0 0 auto}
+.side-nav .tab.status-complete .dot{background:var(--green)}
+.side-nav .tab.status-current .dot{background:var(--accent)}
+.side-nav .divider{height:1px;background:var(--line);margin:4px 2px}
+
+.panels{flex:1 1 auto;min-width:0}
+.panel{display:none}
+.panel.active{display:block}
+.panel h2{font-size:15px;line-height:1.2;margin:0 0 9px;font-weight:800}
+
+/* Roadmap */
+.roadmap-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.roadmap-head h2{margin:0}
+
+.cost-summary{display:flex;gap:8px;flex-wrap:wrap}
+.cost-fig{
+  background:var(--card);border:1px solid var(--line);border-radius:6px;
+  padding:5px 11px;min-width:104px;
+}
+.cost-fig .cost-label{display:block;font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cost-fig .cost-value{display:block;font-size:13.5px;font-weight:800;white-space:nowrap}
+/* Actual is the only committed number here, so it reads as the anchor value
+   against the two estimate ranges without shouting. */
+.cost-fig.is-actual{border-color:var(--accent);background:var(--accent-soft)}
+.cost-fig.is-actual .cost-value{color:var(--accent)}
+
+.progress-strip{display:flex;gap:3px;margin-bottom:10px}
+.progress-strip span{flex:1;height:5px;border-radius:3px;background:var(--soft)}
+.progress-strip span.complete{background:var(--green)}
+.progress-strip span.current{background:var(--accent)}
+
+.road-table td.phase-name{font-weight:700}
+.road-table td.phase-summary{color:var(--muted);font-size:11.5px}
+.road-table .col-num{width:26px;text-align:right}
+.road-table .col-status{width:104px}
+.road-table .col-est,.road-table .col-actual{width:96px;white-space:nowrap;text-align:right}
+.road-table .col-est{color:var(--muted)}
+.road-table .actual-amount{font-weight:800;color:var(--accent)}
+.road-table .qualifier{font-size:10px;color:var(--muted);font-weight:600}
+.road-table .muted{color:var(--line)}
+.road-table tr.is-complete td.phase-name{color:var(--green)}
+.road-table tr.is-current{background:var(--accent-soft)}
+.road-table tr.is-current td.phase-name{color:var(--accent)}
+.road-table tr.total-row td{border-top:2px solid var(--line);border-bottom:0;font-weight:800;background:var(--soft)}
+
+.phase-cost{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:9px;font-size:12px}
+.phase-cost .cost-label{font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.phase-cost .actual-amount{font-weight:800;color:var(--accent)}
+.phase-cost .qualifier{font-size:10px;color:var(--muted)}
+.phase-cost .muted{color:var(--line)}
+
+/* Phase panels */
+.box{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:12.5px;line-height:1.4;min-width:0;margin-bottom:9px}
+.box:last-child{margin-bottom:0}
+.box h3{font-size:12.5px;margin:0 0 5px}
+.box p{margin:0}
+.box ul{margin:0;padding-left:16px;columns:2;column-gap:18px}
+.box ul li{margin:0 0 3px;break-inside:avoid}
+
+.candidate-table td.cand-name{font-weight:700}
+.candidate-table td.cand-notes{color:var(--muted);font-size:11.5px}
+
+.decision-item{color:var(--accent);font-weight:700}
+
+@media(max-width:980px){
+  .project-shell{padding:13px 18px 24px}
+  .workspace{flex-direction:column}
+  .side-nav{
+    position:static;flex-direction:row;flex-wrap:wrap;width:100%;flex:none;
+    gap:4px;
+  }
+  .side-nav .tab{flex:0 0 auto}
+  .side-nav .divider{display:none}
+  .box ul{columns:1}
+  .roadmap-head{gap:10px}
+  .cost-fig{flex:1 1 auto;min-width:96px}
+}
+
+@media(max-width:620px){
+  .project-header h1{font-size:16px}
+  .stat{min-width:auto;flex:1 1 45%}
+  .stat.next-action{flex:1 1 100%}
+  .cost-summary{width:100%}
+  .cost-fig{flex:1 1 30%;min-width:0;padding:5px 8px}
+  .cost-fig .cost-value{font-size:12px}
+  /* The summary column is the first thing to go on a narrow screen: phase,
+     status and the two money columns carry the roadmap on their own. */
+  .road-table .phase-summary,.road-table th:nth-child(4){display:none}
+  .road-table .col-status{width:78px}
+  .road-table .col-est,.road-table .col-actual{width:74px}
+  .road-table th,.road-table td{padding:5px 6px;font-size:11px}
+}

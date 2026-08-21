@@ -1,10 +1,13 @@
-// Renders a project page (tabs, roadmap, phase panels, decisions, maintenance)
-// from its data/<project>.json file. No project facts are hard-coded here —
-// costs, statuses, decisions, next actions, and maintenance all come from JSON.
+// Renders a project page (stat bar, side nav, roadmap, phase panels,
+// decisions, shopping/budget) from its data/<project>.json file, plus an
+// optional data/<projectId>-cost-plan.json. No project facts are hard-coded
+// here — title, lede, costs, statuses, phase content, decisions, shopping,
+// and maintenance all come from JSON.
 //
 // The generic phase renderer looks at which optional fields are present
-// (summary / items / candidates / requirements / notes) and renders each with
-// a small, reusable treatment, rather than special-casing individual phases.
+// (summary / items / candidates / requirements / decisionCriteria /
+// spendBreakdown / notes) and renders each with a small, reusable
+// treatment, rather than special-casing individual phases.
 (() => {
   'use strict';
 
@@ -32,6 +35,10 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  function humanizeSlug(str) {
+    return capitalize(String(str).replace(/-/g, ' '));
+  }
+
   function money(amount, currency) {
     const symbol = { USD: '$' }[currency] || (currency ? currency + ' ' : '$');
     return symbol + Number(amount).toFixed(2);
@@ -51,113 +58,229 @@
     return `${wholeMoney(min, currency)}–${wholeMoney(max, currency)}`;
   }
 
-  // Badges are computed, not stored: "done"/"now" reflect JSON status, and
-  // "NEXT" is derived as the lowest-numbered planned phase — no separate
-  // hardcoded status category needed to reproduce today's behavior.
-  function phaseCardClassAndBadge(phase, nextPlannedNumber) {
-    if (phase.status === 'complete') return { cls: 'done', badge: '✓ DONE' };
-    if (phase.status === 'current') return { cls: 'now', badge: 'YOU ARE HERE' };
-    if (phase.status === 'planned' && phase.number === nextPlannedNumber) return { cls: '', badge: 'NEXT' };
-    return { cls: '', badge: '' };
+  function statusPillClass(status) {
+    if (status === 'locked' || status === 'complete' || status === 'bought') return 'green';
+    if (status === 'open' || status === 'conditional' || status === 'under-evaluation' || status === 'candidate' || status === 'considering' || status === 'need-to-buy') return 'amber';
+    return '';
   }
 
-  function renderCostPlan(costPlan, currency) {
-    if (!costPlan || !costPlan.phases || !costPlan.phases.length) return '';
+  // Badges are computed, not stored: "done"/"now" reflect JSON status, and
+  // "NEXT" is derived as the lowest-numbered planned phase — no separate
+  // hardcoded status category needed.
+  function phaseBadge(phase, nextPlannedNumber) {
+    if (phase.status === 'complete') return { navCls: 'status-complete', badge: '✓ Done', rowCls: 'is-complete' };
+    if (phase.status === 'current') return { navCls: 'status-current', badge: 'You are here', rowCls: 'is-current' };
+    if (phase.status === 'planned' && phase.number === nextPlannedNumber) return { navCls: '', badge: 'Next', rowCls: 'is-next' };
+    return { navCls: '', badge: '', rowCls: '' };
+  }
 
-    const phaseRows = costPlan.phases.map((p) => {
-      let actual = '—';
-      if (p.actual != null) {
-        actual = money(p.actual, currency);
-        if (p.actualStatus === 'complete') actual += ' ✓';
-        if (p.actualStatus === 'so-far') actual += ' so far';
-      }
-      return `
-        <tr>
-          <td>${esc(p.phase)} ${esc(p.label)}</td>
-          <td>${esc(moneyRange(p.estimatedMin, p.estimatedMax, currency))}</td>
-          <td>${esc(actual)}</td>
-        </tr>`;
-    }).join('');
-
+  function renderStatRow(project) {
+    const totalPhases = project.phases.length;
+    const pct = Math.round((project.currentPhase / totalPhases) * 100);
     return `
-      <div class="cost-plan" data-cost-plan>
-        <div class="box">
-          <h3>${esc(costPlan.title || 'Cost by Phase')}</h3>
-          ${costPlan.subtitle ? `<p>${esc(costPlan.subtitle)}</p>` : ''}
-          <p><strong>Target:</strong> ${esc(moneyRange(costPlan.targetBudget?.min, costPlan.targetBudget?.max, currency))} · <strong>Estimated range:</strong> ${esc(moneyRange(costPlan.estimatedTotal?.min, costPlan.estimatedTotal?.max, currency))} · <strong>Actual spent:</strong> ${esc(money(costPlan.actualSpentToDate, currency))}</p>
+      <div class="stat">
+        <span class="stat-label">Phase</span>
+        <span class="stat-value">${project.currentPhase} / ${totalPhases}</span>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Spent</span>
+        <span class="stat-value">${esc(money(project.spentToDate, project.currency))}</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Status</span>
+        <span class="stat-value">${esc(capitalize(project.status || ''))}</span>
+      </div>
+      ${project.nextAction ? `
+      <div class="stat next-action" title="${esc(project.nextAction)}">
+        <span class="stat-label">Next action</span>
+        <span class="stat-value">${esc(project.nextAction)}</span>
+      </div>` : ''}
+    `;
+  }
+
+  function renderOverviewAccordion(project, costPlan) {
+    const goals = project.goals && project.goals.length
+      ? `<p><strong>Goals</strong></p><ul>${project.goals.map((g) => `<li>${esc(g)}</li>`).join('')}</ul>`
+      : '';
+    const sc = project.siteConstraints;
+    const constraints = sc
+      ? `<p><strong>Site constraints</strong></p><ul>
+          ${sc.climate ? `<li>${esc(sc.climate)}</li>` : ''}
+          ${sc.preferredWaterMovement ? `<li>${esc(sc.preferredWaterMovement)}</li>` : ''}
+          ${sc.maintenanceTarget ? `<li>${esc(sc.maintenanceTarget)}</li>` : ''}
+          ${sc.designIntent ? `<li>${esc(sc.designIntent)}</li>` : ''}
+        </ul>`
+      : '';
+    const accounting = costPlan && costPlan.accountingNote
+      ? `<p><strong>Cost accounting</strong></p><p>${esc(costPlan.accountingNote)}</p>`
+      : '';
+    if (!goals && !constraints && !accounting) return '';
+    return `
+      <details class="accordion">
+        <summary>Goals, site constraints &amp; cost accounting</summary>
+        <div class="accordion-body">${goals}${constraints}${accounting}</div>
+      </details>`;
+  }
+
+  // The three headline financial figures, shown as a single compact strip so
+  // target / estimate / actual are legible at a glance without a second table.
+  function renderCostSummary(costPlan, currency) {
+    if (!costPlan) return '';
+    const target = costPlan.targetBudget || {};
+    const estimated = costPlan.estimatedTotal || {};
+    return `
+      <div class="cost-summary">
+        <div class="cost-fig">
+          <span class="cost-label">Target budget</span>
+          <span class="cost-value">${esc(moneyRange(target.min, target.max, currency))}</span>
         </div>
-        <table>
-          <tr><th>Phase</th><th>Estimated</th><th>Actual</th></tr>
-          ${phaseRows}
-          <tr>
-            <td><strong>Total</strong></td>
-            <td><strong>${esc(moneyRange(costPlan.estimatedTotal?.min, costPlan.estimatedTotal?.max, currency))}</strong></td>
-            <td><strong>${esc(money(costPlan.actualSpentToDate, currency))} so far</strong></td>
-          </tr>
-        </table>
+        <div class="cost-fig">
+          <span class="cost-label">Estimated total</span>
+          <span class="cost-value">${esc(moneyRange(estimated.min, estimated.max, currency))}</span>
+        </div>
+        <div class="cost-fig is-actual">
+          <span class="cost-label">Actual spent</span>
+          <span class="cost-value">${esc(money(costPlan.actualSpentToDate, currency))}</span>
+        </div>
       </div>`;
+  }
+
+  // Roadmap and cost plan describe the same eight phases, so they share one
+  // table rather than repeating the phase list twice. Cost rows are matched by
+  // phaseId first, falling back to phase number.
+  function costRowFor(costPlan, phase) {
+    if (!costPlan || !costPlan.phases) return null;
+    return costPlan.phases.find((c) => c.phaseId === phase.id)
+      || costPlan.phases.find((c) => c.phase === phase.number)
+      || null;
+  }
+
+  function actualCell(costRow, currency) {
+    if (!costRow || costRow.actual == null) return '<span class="muted">—</span>';
+    const suffix = costRow.actualStatus === 'complete' ? ' ✓'
+      : costRow.actualStatus === 'so-far' ? ' <span class="qualifier">so far</span>'
+      : '';
+    return `<span class="actual-amount">${esc(money(costRow.actual, currency))}</span>${suffix}`;
   }
 
   function renderRoadmap(project, costPlan) {
     const phases = project.phases;
-    const nextPlannedNumber = Math.min(
-      ...phases.filter((p) => p.status === 'planned').map((p) => p.number)
-    );
+    const currency = project.currency;
+    const plannedNumbers = phases.filter((p) => p.status === 'planned').map((p) => p.number);
+    const nextPlannedNumber = plannedNumbers.length ? Math.min(...plannedNumbers) : null;
 
-    const cards = phases.map((phase) => {
-      const { cls, badge } = phaseCardClassAndBadge(phase, nextPlannedNumber);
-      const priceLine = phase.spent != null
-        ? `<div class="price">${esc(money(phase.spent, project.currency))} spent</div>`
-        : '';
+    const strip = phases.map((p) => `<span class="${p.status === 'complete' ? 'complete' : p.status === 'current' ? 'current' : ''}" title="Phase ${p.number}: ${esc(p.name)}"></span>`).join('');
+
+    const rows = phases.map((phase) => {
+      const { badge, rowCls } = phaseBadge(phase, nextPlannedNumber);
+      const statusLabel = badge || capitalize(phase.status);
+      const costRow = costRowFor(costPlan, phase);
+      const estimated = costRow
+        ? moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency)
+        : '—';
       return `
-        <div class="phase-card${cls ? ' ' + cls : ''}">
-          <div class="phase-top">
-            <span class="phase-num">Phase ${phase.number}</span>
-            ${badge ? `<span class="badge">${esc(badge)}</span>` : ''}
-          </div>
-          <h3>${esc(phase.name)}</h3>
-          <p>${esc(phase.summary || '')}</p>
-          ${priceLine}
-        </div>`;
+        <tr class="${rowCls}">
+          <td class="col-num">${phase.number}</td>
+          <td class="phase-name">${esc(phase.name)}</td>
+          <td class="col-status"><span class="pill ${statusPillClass(phase.status)}">${esc(statusLabel)}</span></td>
+          <td class="phase-summary">${esc(phase.summary || '')}</td>
+          <td class="col-est">${esc(estimated)}</td>
+          <td class="col-actual">${actualCell(costRow, currency)}</td>
+        </tr>`;
     }).join('');
+
+    const totalRow = costPlan ? `
+      <tr class="total-row">
+        <td colspan="4">Total</td>
+        <td class="col-est">${esc(moneyRange(costPlan.estimatedTotal?.min, costPlan.estimatedTotal?.max, currency))}</td>
+        <td class="col-actual"><span class="actual-amount">${esc(money(costPlan.actualSpentToDate, currency))}</span> <span class="qualifier">so far</span></td>
+      </tr>` : '';
 
     const nextActionNotice = project.nextAction
       ? `<div class="notice"><strong>Next action:</strong> ${esc(project.nextAction)}</div>`
       : '';
 
     return `
-      <h2>Roadmap</h2>
+      <div class="roadmap-head">
+        <h2>Roadmap</h2>
+        ${renderCostSummary(costPlan, currency)}
+      </div>
+      <div class="progress-strip">${strip}</div>
       ${nextActionNotice}
-      <div class="road">${cards}</div>
-      ${renderCostPlan(costPlan, project.currency)}`;
+      ${renderOverviewAccordion(project, costPlan)}
+      <table class="road-table">
+        <tr>
+          <th class="col-num">#</th><th>Phase</th><th class="col-status">Status</th>
+          <th>Summary</th><th class="col-est">Est.</th><th class="col-actual">Actual</th>
+        </tr>
+        ${rows}
+        ${totalRow}
+      </table>`;
+  }
+
+  function renderCandidates(candidates) {
+    const hasVolume = candidates.some((c) => c.estimatedVolume);
+    const hasLinks = candidates.some((c) => c.links && c.links.length);
+    const rows = candidates.map((c) => `
+      <tr>
+        <td class="cand-name">
+          ${esc(c.name)}
+          ${c.priority ? `<div class="cand-priority">${esc(humanizeSlug(c.priority))}</div>` : ''}
+        </td>
+        <td><span class="pill ${statusPillClass(c.status)}">${esc(capitalize(c.status.replace(/-/g, ' ')))}</span></td>
+        <td>${esc(c.dimensions || '—')}</td>
+        ${hasVolume ? `<td>${esc(c.estimatedVolume || '—')}</td>` : ''}
+        <td class="cand-notes">${esc(c.notes || '')}</td>
+        ${hasLinks ? `<td>${c.links && c.links.length ? c.links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join('<br>') : '—'}</td>` : ''}
+      </tr>`).join('');
+
+    return `<table class="candidate-table">
+      <tr>
+        <th>Option</th><th>Status</th><th>Dimensions</th>
+        ${hasVolume ? '<th>Est. volume</th>' : ''}
+        <th>Notes</th>
+        ${hasLinks ? '<th>Links</th>' : ''}
+      </tr>
+      ${rows}
+    </table>`;
   }
 
   // One field type -> one rendering treatment, applied uniformly across every
   // phase regardless of phase number.
-  function renderPhaseBody(phase) {
+  function renderPhaseBody(phase, currency, costPlan) {
     let html = '';
+
+    const costRow = costRowFor(costPlan, phase);
+    if (costRow) {
+      html += `<div class="phase-cost">
+        <span><span class="cost-label">Estimated</span> ${esc(moneyRange(costRow.estimatedMin, costRow.estimatedMax, currency))}</span>
+        <span><span class="cost-label">Actual</span> ${actualCell(costRow, currency)}</span>
+      </div>`;
+    }
 
     if (phase.summary) {
       html += `<div class="box"><p>${esc(phase.summary)}</p></div>`;
+    }
+
+    if (phase.layout) {
+      html += `<div class="box"><p><strong>Layout:</strong> ${esc(phase.layout)}</p></div>`;
     }
 
     if (phase.items && phase.items.length) {
       html += `<div class="box"><ul>${phase.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul></div>`;
     }
 
-    if (phase.candidates && phase.candidates.length) {
-      html += `<div class="grid">${phase.candidates.map((c) => `
-        <div class="box">
-          <h3>${esc(c.name)}</h3>
-          <p><strong>${esc(capitalize(c.status.replace(/-/g, ' ')))}</strong>${c.dimensions ? ' · ' + esc(c.dimensions) : ''}</p>
-          ${c.estimatedVolume ? `<p>${esc(c.estimatedVolume)}</p>` : ''}
-          ${c.notes ? `<p>${esc(c.notes)}</p>` : ''}
-          ${c.links && c.links.length ? `<p>${c.links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(' · ')}</p>` : ''}
-        </div>`).join('')}</div>`;
-    }
-
     if (phase.decisionCriteria && phase.decisionCriteria.length) {
       html += `<div class="box"><h3>Decision criteria</h3><ul>${phase.decisionCriteria.map((r) => `<li>${esc(r)}</li>`).join('')}</ul></div>`;
+    }
+
+    if (phase.candidates && phase.candidates.length) {
+      html += renderCandidates(phase.candidates);
+    }
+
+    if (phase.decisionGate) {
+      html += `<div class="notice">${esc(phase.decisionGate)}</div>`;
     }
 
     if (phase.requirements && phase.requirements.length) {
@@ -165,7 +288,10 @@
     }
 
     if (phase.spendBreakdown && phase.spendBreakdown.length) {
-      html += `<div class="box"><h3>Spend</h3><table><tr><th>Item</th><th>Amount</th></tr>${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td>${esc(money(s.amount, 'USD'))}</td></tr>`).join('')}</table></div>`;
+      html += `<div class="box"><h3>Spend</h3><table>
+        <tr><th>Item</th><th>Amount</th></tr>
+        ${phase.spendBreakdown.map((s) => `<tr><td>${esc(s.label)}</td><td>${esc(money(s.amount, currency))}</td></tr>`).join('')}
+      </table></div>`;
     }
 
     if (phase.notes && phase.notes.length) {
@@ -175,21 +301,54 @@
     return html;
   }
 
-  function renderPhasePanels(project) {
+  function renderPhasePanels(project, costPlan) {
     return project.phases.map((phase) => `
       <section id="p${phase.number}" class="panel">
         <h2>Phase ${phase.number} — ${esc(phase.name)}</h2>
-        ${renderPhaseBody(phase)}
+        ${renderPhaseBody(phase, project.currency, costPlan)}
       </section>`).join('');
   }
 
+  function renderDecisions(project) {
+    const rows = (project.decisions || []).map((d) => `
+      <tr>
+        <td class="decision-item">${esc(d.item)}</td>
+        <td><span class="pill ${statusPillClass(d.status)}">${esc(capitalize(d.status))}</span></td>
+        <td>${esc(d.decision)}</td>
+      </tr>`).join('');
+
+    const maintenanceRows = (project.maintenance || []).map((m) => `
+      <tr>
+        <td>${esc(m.frequency)}</td>
+        <td>${esc(m.task)}</td>
+        <td>${esc(m.time)}</td>
+      </tr>`).join('');
+
+    return `
+      <section id="decisions" class="panel">
+        <h2>Locked + open decisions</h2>
+        <table>
+          <tr><th>Item</th><th>Status</th><th>Decision</th></tr>
+          ${rows}
+        </table>
+        ${maintenanceRows ? `
+        <h2 style="margin-top:14px">Maintenance</h2>
+        <table>
+          <tr><th>Frequency</th><th>Task</th><th>Time</th></tr>
+          ${maintenanceRows}
+        </table>` : ''}
+      </section>`;
+  }
+
+  const SHOPPING_STATUS_LABELS = {
+    bought: 'Already bought',
+    considering: 'Considering',
+    'need-to-buy': 'Need to buy',
+    rejected: 'Rejected',
+  };
+
   function shoppingStatusLabel(status) {
-    return {
-      bought: 'Already Bought',
-      considering: 'Considering',
-      'need-to-buy': 'Need to Buy',
-      rejected: 'Rejected',
-    }[status] || capitalize(String(status || '').replace(/-/g, ' '));
+    return SHOPPING_STATUS_LABELS[status] || humanizeSlug(status || '');
   }
 
   function renderShopping(project) {
@@ -199,7 +358,11 @@
     const budget = project.budget || {};
     const budgetSummary = `
       <div class="box">
-        <p><strong>Project budget:</strong> ${esc(optionalMoney(budget.planned, project.currency))} · <strong>Spent:</strong> ${esc(optionalMoney(budget.spentToDate != null ? budget.spentToDate : project.spentToDate, project.currency))} · <strong>Remaining:</strong> ${esc(optionalMoney(budget.remaining, project.currency))}</p>
+        <p>
+          <strong>Planned:</strong> ${esc(optionalMoney(budget.planned, project.currency))}
+          &nbsp;·&nbsp; <strong>Spent:</strong> ${esc(optionalMoney(budget.spentToDate != null ? budget.spentToDate : project.spentToDate, project.currency))}
+          &nbsp;·&nbsp; <strong>Remaining:</strong> ${esc(optionalMoney(budget.remaining, project.currency))}
+        </p>
         ${budget.note ? `<p>${esc(budget.note)}</p>` : ''}
       </div>`;
 
@@ -208,64 +371,52 @@
       const rows = items.filter((i) => i.status === status);
       if (!rows.length) return '';
       return `
-        <div class="box">
-          <h3>${esc(shoppingStatusLabel(status))}</h3>
-          <table>
-            <tr><th>Phase</th><th>Item</th><th>Store / Link</th><th>Price</th><th>Actual</th><th>Budget</th></tr>
-            ${rows.map((i) => `
-              <tr>
-                <td>${i.phase != null ? 'P' + esc(i.phase) : '—'}</td>
-                <td><strong>${esc(i.item)}</strong>${i.note ? `<br>${esc(i.note)}` : ''}</td>
-                <td>${i.store ? esc(i.store) : '—'}${i.link ? `<br><a href="${esc(i.link)}" target="_blank" rel="noopener">Open link</a>` : ''}</td>
-                <td>${esc(optionalMoney(i.price, project.currency))}</td>
-                <td>${esc(optionalMoney(i.actualCost, project.currency))}</td>
-                <td>${esc(optionalMoney(i.budget, project.currency))}</td>
-              </tr>`).join('')}
-          </table>
-        </div>`;
+        <details class="accordion" ${status === 'bought' || status === 'need-to-buy' ? 'open' : ''}>
+          <summary>${esc(shoppingStatusLabel(status))} <span class="pill ${statusPillClass(status)}">${rows.length}</span></summary>
+          <div class="accordion-body">
+            <table>
+              <tr><th>Phase</th><th>Item</th><th>Store / link</th><th>Price</th><th>Actual</th></tr>
+              ${rows.map((i) => `
+                <tr>
+                  <td>${i.phase != null ? 'P' + esc(i.phase) : '—'}</td>
+                  <td><strong>${esc(i.item)}</strong>${i.note ? `<div class="cand-priority">${esc(i.note)}</div>` : ''}</td>
+                  <td>${i.store ? esc(i.store) : '—'}${i.link ? ` · <a href="${esc(i.link)}" target="_blank" rel="noopener">link</a>` : ''}</td>
+                  <td>${esc(optionalMoney(i.price, project.currency))}</td>
+                  <td>${esc(optionalMoney(i.actualCost, project.currency))}</td>
+                </tr>`).join('')}
+            </table>
+          </div>
+        </details>`;
     }).join('');
 
-    return `<h2 style="margin-top:16px">Shopping + Budget</h2>${budgetSummary}${groups}`;
-  }
-
-  function renderDecisions(project) {
-    const rows = (project.decisions || []).map((d) => `
-      <tr>
-        <td>${esc(d.item)}</td>
-        <td>${esc(capitalize(d.status))}</td>
-        <td>${esc(d.decision)}</td>
-      </tr>`).join('');
-
-    const maintenance = (project.maintenance || []).map((m) =>
-      `<li>${esc(m.frequency)}: ${esc(m.task)} (${esc(m.time)})</li>`
-    ).join('');
-
     return `
-      <section id="decisions" class="panel">
-        <h2>Locked + Open Decisions</h2>
-        <table>
-          <tr><th>Item</th><th>Status</th><th>Decision</th></tr>
-          ${rows}
-        </table>
-        ${renderShopping(project)}
-        ${maintenance ? `<div class="notice success" style="margin-top:10px"><strong>Maintenance</strong><ul>${maintenance}</ul></div>` : ''}
+      <section id="shopping" class="panel">
+        <h2>Shopping + budget</h2>
+        ${budgetSummary}
+        ${groups}
       </section>`;
   }
 
-  function renderTabs(project) {
-    const phaseTabs = project.phases.map((phase) =>
-      `<button class="tab" data-tab="p${phase.number}">${phase.number} — ${esc(tabLabel(phase))}</button>`
-    ).join('');
-    return `
-      <button class="tab active" data-tab="roadmap">Roadmap</button>
-      ${phaseTabs}
-      <button class="tab" data-tab="decisions">Decisions</button>`;
-  }
+  function renderSideNav(project) {
+    const plannedNumbers = project.phases.filter((p) => p.status === 'planned').map((p) => p.number);
+    const nextPlannedNumber = plannedNumbers.length ? Math.min(...plannedNumbers) : null;
 
-  function renderStatusPill(project) {
-    const currentPhase = project.phases.find((p) => p.number === project.currentPhase);
-    const label = currentPhase ? currentPhase.name : '';
-    return `PHASE ${project.currentPhase} · ${esc(label.toUpperCase())}`;
+    const phaseTabs = project.phases.map((phase) => {
+      const { navCls } = phaseBadge(phase, nextPlannedNumber);
+      return `<button class="tab ${navCls}" data-tab="p${phase.number}"><span class="dot"></span>${phase.number} — ${esc(tabLabel(phase))}</button>`;
+    }).join('');
+
+    const shoppingTab = project.shopping && project.shopping.length
+      ? `<button class="tab" data-tab="shopping"><span class="dot"></span>Shopping</button>`
+      : '';
+
+    return `
+      <button class="tab active" data-tab="roadmap"><span class="dot"></span>Roadmap</button>
+      <div class="divider"></div>
+      ${phaseTabs}
+      <div class="divider"></div>
+      <button class="tab" data-tab="decisions"><span class="dot"></span>Decisions</button>
+      ${shoppingTab}`;
   }
 
   function initTabs() {
@@ -291,27 +442,37 @@
     const project = await res.json();
 
     let costPlan = null;
-    if (project.projectId) {
+    if (project.costPlanFile || project.projectId) {
+      const costFile = project.costPlanFile || `data/${project.projectId}-cost-plan.json`;
       try {
-        const costRes = await fetch(`data/${project.projectId}-cost-plan.json`);
+        const costRes = await fetch(costFile);
         if (costRes.ok) costPlan = await costRes.json();
       } catch (err) {
         console.warn('[render-project] optional cost plan not loaded', err);
       }
     }
 
-    const statusMount = document.querySelector('[data-project-status]');
-    if (statusMount) statusMount.innerHTML = renderStatusPill(project);
+    const titleMount = document.querySelector('[data-project-title]');
+    if (titleMount) titleMount.textContent = project.displayTitle || project.name;
+
+    const ledeMount = document.querySelector('[data-project-lede]');
+    if (ledeMount) ledeMount.textContent = project.lede || project.subtitle || '';
+
+    document.title = (project.displayTitle || project.name) + ' — Home Project Planner';
+
+    const statMount = document.querySelector('[data-stat-row]');
+    if (statMount) statMount.innerHTML = renderStatRow(project);
 
     const tabsMount = document.querySelector('[data-tabs]');
-    if (tabsMount) tabsMount.innerHTML = renderTabs(project);
+    if (tabsMount) tabsMount.innerHTML = renderSideNav(project);
 
     const panelsMount = document.querySelector('[data-panels]');
     if (panelsMount) {
       panelsMount.innerHTML = `
         <section id="roadmap" class="panel active">${renderRoadmap(project, costPlan)}</section>
-        ${renderPhasePanels(project)}
-        ${renderDecisions(project)}`;
+        ${renderPhasePanels(project, costPlan)}
+        ${renderDecisions(project)}
+        ${renderShopping(project)}`;
     }
 
     initTabs();

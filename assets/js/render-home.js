@@ -23,17 +23,20 @@
       heading.textContent = projects.length + ' project' + (projects.length === 1 ? '' : 's') + ' underway';
     }
 
+    // A per-project photo is optional: assets/img/<id>.jpg. If it 404s, the
+    // onerror handler hides the <img> and the CSS illustration underneath shows instead.
     mount.innerHTML = projects.map((p) => `
       <a class="card" href="${p.id}.html">
         <div class="thumb">
           <div class="trellis left"></div>
           <div class="trellis right"></div>
           <div class="pond"></div>
+          <img src="assets/img/${p.id}.png" alt="${p.name}" loading="lazy" onerror="this.style.display='none'">
         </div>
         <div class="card-body">
           <h3>${p.name}</h3>
           <div class="meta">Phase ${p.currentPhase} of ${p.totalPhases} · ${money(p.spentToDate, p.currency)} spent so far</div>
-          <span class="status">CURRENT: ${(p.currentLabel || '').toUpperCase()}</span>
+          <span class="status pill accent">CURRENT: ${(p.currentLabel || '').toUpperCase()}</span>
         </div>
       </a>
     `).join('');

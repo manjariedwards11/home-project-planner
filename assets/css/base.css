@@ -1,6 +1,0 @@
-/* Truly shared across every page — verified byte-identical before extraction.
-   Everything else in home.css / zen-lotus-pond.css currently differs between
-   the two pages (different header heights, different token colors), so it
-   stays page-specific rather than being forced into one shared file — doing
-   that now would silently change one page's look, which this pass avoids. */
-*{box-sizing:border-box}

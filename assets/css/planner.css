@@ -1,0 +1,90 @@
+/* Shared design system: tokens, reset, topbar, and components common to
+   every page (badges, tables, buttons, stat chips, accordions). Page-specific
+   layout (home list vs. project workspace) lives in home.css / zen-lotus-pond.css. */
+
+:root{
+  --ink:#1f2320;
+  --muted:#65605b;
+  --accent:#b32610;
+  --accent-soft:#fdece7;
+  --line:#ddd8d2;
+  --bg:#f6f4f1;
+  --card:#fff;
+  --soft:#f1efeb;
+  --green:#2f6f39;
+  --green-soft:#e7f4e9;
+  --amber:#b67412;
+  --amber-soft:#fef3e1;
+  --radius:6px;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;max-width:100%}
+body{
+  overflow-x:hidden;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  font-size:13.5px;
+}
+
+.topbar{
+  height:46px;
+  background:#111;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+.topbar .logo{
+  width:26px;height:26px;border:1px solid #555;border-radius:7px;
+  display:grid;place-items:center;margin-right:9px;font-size:13px;
+}
+
+.back{
+  display:inline-block;color:#726c67;text-decoration:none;
+  font-size:11.5px;font-weight:700;margin-bottom:10px;
+}
+.back:hover{color:var(--accent)}
+
+/* Badges / pills */
+.pill{
+  display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.03em;
+  padding:3px 8px;border-radius:999px;background:var(--soft);color:var(--muted);
+  white-space:nowrap;
+}
+.pill.accent{background:var(--accent-soft);color:var(--accent)}
+.pill.green{background:var(--green-soft);color:var(--green)}
+.pill.amber{background:var(--amber-soft);color:var(--amber)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;background:var(--card);font-size:12px;table-layout:fixed}
+th,td{padding:6px 8px;text-align:left;border-bottom:1px solid #e6e2dd;overflow-wrap:anywhere;vertical-align:top}
+th{background:var(--soft);font-weight:800;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+
+/* Notices */
+.notice{background:var(--amber-soft);border-left:3px solid var(--amber);padding:7px 10px;margin-bottom:8px;font-size:11.5px;line-height:1.4;border-radius:0 4px 4px 0}
+.notice.success{background:var(--green-soft);border-left-color:var(--green)}
+.notice.accent{background:var(--accent-soft);border-left-color:var(--accent)}
+
+/* Accordion (native <details>) */
+details.accordion{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);margin-bottom:10px;font-size:12px}
+details.accordion summary{cursor:pointer;padding:8px 11px;font-weight:750;font-size:12px;list-style:none;display:flex;align-items:center;justify-content:space-between;color:var(--ink)}
+details.accordion summary::-webkit-details-marker{display:none}
+details.accordion summary:after{content:'+';font-weight:800;color:var(--muted)}
+details.accordion[open] summary:after{content:'−'}
+details.accordion .accordion-body{padding:0 11px 11px;border-top:1px solid var(--line);padding-top:9px}
+details.accordion .accordion-body ul{margin:0 0 8px;padding-left:16px}
+details.accordion .accordion-body ul:last-child{margin-bottom:0}
+details.accordion .accordion-body p{margin:0 0 8px}
+details.accordion .accordion-body p:last-child{margin-bottom:0}
+
+@media(max-width:620px){
+  body{font-size:13px}
+  .topbar{height:44px;padding:0 14px;font-size:13px}
+}
