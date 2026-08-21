@@ -198,10 +198,24 @@
 .fin-link{display:inline-block;margin-top:2px;font-size:11px;font-weight:700;color:var(--accent);text-decoration:none}
 .fin-link:hover{text-decoration:underline}
 
-/* Rationale and pending purchase sit side by side; neither is tall enough to
-   deserve a full-width row of its own. */
-.decision-cols{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:10px;align-items:start;margin-bottom:9px}
-.decision-cols .box,.decision-cols .shopping-card{margin-bottom:0}
+/* Cross-panel link, e.g. Phase 2 -> Decisions for the full rationale. */
+.xref{
+  display:inline-block;margin-bottom:9px;
+  background:var(--accent-soft);border:1px solid #efc7bd;border-radius:5px;
+  padding:6px 10px;font-size:11.5px;font-weight:700;color:var(--accent);text-decoration:none;
+}
+.xref:hover{background:#fbdcd4}
+
+/* Decision rationale blocks inside the Decisions panel. */
+.rationale{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.rationale-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rationale-head h2{margin:0}
+.rationale-head .xref{margin-bottom:0}
+.rationale-sub{font-size:11.5px;font-weight:800;margin:10px 0 5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.rationale .notice{margin-top:8px}
+.rationale tr.is-chosen td{background:var(--accent-soft)}
+.rationale tr.is-chosen td:first-child{font-weight:700}
+.section-gap{margin-top:14px}
 /* Rationale reads fine in two columns here, which keeps this row as short as
    the pending-purchase card beside it. */
 @media(min-width:1100px){.why-preferred ul{columns:2;column-gap:20px}}
@@ -243,7 +257,6 @@
      element that can give up height without losing information. */
   .completion-card img{max-height:180px}
   /* A fixed 430px sidebar cramps the rationale at this width; stack instead. */
-  .decision-cols{grid-template-columns:minmax(0,1fr)}
   .shopping-card{padding:7px 9px}
   .phase-shopping th,.phase-shopping td{padding:2px 4px}
   /* Reclaim page chrome so the panel itself gets the vertical room. */
@@ -269,7 +282,6 @@
   /* Stack main content, image and shopping list vertically. */
   .phase-layout{grid-template-columns:minmax(0,1fr)}
   .finalists{grid-template-columns:minmax(0,1fr)}
-  .decision-cols{grid-template-columns:minmax(0,1fr)}
   .phase-side{flex-direction:row;flex-wrap:wrap;align-items:flex-start}
   .completion-card{flex:1 1 260px;max-width:340px}
   .shopping-card{flex:1 1 300px}

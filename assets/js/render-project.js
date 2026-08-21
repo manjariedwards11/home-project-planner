@@ -598,31 +598,6 @@
       </details>`;
   }
 
-  function renderPendingShopping(decision, currency) {
-    const ps = decision.pendingShoppingList;
-    if (!ps || !ps.items || !ps.items.length) return '';
-    return `
-      <div class="shopping-card">
-        <h3>Pending purchase</h3>
-        <table class="phase-shopping">
-          <tr><th>Item</th><th class="col-est">Est.</th><th class="col-actual">Actual</th></tr>
-          ${ps.items.map((i) => `
-            <tr>
-              <td>${esc(i.item)}
-                <span class="caption-note">${esc(i.retailer || '')}${i.link ? ` · <a href="${esc(i.link)}" target="_blank" rel="noopener">link</a>` : ''}${i.note ? ' · ' + esc(i.note) : ''}</span>
-              </td>
-              <td class="col-est">${esc(optionalMoney(i.estimatedCost, currency))}</td>
-              <td class="col-actual">${esc(optionalMoney(i.actualCost, currency))}</td>
-            </tr>`).join('')}
-          <tr class="total-row">
-            <td>Phase allowance</td>
-            <td class="col-est">${esc(moneyRange(ps.phaseEstimateMin, ps.phaseEstimateMax, currency))}</td>
-            <td class="col-actual">${esc(optionalMoney(ps.actualTotal, currency))}</td>
-          </tr>
-        </table>
-        ${ps.note ? `<p class="caption-note">${esc(ps.note)}</p>` : ''}
-      </div>`;
-  }
 
   function renderDecisionPanel(decision, phase, project) {
     const currency = project.currency;
@@ -641,6 +616,14 @@
       decision.decisionSummary ? `<p>${esc(decision.decisionSummary)}</p>` : '',
     ].filter(Boolean).join('');
 
+    // The rationale itself lives in the Decisions tab; this panel links across
+    // to it rather than repeating it. The pending list is in the sidebar.
+    const rationaleLink = why
+      ? `<a class="xref" data-goto="decisions" href="#decisions">
+           ${whyTitle} — see the options and rationale in Decisions →
+         </a>`
+      : '';
+
     return `
       ${decision.preferredChoice ? `
         <div class="notice accent">
@@ -649,14 +632,7 @@
         </div>` : ''}
       ${intro ? `<div class="box intro-box">${intro}</div>` : ''}
       <div class="finalists">${finalists}</div>
-      <div class="decision-cols">
-        ${why ? `
-          <div class="box why-preferred">
-            <h3>${whyTitle}</h3>
-            <ul>${why}</ul>
-          </div>` : ''}
-        ${renderPendingShopping(decision, currency)}
-      </div>
+      ${rationaleLink}
       ${decision.completionRule ? `<div class="notice">${esc(decision.completionRule)}</div>` : ''}`;
   }
 
@@ -704,7 +680,54 @@
     }).join('');
   }
 
-  function renderDecisions(project) {
+  // The full rationale for a phase decision: which options were on the table,
+  // and why the preferred one won. Lives here so Decisions answers "what did I
+  // consider and why did I pick it", with a link back to the phase itself.
+  function renderDecisionRationale(project, phaseDetails, currency) {
+    const blocks = [];
+    project.phases.forEach((phase) => {
+      const decision = (phaseDetails.get(phase.number) || {}).decision;
+      if (!decision) return;
+
+      const optionRows = (decision.comparison || []).map((c) => `
+        <tr class="${c.status === 'preferred' ? 'is-chosen' : ''}">
+          <td>${esc(c.name)}${c.link ? `<span class="caption-note"><a href="${esc(c.link)}" target="_blank" rel="noopener">${esc(c.retailer || 'link')}</a></span>` : ''}</td>
+          <td><span class="pill ${c.status === 'preferred' ? 'accent' : ''}">${esc(humanizeSlug(c.status))}</span></td>
+          <td class="col-actual">${c.priceSnapshot != null ? esc(money(c.priceSnapshot, currency)) : '&mdash;'}</td>
+        </tr>`).join('');
+
+      const why = (decision.whyPreferred || []).map((w) => `<li>${esc(w)}</li>`).join('');
+
+      blocks.push(`
+        <section class="rationale">
+          <div class="rationale-head">
+            <h2>Phase ${phase.number} — ${esc(decision.title || phase.name)}</h2>
+            <a class="xref" data-goto="p${phase.number}" href="#p${phase.number}">Open Phase ${phase.number} →</a>
+          </div>
+          ${decision.preferredChoice ? `
+            <div class="notice accent">
+              <strong>Chosen:</strong> ${esc(decision.preferredChoice)}
+              — <em>${esc(humanizeSlug(decision.decisionState || ''))}</em>
+            </div>` : ''}
+          ${optionRows ? `
+            <h3 class="rationale-sub">Options considered</h3>
+            <table>
+              <tr><th>Option</th><th>Status</th><th class="col-actual">Price</th></tr>
+              ${optionRows}
+            </table>` : ''}
+          ${why ? `
+            <h3 class="rationale-sub">Why this one</h3>
+            <div class="box why-preferred"><ul>${why}</ul></div>` : ''}
+          ${decision.excludedReference ? `
+            <div class="notice"><strong>Not a valid option:</strong> ${esc(decision.excludedReference.item)}
+              ${decision.excludedReference.reason ? `<br>${esc(decision.excludedReference.reason)}` : ''}
+            </div>` : ''}
+        </section>`);
+    });
+    return blocks.join('');
+  }
+
+  function renderDecisions(project, phaseDetails) {
     const rows = (project.decisions || []).map((d) => `
       <tr>
         <td class="decision-item">${esc(d.item)}</td>
@@ -726,8 +749,9 @@
           <tr><th>Item</th><th>Status</th><th>Decision</th></tr>
           ${rows}
         </table>
+        ${renderDecisionRationale(project, phaseDetails, project.currency)}
         ${maintenanceRows ? `
-        <h2 style="margin-top:14px">Maintenance</h2>
+        <h2 class="section-gap">Maintenance</h2>
         <table>
           <tr><th>Frequency</th><th>Task</th><th>Time</th></tr>
           ${maintenanceRows}
@@ -824,6 +848,18 @@
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
     tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.tab)));
+
+    // Cross-references between panels (e.g. Phase 2 -> Decisions) switch tabs
+    // rather than relying on hash navigation, which the tab controller owns.
+    document.querySelectorAll('[data-goto]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        const target = link.dataset.goto;
+        if (!document.getElementById(target)) return;
+        e.preventDefault();
+        show(target);
+      });
+    });
+
     const start = location.hash.replace('#', '');
     if (start && document.getElementById(start)) show(start);
   }
@@ -901,7 +937,7 @@
       panelsMount.innerHTML = `
         <section id="roadmap" class="panel active">${renderRoadmap(project, costPlan)}</section>
         ${renderPhasePanels(project, costPlan, phaseDetails)}
-        ${renderDecisions(project)}
+        ${renderDecisions(project, phaseDetails)}
         ${renderShopping(project)}`;
     }
 
