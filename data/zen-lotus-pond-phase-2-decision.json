@@ -10,7 +10,7 @@
   "preferredChoice": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
   "whyPreferred": [
     "Clean rectangular shape fits the Zen design.",
-    "Works better visually with lotus, Buddha and jasmine.",
+    "Works well with lotus, Buddha and open reflective water.",
     "Allows the permanent pump and filtration to be selected separately."
   ],
   "comparison": [
@@ -38,12 +38,8 @@
       "priceSnapshot": 214.47,
       "capacity": "50 gallons",
       "includedEquipment": "Complete pond kit",
-      "strengths": [
-        "More complete out of the box"
-      ],
-      "tradeoffs": [
-        "Less aligned with the rectangular architectural look"
-      ],
+      "strengths": ["More complete out of the box"],
+      "tradeoffs": ["Less aligned with the rectangular architectural look"],
       "link": "https://www.walmart.com/ip/Pennington-50-gal-Aquagarden-Resin-Pond-Kit-Multi-Color/13240014659"
     }
   ],
@@ -67,8 +63,7 @@
         "tax": 11.20,
         "quantity": 1,
         "purchaseDate": "2026-08-21",
-        "estimatedDeliveryStart": "2026-08-26",
-        "estimatedDeliveryEnd": "2026-08-29",
+        "estimatedDeliveryDate": "2026-08-29",
         "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036"
       }
     ]
@@ -77,6 +72,6 @@
     "title": "End of Phase 2",
     "status": "awaiting-delivery-photo",
     "image": null,
-    "caption": "Brownstone Manhattan pond purchased; add the placed-pond photo after delivery."
+    "caption": "Brownstone Manhattan pond purchased; delivery expected August 29, then add the placed-pond photo."
   }
 }
