@@ -407,7 +407,9 @@
             ${i.note ? `<span class="caption-note">${esc(i.note)}</span>` : ''}
           </td>
           <td class="col-est">${estCell}</td>
-          <td class="col-actual">${actual == null ? '&mdash;' : `<span class="actual-amount">${esc(money(actual, currency))}</span>`}</td>
+          <td class="col-actual">${actual == null
+            ? actualOrPending(i, currency)
+            : `<span class="actual-amount">${esc(money(actual, currency))}</span>`}</td>
         </tr>`;
     }).join('');
 
@@ -1103,8 +1105,7 @@
         : i.originalActualCost != null ? i.originalActualCost : null;
       const right = returning && i.expectedRefund != null
         ? `<span class="refund">&minus;${esc(money(i.expectedRefund, currency))}</span>`
-        : i.actualCost != null ? `<span class="actual-amount is-final">${esc(money(i.actualCost, currency))}</span>`
-        : '<span class="muted">&mdash;</span>';
+        : actualOrPending(i, currency);
       return `
         <tr class="${returning ? 'offphase-row' : ''}">
           <td class="col-check">${!returning && i.status === 'bought' ? '<span class="check">&#10003;</span>' : ''}</td>
@@ -1172,13 +1173,26 @@
         <span>${good ? '<span class="check">&#10003;</span> ' : ''}${esc(val)}</span></div>`;
     }).filter(Boolean).join('');
     if (!rows) return '';
-    return `<div class="box"><h3>${esc(title)}</h3><div class="fin-specs">${rows}</div></div>`;
+    return `<div class="box"><h3>${esc(title)}</h3><div class="fact-specs">${rows}</div></div>`;
   }
 
   function renderDelivery(d) {
     if (!d || !d.item) return '';
     const when = d.expectedDate || d.date;
     return `<div class="notice"><strong>Delivery:</strong> ${esc(d.item)}${d.status ? ` &mdash; ${esc(humanizeSlug(d.status))}` : ''}${when ? ` ${esc(when)}` : ''}</div>`;
+  }
+
+  // An item that is bought but has no recorded cost is not the same as an item
+  // nobody has spent on. A bare dash reads as "not purchased", so say which it
+  // is instead.
+  function actualOrPending(item, currency) {
+    const acquired = /bought|delivered|purchased|complete/.test(String(item.status || ''));
+    if (item.actualCost != null) {
+      return `<span class="actual-amount is-final">${esc(money(item.actualCost, currency))}</span>`;
+    }
+    return acquired
+      ? '<span class="await-receipt" title="Purchased; final cost not recorded yet">awaiting receipt</span>'
+      : '<span class="muted">&mdash;</span>';
   }
 
   // A phase page is a concise operational view: goal, the few things to do,
