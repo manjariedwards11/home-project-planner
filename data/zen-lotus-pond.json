@@ -7,7 +7,7 @@
   "lede": "Brownstone rectangular lotus pond with Buddha, gentle moving water and low-maintenance filtration.",
   "status": "underway",
   "currentPhase": 3,
-  "spentToDate": 283.32,
+  "spentToDate": 404.62,
   "currency": "USD",
   "lastContentUpdate": "2026-08-24",
   "nextAction": "Install and test the delivered 300 GPH integrated filter kit; Manhattan pond delivery is expected August 29.",
@@ -24,10 +24,10 @@
   },
   "budget": {
     "planned": null,
-    "spentToDate": 283.32,
+    "spentToDate": 404.62,
     "remaining": null,
     "status": "tracked-in-cost-plan",
-    "note": "Confirmed actual remains $283.32 until the 300 GPH receipt amount and $30 return refund are finalized."
+    "note": "Current gross confirmed spend is $404.62. This still includes the original $30 Smartpond kit while its return refund is pending."
   },
   "shopping": [
     {
@@ -45,8 +45,8 @@
       "status": "delivered",
       "store": "Lowe's",
       "price": 112.0,
-      "actualCost": null,
-      "note": "Option B selected. Delivered August 23; install and test August 24. Final receipt total pending."
+      "actualCost": 121.30,
+      "note": "Ordered and delivered August 23, 2026. Lowe's order total confirmed at $121.30; install and test next."
     },
     {
       "phase": 3,
@@ -98,7 +98,7 @@
       "id": "pump-filter",
       "name": "Pump + Filter + Fountain",
       "status": "current",
-      "spent": 30.0,
+      "spent": 151.30,
       "summary": "Option B selected and delivered: install and test the 300 GPH integrated pump/filter system.",
       "requirements": [
         "Install and test the delivered 300 GPH integrated smartpond filter kit",
