@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "projectId": "zen-lotus-pond",
-  "phase": 6,
+  "phase": 5,
   "phaseId": "lotus-buddha",
   "title": "Lotus + Buddha",
   "status": "planned",
@@ -15,7 +15,7 @@
     "note": "No new purchase is currently identified; use the established lotus and existing Buddha."
   },
   "completionMemory": {
-    "title": "End of Phase 6",
+    "title": "End of Phase 5",
     "status": "awaiting-completion",
     "image": null,
     "caption": "Lotus, Buddha and gentle fountain arranged with open reflective water."
