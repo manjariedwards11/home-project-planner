@@ -14,7 +14,7 @@
     "label": "Known current phase estimates",
     "isPartial": true
   },
-  "actualSpentToDate": 283.32,
+  "actualSpentToDate": 404.62,
   "currency": "USD",
   "phase1Completion": {
     "status": "complete",
@@ -32,11 +32,11 @@
   "phases": [
     {"phase": 1, "phaseId": "nursery", "label": "Lotus Nursery", "estimatedMin": 60, "estimatedMax": 100, "actual": 107.13, "actualStatus": "complete"},
     {"phase": 2, "phaseId": "pond-decision", "label": "Pond Selection", "estimatedMin": 125, "estimatedMax": 200, "actual": 146.19, "actualStatus": "complete"},
-    {"phase": 3, "phaseId": "pump-filter", "label": "Pump + Filter + Fountain", "estimatedMin": 112, "estimatedMax": 127, "actual": 30.0, "actualStatus": "so-far", "note": "300 GPH kit delivered; final receipt amount is pending. The $30 original kit remains in confirmed actuals until its return refund posts."},
+    {"phase": 3, "phaseId": "pump-filter", "label": "Pump + Filter + Fountain", "estimatedMin": 112, "estimatedMax": 127, "actual": 151.30, "actualStatus": "so-far", "note": "$121.30 Lowe's order confirmed plus the original $30 kit, which remains included until its return refund posts."},
     {"phase": 4, "phaseId": "pond-placement", "label": "Pond Placement + Setup", "estimatedMin": 0, "estimatedMax": 0, "actual": 0, "actualStatus": "current-plan", "note": "Option 4 uses the existing patio floor; no leveling/base materials are needed."},
     {"phase": 5, "phaseId": "lotus-buddha", "label": "Lotus + Buddha", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "TBD"},
     {"phase": 6, "phaseId": "lighting", "label": "Lighting + Finishing", "estimatedMin": 50, "estimatedMax": 125, "actual": null},
     {"phase": 7, "phaseId": "future-fish-ready", "label": "Future Fish Decision", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "not-in-current-budget"}
   ],
-  "accountingNote": "Jasmine/trellis was removed from the pond project. Known current phase estimates total $347–552; Lotus + Buddha remains TBD and the future fish phase is outside the current build budget. Confirmed actual spend remains $283.32 until the 300 GPH receipt amount and $30 return refund are finalized."
+  "accountingNote": "Jasmine/trellis was removed from the pond project. Current gross confirmed spend is $404.62, including the original $30 Smartpond kit while its return is pending. Once that refund posts, the project total will be reduced by the actual refund amount."
 }
