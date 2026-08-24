@@ -28,8 +28,8 @@
       "phaseId": "pump-filter",
       "status": "current",
       "todos": [
-        {"task": "Choose Option A or Option B filtration setup", "status": "pending"},
-        {"task": "Purchase selected pump/filter equipment", "status": "pending"},
+        {"task": "Choose Option B integrated filtration setup", "status": "complete"},
+        {"task": "Purchase and receive 300 GPH pump/filter kit", "status": "complete"},
         {"task": "Install circulation, filtration and fountain return", "status": "pending"},
         {"task": "Run and verify stable water flow", "status": "pending"}
       ]
@@ -39,9 +39,9 @@
       "phaseId": "pond-placement",
       "status": "planned",
       "todos": [
-        {"task": "Choose final pond placement option", "status": "pending"},
-        {"task": "Confirm sun, power and maintenance access", "status": "pending"},
-        {"task": "Level and position the Manhattan pond", "status": "pending"},
+        {"task": "Choose Option 4 — Back Patio Window Wall", "status": "complete"},
+        {"task": "Confirm sun, power and maintenance access for Option 4", "status": "complete"},
+        {"task": "Receive Manhattan pond", "status": "pending"},
         {"task": "Fill and leak-test before planting", "status": "pending"}
       ]
     },
@@ -52,7 +52,7 @@
       "todos": [
         {"task": "Move existing jasmine plants from the large SIP system into the two large white pots", "status": "pending"},
         {"task": "Install one black trellis for each jasmine planter", "status": "pending"},
-        {"task": "Position jasmine planters on both sides of the pond", "status": "pending"},
+        {"task": "Choose jasmine placement away from the pond", "status": "pending"},
         {"task": "Train jasmine onto trellises while keeping growth airy", "status": "pending"}
       ]
     },
