@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "projectId": "zen-lotus-pond",
-  "phase": 7,
+  "phase": 6,
   "phaseId": "lighting",
   "title": "Lighting + Finishing",
   "status": "planned",
@@ -17,14 +17,15 @@
         "status": "need-to-buy",
         "estimatedMin": 50.0,
         "estimatedMax": 125.0,
-        "actualCost": null
+        "actualCost": null,
+        "note": "Use for subtle Buddha/pond accent only; no jasmine lighting is part of this pond project."
       }
     ]
   },
   "completionMemory": {
-    "title": "End of Phase 7",
+    "title": "End of Phase 6",
     "status": "awaiting-completion",
     "image": null,
-    "caption": "Final warm lighting and visible finishing details completed."
+    "caption": "Final restrained pond lighting and visible finishing details completed."
   }
 }
