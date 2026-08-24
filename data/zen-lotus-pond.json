@@ -10,7 +10,7 @@
   "spentToDate": 283.32,
   "currency": "USD",
   "lastContentUpdate": "2026-08-24",
-  "nextAction": "Install and test the delivered 300 GPH integrated filter kit, then receive the Manhattan pond on August 29.",
+  "nextAction": "Install and test the delivered 300 GPH integrated filter kit; Manhattan pond delivery is expected August 29.",
   "goals": [
     "Serene, low-maintenance lotus water garden",
     "Clean moving water with predictable upkeep",
@@ -20,14 +20,14 @@
     "climate": "Very hot Arizona summers; temperatures can reach about 110°F",
     "location": "Option 4 — Back Patio Window Wall is the locked permanent pond location.",
     "maintenanceTarget": "A few minutes weekly plus periodic filter cleaning",
-    "designIntent": "Brownstone rectangular pond with lotus, Buddha and a gentle fountain; no jasmine around the pond."
+    "designIntent": "Brownstone rectangular pond with lotus, Buddha and a gentle fountain; no jasmine or trellis around the pond."
   },
   "budget": {
     "planned": null,
     "spentToDate": 283.32,
     "remaining": null,
     "status": "tracked-in-cost-plan",
-    "note": "Actual spend remains at the last receipt-confirmed total until the new 300 GPH purchase and $30 return are finalized."
+    "note": "Confirmed actual remains $283.32 until the 300 GPH receipt amount and $30 return refund are finalized."
   },
   "shopping": [
     {
@@ -54,7 +54,7 @@
       "status": "return-pending",
       "store": "Lowe's",
       "actualCost": 30.0,
-      "note": "Being returned because the new 300 GPH integrated system replaces it. Refund pending."
+      "note": "Being returned because the 300 GPH integrated system replaces it. Refund pending."
     },
     {
       "phase": 3,
@@ -63,31 +63,10 @@
       "actualCost": null,
       "estimatedMin": 0.0,
       "estimatedMax": 15.0,
-      "note": "Buy only if the Back Patio Window Wall placement requires extra reach or a separate quiet return."
+      "note": "Buy only if the Back Patio Window Wall installation requires extra reach or a separate quiet return."
     },
     {
-      "phase": 5,
-      "item": "Two white jasmine planters",
-      "status": "need-to-buy",
-      "actualCost": null,
-      "note": "Jasmine will be placed separately from the pond."
-    },
-    {
-      "phase": 5,
-      "item": "Two black jasmine trellises",
-      "status": "need-to-buy",
-      "actualCost": null,
-      "note": "For jasmine placement away from the pond."
-    },
-    {
-      "phase": 5,
-      "item": "Existing jasmine plants",
-      "status": "owned",
-      "actualCost": 0,
-      "note": "Currently in the large SIP system; transfer into the large white pots, away from the pond."
-    },
-    {
-      "phase": 7,
+      "phase": 6,
       "item": "Warm accent lighting",
       "status": "need-to-buy",
       "actualCost": null,
@@ -120,11 +99,11 @@
       "name": "Pump + Filter + Fountain",
       "status": "current",
       "spent": 30.0,
-      "summary": "Option B selected: delivered 300 GPH integrated pump/filter system; install and test next.",
+      "summary": "Option B selected and delivered: install and test the 300 GPH integrated pump/filter system.",
       "requirements": [
-        "Install the delivered 300 GPH integrated smartpond filter kit",
+        "Install and test the delivered 300 GPH integrated smartpond filter kit",
         "Return the original small Smartpond kit",
-        "Add extra tubing or flow-control fittings only if the final placement requires them",
+        "Add extra tubing or flow-control fittings only if installation requires them",
         "Run fishless initially; consider UV later only for persistent green-water algae"
       ],
       "detailFile": "data/zen-lotus-pond-phase-3-system.json"
@@ -134,11 +113,11 @@
       "id": "pond-placement",
       "name": "Pond Placement + Setup",
       "status": "planned",
-      "summary": "Back Patio Window Wall selected; receive, position and leak-test the Manhattan pond.",
+      "summary": "Option 4 — Back Patio Window Wall selected; receive and leak-test the Manhattan pond on the existing patio floor.",
       "requirements": [
         "Option 4 — Back Patio Window Wall selected",
         "Sun, power and maintenance access confirmed",
-        "Existing patio floor requires no leveling/base work",
+        "Existing patio floor requires no leveling or base work",
         "Receive the Manhattan pond on August 29",
         "Fill and leak-test before moving the lotus"
       ],
@@ -146,21 +125,6 @@
     },
     {
       "number": 5,
-      "id": "jasmine",
-      "name": "Jasmine Planters",
-      "status": "planned",
-      "summary": "Move the existing jasmine into large white pots and place them separately from the pond.",
-      "layout": "Separate from pond",
-      "requirements": [
-        "Transfer the existing jasmine from the large SIP system into two large white pots",
-        "Use two black trellises",
-        "Choose a separate jasmine location; no jasmine around the pond",
-        "Keep jasmine growth airy rather than forming a dense wall"
-      ],
-      "detailFile": "data/zen-lotus-pond-phase-5-jasmine.json"
-    },
-    {
-      "number": 6,
       "id": "lotus-buddha",
       "name": "Lotus + Buddha",
       "status": "planned",
@@ -174,20 +138,20 @@
       "detailFile": "data/zen-lotus-pond-phase-6-lotus-buddha.json"
     },
     {
-      "number": 7,
+      "number": 6,
       "id": "lighting",
       "name": "Lighting + Finishing",
       "status": "planned",
-      "summary": "Add restrained warm lighting and finish the visible details after the pond is stable.",
+      "summary": "Add restrained warm lighting and finish visible details after the pond is stable.",
       "requirements": [
-        "Subtle Buddha accent",
-        "Hide and secure visible wiring/hardware",
-        "Add jasmine lighting only at the separate jasmine location if desired"
+        "Add subtle Buddha accent lighting if desired",
+        "Keep pond lighting restrained",
+        "Hide and secure visible wiring and hardware"
       ],
       "detailFile": "data/zen-lotus-pond-phase-7-lighting.json"
     },
     {
-      "number": 8,
+      "number": 7,
       "id": "future-fish-ready",
       "name": "Future Fish Decision",
       "status": "future-idea",
@@ -219,9 +183,9 @@
       "decision": "Option 4 — Back Patio Window Wall selected as the permanent pond location."
     },
     {
-      "item": "Jasmine around pond",
+      "item": "Jasmine / trellis phase",
       "status": "removed",
-      "decision": "No jasmine will be placed around the pond; jasmine will be handled separately."
+      "decision": "Removed from the pond project after selecting Option 4; there will be no jasmine or trellis around the pond."
     },
     {
       "item": "Fish",
