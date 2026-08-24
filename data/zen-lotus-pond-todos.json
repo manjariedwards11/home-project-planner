@@ -31,7 +31,8 @@
         {"task": "Choose Option B integrated filtration setup", "status": "complete"},
         {"task": "Purchase and receive 300 GPH pump/filter kit", "status": "complete"},
         {"task": "Install circulation, filtration and fountain return", "status": "pending"},
-        {"task": "Run and verify stable water flow", "status": "pending"}
+        {"task": "Run and verify stable water flow", "status": "pending"},
+        {"task": "Return original small Smartpond kit", "status": "pending"}
       ]
     },
     {
@@ -47,17 +48,6 @@
     },
     {
       "phase": 5,
-      "phaseId": "jasmine",
-      "status": "planned",
-      "todos": [
-        {"task": "Move existing jasmine plants from the large SIP system into the two large white pots", "status": "pending"},
-        {"task": "Install one black trellis for each jasmine planter", "status": "pending"},
-        {"task": "Choose jasmine placement away from the pond", "status": "pending"},
-        {"task": "Train jasmine onto trellises while keeping growth airy", "status": "pending"}
-      ]
-    },
-    {
-      "phase": 6,
       "phaseId": "lotus-buddha",
       "status": "planned",
       "todos": [
@@ -68,17 +58,17 @@
       ]
     },
     {
-      "phase": 7,
+      "phase": 6,
       "phaseId": "lighting",
       "status": "planned",
       "todos": [
-        {"task": "Add warm jasmine accent lighting", "status": "pending"},
-        {"task": "Add subtle Buddha accent lighting", "status": "pending"},
+        {"task": "Add subtle Buddha accent lighting if desired", "status": "pending"},
+        {"task": "Keep pond lighting restrained", "status": "pending"},
         {"task": "Hide and secure visible wiring and hardware", "status": "pending"}
       ]
     },
     {
-      "phase": 8,
+      "phase": 7,
       "phaseId": "future-fish-ready",
       "status": "future-idea",
       "todos": [
