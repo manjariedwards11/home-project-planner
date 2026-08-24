@@ -173,8 +173,8 @@
           <span class="cost-value">${esc(moneyRange(target.min, target.max, currency))}</span>
         </div>
         <div class="cost-fig">
-          <span class="cost-label">Estimated total</span>
-          <span class="cost-value">${esc(moneyRange(estimated.min, estimated.max, currency))}</span>
+          <span class="cost-label">${esc(estimated.label || 'Estimated total')}</span>
+          <span class="cost-value">${esc(moneyRange(estimated.min, estimated.max, currency))}${estimated.isPartial ? '<span class="qualifier">+</span>' : ''}</span>
         </div>
         <div class="cost-fig is-actual">
           <span class="cost-label">Actual spent</span>
@@ -1159,6 +1159,28 @@
       </section>`;
   }
 
+  // A checked-off site survey. Booleans read as Yes/No so a deliberate "no"
+  // (no jasmine around the pond) is stated rather than silently omitted.
+  function renderFactBlock(title, obj) {
+    if (!obj || typeof obj !== 'object') return '';
+    const rows = Object.entries(obj).map(([k, v]) => {
+      if (v == null || v === '') return '';
+      const label = humanizeSlug(k.replace(/([A-Z])/g, '-$1').toLowerCase());
+      const val = typeof v === 'boolean' ? (v ? 'Yes' : 'No') : humanizeSlug(String(v));
+      const good = v === true || /confirmed|done|complete/i.test(String(v));
+      return `<div class="spec"><span class="spec-label">${esc(label)}</span>
+        <span>${good ? '<span class="check">&#10003;</span> ' : ''}${esc(val)}</span></div>`;
+    }).filter(Boolean).join('');
+    if (!rows) return '';
+    return `<div class="box"><h3>${esc(title)}</h3><div class="fin-specs">${rows}</div></div>`;
+  }
+
+  function renderDelivery(d) {
+    if (!d || !d.item) return '';
+    const when = d.expectedDate || d.date;
+    return `<div class="notice"><strong>Delivery:</strong> ${esc(d.item)}${d.status ? ` &mdash; ${esc(humanizeSlug(d.status))}` : ''}${when ? ` ${esc(when)}` : ''}</div>`;
+  }
+
   // A phase page is a concise operational view: goal, the few things to do,
   // and the money. Anything discursive — restated summaries, design rationale,
   // extra notes — goes into a collapsed Details block so it is preserved
@@ -1197,7 +1219,7 @@
     }
 
     // An open choice is announced before the options themselves.
-    const ds = comp.decisionStatus;
+    const ds = comp.decisionStatus || comp.decisionState;
     if (ds === 'pending' || ds === 'decision-pending') {
       primary.push(`<div class="notice"><strong>Decision pending.</strong>${comp.decisionNote ? ' ' + esc(comp.decisionNote) : ''}</div>`);
     } else if (isSettledStatus(ds) && comp.decisionSummary) {
@@ -1250,6 +1272,8 @@
       primary.push(renderPlacementGallery(phase, { projectId: currentProjectId }, comp));
     }
     primary.push(renderRecommendation(comp.recommendation));
+    primary.push(renderDelivery(comp.delivery));
+    primary.push(renderFactBlock('Site check', comp.siteCheck));
 
     // At most one note stays on the page; the rest are preserved in Details.
     const notes = (phase.notes || []).slice();
