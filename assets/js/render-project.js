@@ -1693,6 +1693,9 @@
     return urls.filter((u, i) => urls.indexOf(u) === i);
   }
 
+  // Every data fetch bypasses the HTTP cache: the JSON changes many times a
+  // day while the renderer barely changes, and a cached copy renders stale
+  // costs on a page that otherwise looks correct.
   async function loadPhaseDetails(project) {
     const details = new Map();
     const id = project.projectId;
@@ -1701,7 +1704,7 @@
     await Promise.all(project.phases.map(async (phase) => {
       for (const url of detailUrlsFor(project, phase)) {
         try {
-          const res = await fetch(url);
+          const res = await fetch(url, { cache: 'no-store' });
           if (!res.ok) continue;
           const json = await res.json();
           // A decision file lists its options as an array. Phase detail files
@@ -1723,7 +1726,7 @@
     if (!root) return;
     const dataFile = root.getAttribute('data-project-file');
 
-    const res = await fetch(dataFile);
+    const res = await fetch(dataFile, { cache: 'no-store' });
     const project = await res.json();
     currentProjectId = project.projectId || '';
 
@@ -1731,7 +1734,7 @@
     if (project.costPlanFile || project.projectId) {
       const costFile = project.costPlanFile || `data/${project.projectId}-cost-plan.json`;
       try {
-        const costRes = await fetch(costFile);
+        const costRes = await fetch(costFile, { cache: 'no-store' });
         if (costRes.ok) costPlan = await costRes.json();
       } catch (err) {
         console.warn('[render-project] optional cost plan not loaded', err);
@@ -1745,7 +1748,7 @@
 
     // Optional project-wide checklist file.
     try {
-      const tRes = await fetch(`data/${project.projectId}-todos.json`);
+      const tRes = await fetch(`data/${project.projectId}-todos.json`, { cache: 'no-store' });
       if (tRes.ok) projectTodos = await tRes.json();
     } catch (err) { /* optional */ }
 
