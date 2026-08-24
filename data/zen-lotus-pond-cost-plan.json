@@ -6,12 +6,12 @@
   "targetBudget": {
     "min": 800,
     "max": 900,
-    "label": "Target to actually work toward"
+    "label": "Original project target"
   },
   "estimatedTotal": {
-    "min": 485,
-    "max": 875,
-    "label": "Known phase estimates",
+    "min": 347,
+    "max": 552,
+    "label": "Known current phase estimates",
     "isPartial": true
   },
   "actualSpentToDate": 283.32,
@@ -32,12 +32,11 @@
   "phases": [
     {"phase": 1, "phaseId": "nursery", "label": "Lotus Nursery", "estimatedMin": 60, "estimatedMax": 100, "actual": 107.13, "actualStatus": "complete"},
     {"phase": 2, "phaseId": "pond-decision", "label": "Pond Selection", "estimatedMin": 125, "estimatedMax": 200, "actual": 146.19, "actualStatus": "complete"},
-    {"phase": 3, "phaseId": "pump-filter", "label": "Pump + Filter + Fountain", "estimatedMin": 150, "estimatedMax": 250, "actual": 30.0, "actualStatus": "so-far"},
-    {"phase": 4, "phaseId": "pond-placement", "label": "Pond Placement + Setup", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "TBD"},
-    {"phase": 5, "phaseId": "jasmine", "label": "Jasmine Frame", "estimatedMin": 100, "estimatedMax": 200, "actual": null},
-    {"phase": 6, "phaseId": "lotus-buddha", "label": "Lotus + Buddha", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "TBD"},
-    {"phase": 7, "phaseId": "lighting", "label": "Lighting + Finishing", "estimatedMin": 50, "estimatedMax": 125, "actual": null},
-    {"phase": 8, "phaseId": "future-fish-ready", "label": "Future Fish Decision", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "not-in-current-budget"}
+    {"phase": 3, "phaseId": "pump-filter", "label": "Pump + Filter + Fountain", "estimatedMin": 112, "estimatedMax": 127, "actual": 30.0, "actualStatus": "so-far", "note": "300 GPH kit delivered; final receipt amount is pending. The $30 original kit remains in confirmed actuals until its return refund posts."},
+    {"phase": 4, "phaseId": "pond-placement", "label": "Pond Placement + Setup", "estimatedMin": 0, "estimatedMax": 0, "actual": 0, "actualStatus": "current-plan", "note": "Option 4 uses the existing patio floor; no leveling/base materials are needed."},
+    {"phase": 5, "phaseId": "lotus-buddha", "label": "Lotus + Buddha", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "TBD"},
+    {"phase": 6, "phaseId": "lighting", "label": "Lighting + Finishing", "estimatedMin": 50, "estimatedMax": 125, "actual": null},
+    {"phase": 7, "phaseId": "future-fish-ready", "label": "Future Fish Decision", "estimatedMin": null, "estimatedMax": null, "actual": null, "budgetStatus": "not-in-current-budget"}
   ],
-  "accountingNote": "Known phase estimates total $485–875. Phase 4 and Phase 6 remain TBD; Phase 8 is a future idea outside the current build budget. Actual spend is $283.32."
+  "accountingNote": "Jasmine/trellis was removed from the pond project. Known current phase estimates total $347–552; Lotus + Buddha remains TBD and the future fish phase is outside the current build budget. Confirmed actual spend remains $283.32 until the 300 GPH receipt amount and $30 return refund are finalized."
 }
