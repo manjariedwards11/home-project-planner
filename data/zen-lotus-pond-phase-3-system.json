@@ -42,7 +42,7 @@
     "min": 112,
     "max": 127,
     "currency": "USD",
-    "note": "Permanent-system estimate. Final actual will be updated from the Lowe's receipt; the original $30 Smartpond is being returned."
+    "note": "Original permanent-system estimate; actual Lowe's order total is now confirmed at $121.30."
   },
   "purchases": [
     {
@@ -50,11 +50,11 @@
       "retailer": "Lowe's",
       "status": "delivered",
       "listedPrice": 112.0,
-      "actualCost": null,
-      "purchaseDate": "2026-08-21",
+      "actualCost": 121.30,
+      "purchaseDate": "2026-08-23",
       "deliveryDate": "2026-08-23",
       "role": "Integrated pump, mechanical filtration, biological filtration and fountain hardware",
-      "note": "Delivered August 23. Install and test planned for August 24; final receipt total still pending."
+      "note": "Lowe's order total confirmed at $121.30. Ordered and delivered August 23; install and test next."
     },
     {
       "item": "Existing small Smartpond Filter Kit with Pump",
@@ -67,13 +67,13 @@
   ],
   "shoppingList": {
     "status": "equipment-delivered",
-    "actualTotal": null,
+    "actualTotal": 121.30,
     "items": [
       {
         "item": "smartpond Filter Kit with 300 GPH Pump",
         "status": "delivered",
         "estimatedCost": 112.0,
-        "actualCost": null,
+        "actualCost": 121.30,
         "note": "Delivered; install and test next."
       },
       {
@@ -84,7 +84,8 @@
         "actualCost": null,
         "note": "Buy only if the final Option 4 placement needs extra reach or a separate quiet return."
       }
-    ]
+    ],
+    "note": "The separate $30 original Smartpond kit remains return-pending and is tracked in project actuals until the refund posts."
   },
   "futureMaintenance": [
     "Clean mechanical filter pads as needed.",
