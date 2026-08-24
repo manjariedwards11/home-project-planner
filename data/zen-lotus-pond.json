@@ -4,13 +4,13 @@
   "name": "Zen Lotus Pond",
   "subtitle": "Lotus water garden",
   "displayTitle": "ZEN LOTUS POND — WATER GARDEN PLAN",
-  "lede": "Brownstone rectangular lotus pond with Buddha, jasmine, gentle moving water and low-maintenance filtration.",
+  "lede": "Brownstone rectangular lotus pond with Buddha, gentle moving water and low-maintenance filtration.",
   "status": "underway",
   "currentPhase": 3,
   "spentToDate": 283.32,
   "currency": "USD",
-  "lastContentUpdate": "2026-08-21",
-  "nextAction": "Return the original small Smartpond kit, then install and test the new 300 GPH integrated filter kit.",
+  "lastContentUpdate": "2026-08-24",
+  "nextAction": "Install and test the delivered 300 GPH integrated filter kit, then receive the Manhattan pond on August 29.",
   "goals": [
     "Serene, low-maintenance lotus water garden",
     "Clean moving water with predictable upkeep",
@@ -18,9 +18,9 @@
   ],
   "siteConstraints": {
     "climate": "Very hot Arizona summers; temperatures can reach about 110°F",
-    "location": "Final placement — front courtyard/patio or backyard patio — will be confirmed in Phase 4",
+    "location": "Option 4 — Back Patio Window Wall is the locked permanent pond location.",
     "maintenanceTarget": "A few minutes weekly plus periodic filter cleaning",
-    "designIntent": "Brownstone rectangular pond with lotus, Buddha, gentle fountain and jasmine"
+    "designIntent": "Brownstone rectangular pond with lotus, Buddha and a gentle fountain; no jasmine around the pond."
   },
   "budget": {
     "planned": null,
@@ -37,16 +37,16 @@
       "store": "Wayfair",
       "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036",
       "actualCost": 146.19,
-      "note": "Purchased August 21, 2026; $134.99 subtotal + $11.20 tax."
+      "note": "Purchased August 21, 2026; $134.99 subtotal + $11.20 tax. Delivery expected August 29, 2026."
     },
     {
       "phase": 3,
       "item": "smartpond Filter Kit with 300 GPH Pump",
-      "status": "bought",
+      "status": "delivered",
       "store": "Lowe's",
       "price": 112.0,
       "actualCost": null,
-      "note": "Option B selected. Integrated pump, mechanical filtration, biological filtration and fountain hardware. Final receipt total pending."
+      "note": "Option B selected. Delivered August 23; install and test August 24. Final receipt total pending."
     },
     {
       "phase": 3,
@@ -63,33 +63,28 @@
       "actualCost": null,
       "estimatedMin": 0.0,
       "estimatedMax": 15.0,
-      "note": "Buy only if final placement requires extra reach or a separate quiet return."
-    },
-    {
-      "phase": 4,
-      "item": "Leveling/base materials, only if needed",
-      "status": "conditional",
-      "actualCost": null,
-      "note": "Buy only if the chosen location is not already flat, level and stable."
+      "note": "Buy only if the Back Patio Window Wall placement requires extra reach or a separate quiet return."
     },
     {
       "phase": 5,
       "item": "Two white jasmine planters",
       "status": "need-to-buy",
-      "actualCost": null
+      "actualCost": null,
+      "note": "Jasmine will be placed separately from the pond."
     },
     {
       "phase": 5,
       "item": "Two black jasmine trellises",
       "status": "need-to-buy",
-      "actualCost": null
+      "actualCost": null,
+      "note": "For jasmine placement away from the pond."
     },
     {
       "phase": 5,
       "item": "Existing jasmine plants",
       "status": "owned",
-      "actualCost": null,
-      "note": "Currently in the large SIP system; transfer into the large white pots in Phase 5."
+      "actualCost": 0,
+      "note": "Currently in the large SIP system; transfer into the large white pots, away from the pond."
     },
     {
       "phase": 7,
@@ -125,11 +120,11 @@
       "name": "Pump + Filter + Fountain",
       "status": "current",
       "spent": 30.0,
-      "summary": "Option B selected: one integrated 300 GPH pump/filter system for lower maintenance and simpler plumbing.",
+      "summary": "Option B selected: delivered 300 GPH integrated pump/filter system; install and test next.",
       "requirements": [
-        "Install the purchased 300 GPH integrated smartpond filter kit",
+        "Install the delivered 300 GPH integrated smartpond filter kit",
         "Return the original small Smartpond kit",
-        "Add extra tubing or flow-control fittings only if final placement requires them",
+        "Add extra tubing or flow-control fittings only if the final placement requires them",
         "Run fishless initially; consider UV later only for persistent green-water algae"
       ],
       "detailFile": "data/zen-lotus-pond-phase-3-system.json"
@@ -139,12 +134,12 @@
       "id": "pond-placement",
       "name": "Pond Placement + Setup",
       "status": "planned",
-      "summary": "Choose the final location, level the Manhattan pond and test the setup before planting.",
+      "summary": "Back Patio Window Wall selected; receive, position and leak-test the Manhattan pond.",
       "requirements": [
-        "Choose front courtyard/patio or backyard patio",
-        "Confirm sun exposure, heat, power access and maintenance access",
-        "Set the pond on a flat, level and stable surface",
-        "Plan pump/filter placement and cable routing",
+        "Option 4 — Back Patio Window Wall selected",
+        "Sun, power and maintenance access confirmed",
+        "Existing patio floor requires no leveling/base work",
+        "Receive the Manhattan pond on August 29",
         "Fill and leak-test before moving the lotus"
       ],
       "detailFile": "data/zen-lotus-pond-phase-4-placement.json"
@@ -152,13 +147,14 @@
     {
       "number": 5,
       "id": "jasmine",
-      "name": "Jasmine Frame",
+      "name": "Jasmine Planters",
       "status": "planned",
-      "summary": "Frame the pond with jasmine while keeping the composition light and uncluttered.",
-      "layout": "Jasmine — Pond — Jasmine",
+      "summary": "Move the existing jasmine into large white pots and place them separately from the pond.",
+      "layout": "Separate from pond",
       "requirements": [
         "Transfer the existing jasmine from the large SIP system into two large white pots",
         "Use two black trellises",
+        "Choose a separate jasmine location; no jasmine around the pond",
         "Keep jasmine growth airy rather than forming a dense wall"
       ],
       "detailFile": "data/zen-lotus-pond-phase-5-jasmine.json"
@@ -184,9 +180,9 @@
       "status": "planned",
       "summary": "Add restrained warm lighting and finish the visible details after the pond is stable.",
       "requirements": [
-        "Warm accent light on jasmine",
         "Subtle Buddha accent",
-        "Hide and secure visible wiring/hardware"
+        "Hide and secure visible wiring/hardware",
+        "Add jasmine lighting only at the separate jasmine location if desired"
       ],
       "detailFile": "data/zen-lotus-pond-phase-7-lighting.json"
     },
@@ -215,12 +211,17 @@
     {
       "item": "Phase 3 filtration system",
       "status": "locked",
-      "decision": "Option B selected: one integrated smartpond 300 GPH pump/filter system from Lowe's for lower maintenance and simpler plumbing. The original small Smartpond kit will be returned."
+      "decision": "Option B selected: one integrated smartpond 300 GPH pump/filter system from Lowe's for lower maintenance and simpler plumbing."
     },
     {
       "item": "Pond location",
-      "status": "open",
-      "decision": "Choose front courtyard/patio or backyard patio in Phase 4."
+      "status": "locked",
+      "decision": "Option 4 — Back Patio Window Wall selected as the permanent pond location."
+    },
+    {
+      "item": "Jasmine around pond",
+      "status": "removed",
+      "decision": "No jasmine will be placed around the pond; jasmine will be handled separately."
     },
     {
       "item": "Fish",
@@ -231,11 +232,6 @@
       "item": "Pothos",
       "status": "removed",
       "decision": "Removed from the final design."
-    },
-    {
-      "item": "Jasmine layout",
-      "status": "locked",
-      "decision": "Jasmine — Pond — Jasmine."
     }
   ],
   "maintenance": [
