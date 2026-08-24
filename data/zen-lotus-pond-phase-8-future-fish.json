@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "projectId": "zen-lotus-pond",
-  "phase": 8,
+  "phase": 7,
   "phaseId": "future-fish-ready",
   "title": "Future Fish Decision",
   "status": "future-idea",
@@ -34,7 +34,7 @@
     "note": "No fish or UV purchases are committed now."
   },
   "completionMemory": {
-    "title": "End of Phase 8",
+    "title": "End of Phase 7",
     "status": "not-active",
     "image": null,
     "caption": "Reserved for the future fish and long-term pond-health decision if this phase is activated."
