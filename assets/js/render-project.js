@@ -790,15 +790,34 @@
     { label: 'Option 5 — Back Patio TV Corner', file: 'option-5-back-patio-tv-corner' },
   ];
 
+  // Which option, if any, the data says was chosen. Accepts a named choice, a
+  // per-option status, or a settled recommendation — so recording the decision
+  // any of those ways lights up the gallery without a code change.
+  function chosenPlacement(detail, options) {
+    const named = detail && (detail.selectedPlacement || detail.selectedOption);
+    const rec = detail && detail.recommendation;
+    const fromRec = rec && isSettledStatus(rec.status) ? rec.topChoice : null;
+    const target = String(named || fromRec || '').toLowerCase();
+    const marked = options.find((o) => isChosen(o.status) || /selected|chosen/.test(String(o.status || '')));
+    if (marked) return marked;
+    if (!target) return null;
+    return options.find((o) => {
+      const hay = [o.label, o.id, o.file].filter(Boolean).map((x) => String(x).toLowerCase());
+      return hay.some((h) => h === target || h.includes(target) || target.includes(h));
+    }) || null;
+  }
+
   function renderPlacementGallery(phase, project, detail) {
     const fromData = (detail && detail.placementOptions) || phase.placementOptions;
     const options = fromData || PLACEMENT_FALLBACK;
     if (!options.length) return '';
     const base = `assets/images/${project.projectId}/phase-${phase.number}/`;
+    const chosen = chosenPlacement(detail, options);
     const cards = options.map((o, i) => {
       const src = o.image || `${base}${o.file || 'option-' + (i + 1)}.jpg`;
+      const isPick = chosen && o === chosen;
       return `
-        <figure class="placement">
+        <figure class="placement${isPick ? ' is-chosen' : ''}">
           <div class="memory-frame placement-shot"
                data-memory-src="${esc(src)}" data-memory-alt="${esc(o.label)}"
                data-memory-key="${esc(project.projectId)}:phase${phase.number}-${esc(o.file || 'option-' + (i + 1))}">
@@ -816,14 +835,14 @@
               <button type="button" data-mem-clear>Remove</button>
             </div>
           </div>
-          <figcaption>${esc(o.label)}</figcaption>
+          <figcaption>${esc(o.label)}${isPick ? ' <span class="pill green">Selected</span>' : ''}</figcaption>
         </figure>`;
     }).join('');
     return `
       <section class="placement-block">
         <div class="placement-head">
           <h3>Pond placement options</h3>
-          <span class="pill amber">Decision pending</span>
+          <span class="pill ${chosen ? 'green' : 'amber'}">${chosen ? 'Selected' : 'Decision pending'}</span>
         </div>
         <div class="placement-grid">${cards}</div>
       </section>`;
