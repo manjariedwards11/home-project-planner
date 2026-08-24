@@ -5,9 +5,9 @@
   "phaseId": "pump-filter",
   "title": "Pump + Filter + Fountain",
   "status": "current",
-  "goal": "Install the low-maintenance 300 GPH integrated circulation and filtration system for the permanent pond.",
+  "goal": "Install and test the low-maintenance 300 GPH integrated circulation and filtration system for the permanent pond.",
   "decisionStatus": "selected",
-  "decisionState": "selected-purchased",
+  "decisionState": "selected-delivered",
   "selectedOption": "integrated-system",
   "preferredChoice": "Option B — One Integrated 300 GPH System",
   "decisionSummary": "Option B selected: one integrated 300 GPH pump/filter system for lower maintenance and simpler plumbing.",
@@ -24,35 +24,18 @@
       "priceSnapshot": 143.0,
       "priceSnapshotDate": "2026-08-21",
       "includedEquipment": "Existing small Smartpond fountain plus separate adjustable main pump, mechanical/biological filter and tubing.",
-      "strengths": [
-        "Independent fountain and filtration circuits",
-        "Reuses the original Smartpond kit"
-      ],
-      "tradeoffs": [
-        "Two pumps to maintain",
-        "More plumbing and fittings",
-        "More failure and cleaning points",
-        "Estimated system cost about $143–153 including the existing $30 kit"
-      ]
+      "strengths": ["Independent fountain and filtration circuits", "Reuses the original Smartpond kit"],
+      "tradeoffs": ["Two pumps to maintain", "More plumbing and fittings", "More failure and cleaning points", "Estimated system cost about $143–153 including the existing $30 kit"]
     },
     {
       "name": "Option B — One Integrated 300 GPH System",
       "retailer": "Lowe's",
-      "status": "preferred",
+      "status": "selected",
       "priceSnapshot": 112.0,
       "priceSnapshotDate": "2026-08-21",
       "includedEquipment": "smartpond 300 GPH pump, mechanical filtration, biological filtration and fountain hardware in one system.",
-      "strengths": [
-        "One pump",
-        "Lower maintenance",
-        "Simpler plumbing",
-        "Mechanical + biological filtration in one system",
-        "Gentle fountain hardware included"
-      ],
-      "tradeoffs": [
-        "Original $30 Smartpond kit will be returned",
-        "Extra tubing may still be needed depending on final placement"
-      ]
+      "strengths": ["One pump", "Lower maintenance", "Simpler plumbing", "Mechanical + biological filtration in one system", "Gentle fountain hardware included"],
+      "tradeoffs": ["Original $30 Smartpond kit will be returned", "Extra tubing may still be needed depending on final placement"]
     }
   ],
   "phaseEstimate": {
@@ -65,12 +48,13 @@
     {
       "item": "smartpond Filter Kit with 300 GPH Pump",
       "retailer": "Lowe's",
-      "status": "bought",
+      "status": "delivered",
       "listedPrice": 112.0,
       "actualCost": null,
       "purchaseDate": "2026-08-21",
+      "deliveryDate": "2026-08-23",
       "role": "Integrated pump, mechanical filtration, biological filtration and fountain hardware",
-      "note": "Purchased. Final all-in actual cost is pending receipt confirmation."
+      "note": "Delivered August 23. Install and test planned for August 24; final receipt total still pending."
     },
     {
       "item": "Existing small Smartpond Filter Kit with Pump",
@@ -78,19 +62,19 @@
       "status": "return-pending",
       "originalActualCost": 30.0,
       "expectedRefund": 30.0,
-      "note": "Will be returned because the new 300 GPH integrated system replaces it in the permanent setup."
+      "note": "Will be returned because the new 300 GPH integrated system replaces it."
     }
   ],
   "shoppingList": {
-    "status": "mostly-complete",
+    "status": "equipment-delivered",
     "actualTotal": null,
     "items": [
       {
         "item": "smartpond Filter Kit with 300 GPH Pump",
-        "status": "bought",
+        "status": "delivered",
         "estimatedCost": 112.0,
         "actualCost": null,
-        "note": "Main permanent system; final receipt total pending."
+        "note": "Delivered; install and test next."
       },
       {
         "item": "Extra tubing / flow-control fittings",
@@ -98,7 +82,7 @@
         "estimatedMin": 0.0,
         "estimatedMax": 15.0,
         "actualCost": null,
-        "note": "Buy only if the final placement needs extra reach or a separate quiet return."
+        "note": "Buy only if the final Option 4 placement needs extra reach or a separate quiet return."
       }
     ]
   },
@@ -109,7 +93,7 @@
   ],
   "completionMemory": {
     "title": "End of Phase 3",
-    "status": "awaiting-installation",
+    "status": "awaiting-installation-test",
     "image": null,
     "caption": "300 GPH integrated circulation, filtration and fountain system installed and running."
   }
