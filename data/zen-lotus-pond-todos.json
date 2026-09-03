@@ -38,12 +38,12 @@
     {
       "phase": 4,
       "phaseId": "pond-placement",
-      "status": "planned",
+      "status": "complete",
       "todos": [
         {"task": "Choose Option 4 — Back Patio Window Wall", "status": "complete"},
         {"task": "Confirm sun, power and maintenance access for Option 4", "status": "complete"},
-        {"task": "Receive Manhattan pond", "status": "pending"},
-        {"task": "Fill and leak-test before planting", "status": "pending"}
+        {"task": "Receive Manhattan pond", "status": "complete"},
+        {"task": "Complete pond placement/setup at Option 4", "status": "complete"}
       ]
     },
     {
