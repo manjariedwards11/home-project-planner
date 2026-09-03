@@ -4,12 +4,12 @@
   "phase": 4,
   "phaseId": "pond-placement",
   "title": "Pond Placement + Setup",
-  "status": "planned",
+  "status": "complete",
   "goal": "Set up and leak-test the Manhattan pond at the selected Back Patio Window Wall location before planting.",
-  "decisionState": "selected",
+  "decisionState": "selected-complete",
   "selectedOption": "option-4-back-patio-window-wall",
   "preferredChoice": "Option 4 — Back Patio Window Wall",
-  "decisionSummary": "Option 4 — Back Patio Window Wall is the selected permanent pond location.",
+  "decisionSummary": "Option 4 — Back Patio Window Wall is the completed permanent pond location.",
   "siteCheck": {
     "sun": "confirmed",
     "power": "confirmed",
@@ -19,21 +19,22 @@
   },
   "delivery": {
     "item": "Algreen Manhattan pond",
-    "status": "expected",
-    "expectedDate": "2026-08-29"
+    "status": "delivered",
+    "deliveryDate": "2026-09-02"
   },
   "shoppingList": {
-    "status": "none-needed",
+    "status": "complete",
     "estimatedTotalMin": 0,
     "estimatedTotalMax": 0,
     "actualTotal": 0,
     "items": [],
-    "note": "No Phase 4 purchases are needed. The selected location is an existing patio floor."
+    "note": "No Phase 4 purchases were needed. The selected location uses the existing patio floor."
   },
   "completionMemory": {
     "title": "End of Phase 4",
-    "status": "awaiting-completion",
+    "status": "complete",
     "image": null,
-    "caption": "Manhattan pond positioned at the Back Patio Window Wall, filled and leak-tested."
+    "caption": "Manhattan pond positioned at the Back Patio Window Wall and Phase 4 completed.",
+    "photoNote": "Completion photo supplied in chat on September 3, 2026; site image asset still needs to be uploaded to the repository."
   }
 }
