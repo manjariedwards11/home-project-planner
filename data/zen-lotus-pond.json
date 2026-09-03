@@ -9,8 +9,8 @@
   "currentPhase": 3,
   "spentToDate": 404.62,
   "currency": "USD",
-  "lastContentUpdate": "2026-08-24",
-  "nextAction": "Install and test the delivered 300 GPH integrated filter kit; Manhattan pond delivery is expected August 29.",
+  "lastContentUpdate": "2026-09-03",
+  "nextAction": "Install and test the delivered 300 GPH integrated filter kit, then continue to Lotus + Buddha once the lotus is ready.",
   "goals": [
     "Serene, low-maintenance lotus water garden",
     "Clean moving water with predictable upkeep",
@@ -33,11 +33,11 @@
     {
       "phase": 2,
       "item": "Algreen Manhattan 40-inch Balcony Planter & Pond — Brownstone",
-      "status": "bought",
+      "status": "delivered",
       "store": "Wayfair",
       "link": "https://www.wayfair.com/outdoor/pdp/algreen-manhattan-40-balcony-planter-pond-large-outdoor-rectangular-planter-box-aen1141.html?piid=14212036",
       "actualCost": 146.19,
-      "note": "Purchased August 21, 2026; $134.99 subtotal + $11.20 tax. Delivery expected August 29, 2026."
+      "note": "Purchased August 21, 2026; $134.99 subtotal + $11.20 tax. Delivered September 2, 2026."
     },
     {
       "phase": 3,
@@ -112,14 +112,14 @@
       "number": 4,
       "id": "pond-placement",
       "name": "Pond Placement + Setup",
-      "status": "planned",
-      "summary": "Option 4 — Back Patio Window Wall selected; receive and leak-test the Manhattan pond on the existing patio floor.",
+      "status": "complete",
+      "summary": "Option 4 — Back Patio Window Wall selected; Manhattan pond delivered and placement/setup completed on the existing patio floor.",
       "requirements": [
         "Option 4 — Back Patio Window Wall selected",
         "Sun, power and maintenance access confirmed",
         "Existing patio floor requires no leveling or base work",
-        "Receive the Manhattan pond on August 29",
-        "Fill and leak-test before moving the lotus"
+        "Manhattan pond delivered September 2, 2026",
+        "Placement/setup completed"
       ],
       "detailFile": "data/zen-lotus-pond-phase-4-placement.json"
     },
@@ -180,7 +180,7 @@
     {
       "item": "Pond location",
       "status": "locked",
-      "decision": "Option 4 — Back Patio Window Wall selected as the permanent pond location."
+      "decision": "Option 4 — Back Patio Window Wall selected as the permanent pond location; placement/setup completed September 2026."
     },
     {
       "item": "Jasmine / trellis phase",
